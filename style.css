@@ -218,10 +218,10 @@ html, body {
   margin-left: 8px;
 }
 
-/* Slot 3: Subtitle (animates down-to-up with easing from the very start) */
+/* Slot 3: Subtitle (animates down-to-up into center, and center-to-up when leaving, uncropped) */
 .slot-sub {
   height: 2.4rem;
-  overflow: hidden; /* masks the slide up transition cleanly */
+  overflow: visible; /* no clipping so animation glides freely without cropping */
 }
 
 #text-sub {
@@ -245,8 +245,8 @@ html, body {
 
 #text-sub.leaving {
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.4s ease-in, transform 0.4s ease-in;
+  transform: translateY(-32px);
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* --- Click Ripple Interactions --- */

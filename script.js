@@ -169,7 +169,7 @@
     }
 
     function startBackspacing() {
-      // REQUIREMENT: As text 2 starts backspacing away, text 3 also starts disappearing
+      // REQUIREMENT: As text 2 starts backspacing away, text 3 also starts disappearing towards top
       textSub.className = 'leaving';
 
       let backIdx = len;
@@ -177,15 +177,15 @@
         if (backIdx > 0) {
           backIdx--;
           textTitle.textContent = currentWord.slice(0, backIdx);
-          // Fast backspacing
-          setTimeout(backStep, 32);
+          // Fast backspacing synchronized with text 3 exit
+          setTimeout(backStep, 36);
         } else {
           // Finished backspacing: both text 2 and text 3 are completely gone
           textSub.className = '';
           textSub.textContent = '';
           titleIndex = (titleIndex + 1) % TITLES.length;
           // Brief pause before next cycle begins
-          setTimeout(runTitleCycle, 350);
+          setTimeout(runTitleCycle, 400);
         }
       }
       backStep();
