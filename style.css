@@ -563,6 +563,15 @@ html, body {
   position: relative;
 }
 
+.work-thumbnail {
+  width: 100%;
+  height: auto;
+  max-height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
 .work-card::before {
   content: '';
   position: absolute;

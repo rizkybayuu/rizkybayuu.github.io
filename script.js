@@ -229,6 +229,7 @@
       sub: 'Motion Graphics',
       title: 'Ramadan 2026 Celebration',
       desc: '3D celebratory motion graphic featuring illuminated crescent geometry, floating lanterns, and ambient golden particles.',
+        thumbnail: 'assets/media/thumbnail.svg',
       links: [
         { label: 'Instagram Reel', url: 'https://www.instagram.com/p/DVAAJk6FAx0/' }
       ]
@@ -239,6 +240,7 @@
       sub: 'Motion Graphics',
       title: 'UTBK 2026 Motion & Code',
       desc: 'Dynamic 3D motion graphic integrating terminal command streams, cyber aesthetic lighting, and rhythmic hacker typography.',
+        thumbnail: 'assets/media/thumbnail.svg',
       links: [
         { label: 'Instagram Reel', url: 'https://www.instagram.com/p/DYw6a_qTa1U/' }
       ]
@@ -249,6 +251,7 @@
       sub: 'Commercial Reel',
       title: 'Product Motion Showcase',
       desc: 'High-end commercial 3D product animation focusing on dynamic camera sweeps, materials, and fluid lighting.',
+        thumbnail: 'assets/media/thumbnail.svg',
       links: [
         { label: 'Instagram Part 1', url: 'https://www.instagram.com/p/DMzrefzvxnM/' },
         { label: 'Instagram Part 2', url: 'https://www.instagram.com/p/DM0Tcx9vNOX/' }
@@ -260,6 +263,7 @@
       sub: 'Conceptual Animation',
       title: 'Piano & Musical Note Rain',
       desc: 'Melancholic 3D scene depicting an expressive grand piano amidst a continuous downpour of physical sheet music notes.',
+        thumbnail: 'assets/media/thumbnail.svg',
       links: [
         { label: 'Instagram Post', url: 'https://www.instagram.com/p/DKonumiSbB2/' }
       ]
@@ -270,6 +274,7 @@
       sub: 'Environment Design',
       title: 'Lakeside Sanctuary',
       desc: 'Photorealistic architectural render of a serene waterside deck and lounge chair bathed in tranquil twilight illumination.',
+        thumbnail: 'assets/media/thumbnail.svg',
       links: [
         { label: 'Instagram Post', url: 'https://www.instagram.com/p/DYvvJbXkmjn' }
       ]
@@ -280,6 +285,7 @@
       sub: 'Architecture',
       title: 'Curved Origami Gallery',
       desc: 'Architectural concept study mimicking gracefully folded paper sheets with natural daytime bounce lighting and concrete textures.',
+        thumbnail: 'assets/media/thumbnail.svg',
       links: [
         { label: 'Instagram Post', url: 'https://www.instagram.com/p/DRZH4ZwkmBj/' }
       ]
@@ -290,6 +296,7 @@
       sub: 'Automotive Hard-Surface',
       title: 'Rolls Royce Phantom V',
       desc: 'Exacting 3D automotive hard-surface reproduction showcasing metallic clearcoat reflections, studio lighting, and curves.',
+        thumbnail: 'assets/media/thumbnail.svg',
       links: [
         { label: 'Instagram Post', url: 'https://www.instagram.com/p/C9FIGbTSd5N/' }
       ]
@@ -300,6 +307,7 @@
       sub: 'Interior Storytelling',
       title: 'Abandoned Room & Laptop',
       desc: 'Detailed storytelling render of a dusty forgotten workstation, volumetric sunlight shafts, and decaying concrete surroundings.',
+        thumbnail: 'assets/media/thumbnail.svg',
       links: [
         { label: 'Instagram Post', url: 'https://www.instagram.com/p/C868K1jymmw/?img_index=1' }
       ]
@@ -310,6 +318,7 @@
       sub: 'Still Life Study',
       title: 'Morning Tea Still Life',
       desc: 'Photorealistic morning beverage study modeled in Blender 4.0 with authentic glass refraction, condensation, and brass kettle.',
+        thumbnail: 'assets/media/thumbnail.svg',
       links: [
         { label: 'Instagram Post', url: 'https://www.instagram.com/p/C4LROTsyVNZ/?img_index=1' }
       ]
@@ -320,6 +329,7 @@
       sub: 'Lighting Study',
       title: 'Warm Interior Study',
       desc: 'Carefully balanced natural ambient daylight and warm indoor accents exploring architectural material realism.',
+        thumbnail: 'assets/media/thumbnail.svg',
       links: [
         { label: 'Instagram Post', url: 'https://www.instagram.com/p/DMzqo-Tv8kM/' }
       ]
@@ -330,6 +340,7 @@
       sub: 'Level 2 Consecutive',
       title: 'Akyas Lounge & Office (Day 28)',
       desc: 'Eighth and concluding entry of Level 2 Consecutive Isometric series: personalized cozy workspace diorama created as a farewell tribute.',
+        thumbnail: 'assets/media/thumbnail.svg',
       links: [
         { label: 'Instagram Post', url: 'https://www.instagram.com/p/DH0IoOgyL6g/?img_index=1' }
       ]
@@ -340,6 +351,7 @@
       sub: 'Level 2 Consecutive',
       title: 'Military Memorial Room (Day 27)',
       desc: 'Seventh entry of Level 2 Isometric: dedicated military heritage quarters with medals, authentic posters, and foliage balance.',
+        thumbnail: 'assets/media/thumbnail.svg',
       links: [
         { label: 'Instagram Post', url: 'https://www.instagram.com/p/DH0IS42SUR3/?img_index=1' }
       ]
@@ -350,6 +362,7 @@
       sub: 'Diorama Worlds',
       title: 'Isometric Living Spaces Series',
       desc: 'Multi-part systematic collection exploring isometric room aesthetics, custom miniature props, and controlled studio palettes.',
+        thumbnail: 'assets/media/thumbnail.svg',
       links: [
         { label: 'Series Part 1', url: 'https://www.instagram.com/p/DIcXik2zBSr/?img_index=1' },
         { label: 'Series Part 2', url: 'https://www.instagram.com/p/C3KzVawyzwz/?img_index=1' }
@@ -361,6 +374,7 @@
       sub: 'Surrealism',
       title: 'Ethereal Spatial Landscapes',
       desc: 'Surreal 3D dreamscape featuring gravity-defying geometries, impossible horizons, and emotive color balancing.',
+        thumbnail: 'assets/media/thumbnail.svg',
       links: [
         { label: 'Instagram Post', url: 'https://www.instagram.com/p/C11xXl0B_OF/?img_index=1' },
         { label: 'Instagram Post', url: 'https://www.instagram.com/p/C3bes_TSWtC/?img_index=1' }
@@ -372,6 +386,7 @@
       sub: 'Astronomy',
       title: 'Celestial Orbital Dynamics',
       desc: 'Cosmic scale 3D astronomical simulations rendering deep-space nebulae, planetary alignments, and stellar illumination.',
+        thumbnail: 'assets/media/thumbnail.svg',
       links: [
         { label: 'Instagram Post', url: 'https://www.instagram.com/p/C9CVPMnyBRe/?img_index=1' },
         { label: 'Instagram Post', url: 'https://www.instagram.com/p/DQ6PsyZErxM/?img_index=1' }
@@ -383,6 +398,7 @@
       sub: 'Dynamics & Physics',
       title: 'Collapsing Road VFX Sequence',
       desc: 'Realistic physics-driven destruction simulation portraying sudden roadway surface collapse with detailed fracturing debris.',
+        thumbnail: 'assets/media/thumbnail.svg',
       links: [
         { label: 'Instagram Post', url: 'https://www.instagram.com/p/DMzpw5zPtLg/' }
       ]
@@ -393,6 +409,7 @@
       sub: 'Procedural Geometry',
       title: 'Procedural Staircase Generator',
       desc: 'Parametric procedural staircase asset generator created in Blender Geometry Nodes and officially published on BlendKit.',
+        thumbnail: 'assets/media/thumbnail.svg',
       links: [
         { label: 'Instagram Demo', url: 'https://www.instagram.com/p/DcQsphEy-_1/' },
         { label: 'BlendKit Asset', url: 'https://www.blendkit.com/asset-gallery-detail/316be27d-8839-494d-96c8-ccccf71efdea/?query=author_id%3A1305503' }
@@ -404,6 +421,7 @@
       sub: 'Original Music',
       title: 'Project No. 7466',
       desc: 'Original electronic synthwave composition across 6 sequenced movements exploring driving basslines, arpeggios, and melodic progression.',
+        thumbnail: 'assets/media/thumbnail.svg',
       links: [
         { label: 'SoundCloud Track', url: 'https://soundcloud.com/rizky-bayuu/project-no-7466' }
       ]
@@ -414,6 +432,7 @@
       sub: 'Audio Engineering',
       title: 'Drama CAI 2025 Vocal Engineering',
       desc: 'Comprehensive voice acting, dialogue cleanup, dynamic vocal enhancement, and atmospheric sound design for PPM BKI theatrical production.',
+        thumbnail: 'assets/media/thumbnail.svg',
       links: [
         { label: 'Audio Demo', url: 'https://drive.google.com/file/d/1jE-CGjSDF2QoDXhjDVnOZeuB4_XEBTJA/view?usp=drive_link' }
       ]
@@ -424,6 +443,7 @@
       sub: 'Linux Telemetry',
       title: 'RizkybyMONITOR',
       desc: 'Real-time Linux hardware monitor tracking CPU cores, RAM hierarchy, compressed ZRAM, temperature sensors, and process hierarchies.',
+        thumbnail: 'assets/media/thumbnail.svg',
       links: [
         { label: 'GitHub Repository', url: 'https://github.com/rizkybayuu/RizkybyMONITOR' },
         { label: 'Instagram Demo', url: 'https://www.instagram.com/p/Dc3zoGzS4En/' }
@@ -435,6 +455,7 @@
       sub: 'Desktop Application',
       title: 'SkyRetail POS Suite',
       desc: 'Modern desktop retail point-of-sale architecture designed for rapid local transactions, inventory indexing, and robust offline stability.',
+        thumbnail: 'assets/media/thumbnail.svg',
       links: [
         { label: 'In Development', url: '#' }
       ]
@@ -445,6 +466,7 @@
       sub: 'Tauri & Rust',
       title: 'Writepath Creative Suite',
       desc: 'Focused desktop novel & story authoring suite built with Rust/Tauri v2, neural smart translation engine, and local-first encryption.',
+        thumbnail: 'assets/media/thumbnail.svg',
       links: [
         { label: 'In Development', url: '#' }
       ]
@@ -455,6 +477,7 @@
       sub: 'Virtualization',
       title: 'VM & Legacy OS Orchestration',
       desc: 'Hands-on system deployment across virtual machine hypervisors, retro Windows environments, and bare-metal Void Linux builds.',
+        thumbnail: 'assets/media/thumbnail.svg',
       links: [
         { label: 'Instagram Demo', url: 'https://www.instagram.com/p/Dc72_ssSybI/' }
       ]
@@ -465,6 +488,7 @@
       sub: 'Procedural Shader',
       title: 'Bitmap & Dither Shader Pipeline',
       desc: 'Experimental procedural aesthetic pipeline combining Blender Geometry Nodes procedural scattering with modern Affinity raster dithering.',
+        thumbnail: 'assets/media/thumbnail.svg',
       links: [
         { label: 'Project Assets', url: 'https://drive.google.com/file/d/1iSYJ3IjJkiEprGIN2lkRptp_sOMT7udc/view?usp=drive_open' }
       ]
@@ -475,6 +499,7 @@
       sub: 'Editorial Publication',
       title: 'YEARBOOK 25 Publication',
       desc: 'Complete editorial design, typography lockups, and high-resolution layout engineering for full-format commemorative yearbook.',
+        thumbnail: 'assets/media/thumbnail.svg',
       links: [
         { label: 'Editorial Design', url: '#' }
       ]
@@ -485,6 +510,7 @@
       sub: 'Editorial & Motion',
       title: 'Magazine Perfect & Motion Sequence',
       desc: 'Stylized magazine publication artwork synchronized with fluid 3D commercial motion showcase sequences.',
+        thumbnail: 'assets/media/thumbnail.svg',
       links: [
         { label: 'Instagram Motion', url: 'https://www.instagram.com/p/DK50YJIgD99/' }
       ]
@@ -495,6 +521,7 @@
       sub: 'Video Editing',
       title: 'Cinematic Rhythm Video Editing',
       desc: 'Dynamic pacing, audio beat synchronization, color treatment, and narrative micro-pacing for social video productions.',
+        thumbnail: 'assets/media/thumbnail.svg',
       links: [
         { label: 'TikTok Video', url: 'https://www.tiktok.com/@rizkybayu354/video/7578757396319800583' },
         { label: 'Google Drive Reel', url: 'https://drive.google.com/file/d/1qLo_qkzzpYTNesiCakT9zoHGRXQvJvnr/view?usp=drive_link' }
@@ -615,6 +642,7 @@
 
       return `
         <article class="work-card">
+          ${item.thumbnail ? `<img src="${item.thumbnail}" alt="${item.title}" class="work-thumbnail">` : ''}
           <div>
             <div class="card-top">
               <span class="card-category-badge">${item.category}</span>
