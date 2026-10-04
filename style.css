@@ -1,0 +1,222 @@
+/* ==========================================================================
+   rizkyby.web - Overview Stylesheet
+   Fonts: Atkinson Hyperlegible (UI) & JetBrains Mono (Technical/Title)
+   ========================================================================== */
+
+:root {
+  --font-ui: 'Atkinson Hyperlegible', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --color-text-main: #f5f5f7;
+  --color-text-dim: rgba(245, 245, 247, 0.72);
+  --color-text-sub: rgba(245, 245, 247, 0.55);
+  --mx: 50%;
+  --my: 50%;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  user-select: none;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #000000;
+  color: var(--color-text-main);
+  font-family: var(--font-ui);
+  touch-action: none;
+}
+
+/* --- Background Layers --- */
+#bg-base {
+  position: fixed;
+  inset: 0;
+  background: #000000;
+  z-index: 0;
+}
+
+#bg-sunset {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 2.8s cubic-bezier(0.25, 1, 0.5, 1);
+  background:
+    radial-gradient(circle 650px at var(--mx) var(--my), rgba(245, 120, 65, 0.22) 0%, rgba(180, 50, 95, 0.12) 42%, transparent 70%),
+    radial-gradient(ellipse 110% 80% at calc(100% - var(--mx) * 0.4) calc(100% - var(--my) * 0.3), rgba(110, 40, 140, 0.18) 0%, transparent 60%),
+    linear-gradient(180deg,
+      #070512 0%,
+      #140a24 25%,
+      #290d35 48%,
+      #4c1538 68%,
+      #7b2533 84%,
+      #ad4530 96%,
+      #c95b34 100%
+    );
+}
+
+#bg-sunset.active {
+  opacity: 1;
+}
+
+/* Interactive Mouse Glow / Halo */
+#mouse-glow {
+  position: fixed;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 2;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  filter: blur(80px);
+  transition: opacity 1.5s ease;
+  background: radial-gradient(circle, rgba(255, 150, 80, 0.18) 0%, rgba(210, 70, 110, 0.08) 50%, transparent 75%);
+}
+
+#mouse-glow.active {
+  opacity: 1;
+}
+
+/* --- Centered App Viewport --- */
+#app {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  text-align: center;
+}
+
+.content-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 980px;
+  padding: 0 1.5rem;
+}
+
+/* Fixed text slots to prevent any vertical or horizontal layout shifts */
+.text-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+  position: relative;
+}
+
+/* Slot 1: Welcome */
+.slot-welcome {
+  height: 2.8rem;
+  margin-bottom: 0.25rem;
+}
+
+#text-welcome {
+  font-family: var(--font-ui);
+  font-size: clamp(1.25rem, 3.2vw, 2.1rem);
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  color: var(--color-text-dim);
+  white-space: pre;
+}
+
+/* Slot 2: Main Title (rizkyby.web) */
+.slot-title {
+  height: 5.6rem;
+  margin-bottom: 0.5rem;
+}
+
+#text-title {
+  font-family: var(--font-mono);
+  font-size: clamp(2.2rem, 7vw, 4.6rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--color-text-main);
+  white-space: pre;
+  display: inline-block;
+}
+
+/* Slot 3: Subtitle (animates down-to-up with easing) */
+.slot-sub {
+  height: 2.4rem;
+  overflow: hidden; /* masks the slide up transition cleanly */
+}
+
+#text-sub {
+  font-family: var(--font-ui);
+  font-size: clamp(0.85rem, 2vw, 1.15rem);
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-sub);
+  white-space: pre;
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#text-sub.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#text-sub.leaving {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.35s ease-in, transform 0.35s ease-in;
+}
+
+/* --- Click Ripple Interactions --- */
+.click-ripple {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 999;
+  transform: translate(-50%, -50%) scale(0);
+  animation: ripple-wave 0.75s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
+
+.click-ripple.left {
+  background: radial-gradient(circle, rgba(255, 185, 95, 0.45) 0%, rgba(230, 90, 60, 0.2) 40%, transparent 75%);
+  border: 1px solid rgba(255, 200, 130, 0.35);
+}
+
+.click-ripple.right {
+  background: radial-gradient(circle, rgba(185, 130, 255, 0.45) 0%, rgba(100, 70, 220, 0.2) 40%, transparent 75%);
+  border: 1px solid rgba(200, 160, 255, 0.35);
+}
+
+@keyframes ripple-wave {
+  0% {
+    transform: translate(-50%, -50%) scale(0.1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(3.5);
+    opacity: 0;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+  #text-sub {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
