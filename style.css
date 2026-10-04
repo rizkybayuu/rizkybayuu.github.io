@@ -86,22 +86,22 @@ html, body {
   animation: mouseGlowPaletteShift 32s ease-in-out infinite alternate;
 }
 
-/* Dynamic Sky & Aurora Palette Shift over time */
+/* Dynamic Sunset, Purple, and Dusk Blue Sky Palette (Strictly Orange, Purple, and Blue) */
 @keyframes skyPaletteShift {
   0% {
-    filter: hue-rotate(0deg) saturate(1);
+    filter: hue-rotate(0deg); /* Warm Sunset Amber & Purple */
   }
-  25% {
-    filter: hue-rotate(45deg) saturate(1.15); /* Twilight rose & deep royal purple */
+  30% {
+    filter: hue-rotate(-35deg); /* Twilight Coral, Magenta & Rich Violet */
   }
-  50% {
-    filter: hue-rotate(110deg) saturate(1.2); /* Oceanic dusk & teal midnight */
+  65% {
+    filter: hue-rotate(-75deg); /* Deep Amethyst Purple & Midnight Indigo */
   }
-  75% {
-    filter: hue-rotate(175deg) saturate(1.15); /* Electric aurora azure & amethyst */
+  85% {
+    filter: hue-rotate(-105deg); /* Deep Twilight Blue & Navy */
   }
   100% {
-    filter: hue-rotate(-45deg) saturate(1.3); /* Intense golden hour amber & crimson dusk */
+    filter: hue-rotate(0deg); /* Back smoothly to Sunset Orange */
   }
 }
 
@@ -109,17 +109,17 @@ html, body {
   0% {
     filter: blur(110px) hue-rotate(0deg);
   }
-  25% {
-    filter: blur(110px) hue-rotate(45deg);
+  30% {
+    filter: blur(110px) hue-rotate(-35deg);
   }
-  50% {
-    filter: blur(110px) hue-rotate(110deg);
+  65% {
+    filter: blur(110px) hue-rotate(-75deg);
   }
-  75% {
-    filter: blur(110px) hue-rotate(175deg);
+  85% {
+    filter: blur(110px) hue-rotate(-105deg);
   }
   100% {
-    filter: blur(110px) hue-rotate(-45deg);
+    filter: blur(110px) hue-rotate(0deg);
   }
 }
 
@@ -235,18 +235,18 @@ html, body {
   display: inline-block;
   opacity: 0;
   transform: translateY(32px);
-  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 #text-sub.visible {
   opacity: 1;
   transform: translateY(0);
+  transition: opacity 0.75s ease-in, transform 0.75s ease-in; /* Animasi Masuk: EASE-IN */
 }
 
 #text-sub.leaving {
   opacity: 0;
   transform: translateY(-32px);
-  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 0.42s ease-out, transform 0.42s ease-out; /* Animasi Keluar: EASE-OUT */
 }
 
 /* --- Click Ripple Interactions --- */

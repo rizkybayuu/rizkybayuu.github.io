@@ -177,8 +177,8 @@
         if (backIdx > 0) {
           backIdx--;
           textTitle.textContent = currentWord.slice(0, backIdx);
-          // Fast backspacing synchronized with text 3 exit
-          setTimeout(backStep, 36);
+          // Fast backspacing synchronized with text 3 ease-out exit
+          setTimeout(backStep, 38);
         } else {
           // Finished backspacing: both text 2 and text 3 are completely gone
           textSub.className = '';
