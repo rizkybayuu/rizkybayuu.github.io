@@ -116,6 +116,28 @@ html, body {
   position: relative;
 }
 
+.line-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Type Caret Indicator (Sleek straight line bar, perfectly centered, blinks independently) */
+.type-caret {
+  display: inline-block;
+  width: 3.5px;
+  border-radius: 2px;
+  background-color: var(--color-text-main);
+  margin-left: 6px;
+  animation: caret-pulse 0.85s steps(2, start) infinite;
+}
+
+@keyframes caret-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
 /* Slot 1: Welcome */
 .slot-welcome {
   height: 2.8rem;
@@ -129,6 +151,10 @@ html, body {
   letter-spacing: 0.03em;
   color: var(--color-text-dim);
   white-space: pre;
+}
+
+#caret-welcome {
+  height: clamp(1.2rem, 3vw, 1.8rem);
 }
 
 /* Slot 2: Main Title (rizkyby.web) */
@@ -147,7 +173,13 @@ html, body {
   display: inline-block;
 }
 
-/* Slot 3: Subtitle (animates down-to-up with easing) */
+#caret-title {
+  height: clamp(2.2rem, 6.5vw, 4.2rem);
+  width: 4px;
+  margin-left: 8px;
+}
+
+/* Slot 3: Subtitle (animates down-to-up with easing from the very start) */
 .slot-sub {
   height: 2.4rem;
   overflow: hidden; /* masks the slide up transition cleanly */
@@ -174,8 +206,8 @@ html, body {
 
 #text-sub.leaving {
   opacity: 0;
-  transform: translateY(-20px);
-  transition: opacity 0.35s ease-in, transform 0.35s ease-in;
+  transform: translateY(24px);
+  transition: opacity 0.4s ease-in, transform 0.4s ease-in;
 }
 
 /* --- Click Ripple Interactions --- */
@@ -217,6 +249,10 @@ html, body {
   }
   #text-sub {
     transform: none !important;
+    opacity: 1 !important;
+  }
+  .type-caret {
+    animation: none !important;
     opacity: 1 !important;
   }
 }

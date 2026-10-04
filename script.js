@@ -9,7 +9,9 @@
 
   // DOM references
   const textWelcome = document.getElementById('text-welcome');
+  const caretWelcome = document.getElementById('caret-welcome');
   const textTitle = document.getElementById('text-title');
+  const caretTitle = document.getElementById('caret-title');
   const textSub = document.getElementById('text-sub');
   const bgSunset = document.getElementById('bg-sunset');
   const mouseGlow = document.getElementById('mouse-glow');
@@ -110,7 +112,10 @@
         i++;
         setTimeout(step, 75 + Math.random() * 25);
       } else {
-        // Done typing welcome
+        // Done typing welcome: hide welcome caret
+        if (caretWelcome) {
+          caretWelcome.style.display = 'none';
+        }
         if (typeof callback === 'function') {
           callback();
         }
@@ -133,7 +138,16 @@
     let charIdx = 0;
     const len = currentWord.length;
 
-    // Ease-in-out typewriter step
+    // Show title caret
+    if (caretTitle) {
+      caretTitle.style.display = 'inline-block';
+    }
+
+    // REQUIREMENT: Text 3 immediately appears from the start (does not wait for text 2 to finish typing)
+    textSub.textContent = currentSub;
+    textSub.className = 'visible';
+
+    // Ease-in-out typewriter step for text 2
     function typeStep() {
       if (charIdx <= len) {
         textTitle.textContent = currentWord.slice(0, charIdx);
@@ -148,23 +162,14 @@
           const delay = 155 - curve * 95;
           setTimeout(typeStep, delay);
         } else {
-          // Reached 100% completion
-          onTitleComplete();
+          // Reached 100% completion - hold for user reading time
+          setTimeout(startBackspacing, 2200);
         }
       }
     }
 
-    function onTitleComplete() {
-      // Trigger subtitle to glide in from bottom with smooth easing
-      textSub.textContent = currentSub;
-      textSub.className = 'visible';
-
-      // Hold for 2.2 seconds before backspacing
-      setTimeout(startBackspacing, 2200);
-    }
-
     function startBackspacing() {
-      // Subtitle slides out gently
+      // REQUIREMENT: As text 2 starts backspacing away, text 3 also starts disappearing
       textSub.className = 'leaving';
 
       let backIdx = len;
@@ -175,12 +180,12 @@
           // Fast backspacing
           setTimeout(backStep, 32);
         } else {
-          // Finished backspacing
+          // Finished backspacing: both text 2 and text 3 are completely gone
           textSub.className = '';
           textSub.textContent = '';
           titleIndex = (titleIndex + 1) % TITLES.length;
-          // Brief rest before next title
-          setTimeout(runTitleCycle, 400);
+          // Brief pause before next cycle begins
+          setTimeout(runTitleCycle, 350);
         }
       }
       backStep();
@@ -193,15 +198,14 @@
      4. Sequence Bootstrap
      -------------------------------------------------------------------------- */
   window.addEventListener('DOMContentLoaded', () => {
-    // Delay slightly before starting first animation
     setTimeout(() => {
       typeWelcome(() => {
         // Trigger sunset gradient background
         triggerSunset();
 
         // Start title cycle after short pause
-        setTimeout(runTitleCycle, 500);
+        setTimeout(runTitleCycle, 450);
       });
-    }, 400);
+    }, 350);
   });
 })();
