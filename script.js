@@ -43,10 +43,29 @@
   let currentX = targetX;
   let currentY = targetY;
 
+  function showMouseRadial() {
+    if (bgMouseRadial) bgMouseRadial.classList.remove('mouse-hidden');
+    if (mouseGlow) mouseGlow.classList.remove('mouse-hidden');
+  }
+
+  function hideMouseRadial() {
+    if (bgMouseRadial) bgMouseRadial.classList.add('mouse-hidden');
+    if (mouseGlow) mouseGlow.classList.add('mouse-hidden');
+  }
+
   window.addEventListener('pointermove', (e) => {
     targetX = e.clientX;
     targetY = e.clientY;
+    showMouseRadial();
   }, { passive: true });
+
+  document.addEventListener('mouseleave', () => {
+    hideMouseRadial();
+  });
+
+  document.addEventListener('mouseenter', () => {
+    showMouseRadial();
+  });
 
   function updateMousePhysics() {
     if (mouseTrackingActive) {
