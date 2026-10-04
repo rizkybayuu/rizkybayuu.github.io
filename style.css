@@ -240,13 +240,13 @@ html, body {
 #text-sub.visible {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 0.75s ease-in, transform 0.75s ease-in; /* Animasi Masuk: EASE-IN */
+  transition: opacity 0.75s ease-out, transform 0.75s ease-out; /* Cepat/tajam masuk, perlahan berhenti */
 }
 
 #text-sub.leaving {
   opacity: 0;
   transform: translateY(-32px);
-  transition: opacity 0.42s ease-out, transform 0.42s ease-out; /* Animasi Keluar: EASE-OUT */
+  transition: opacity 0.42s ease-in, transform 0.42s ease-in; /* Perlahan di awal, tajam menghilang */
 }
 
 /* --- Click Ripple Interactions --- */
