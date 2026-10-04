@@ -12,11 +12,12 @@
   --mx: 50%;
   --my: 50%;
 
-  /* Mathematically locked typography scale across any zoom level */
-  --scale-title: clamp(2.2rem, 6.4vw, 4.4rem);
+  /* Linear, unconstrained rem typography scale - strictly zero clamp, zero threshold */
+  --scale-title: 3.85rem;
   --scale-welcome: calc(var(--scale-title) * 0.45);
-  --scale-sub: calc(var(--scale-title) * 0.27);
+  --scale-sub: calc(var(--scale-title) * 0.28);
   --scale-gap: calc(var(--scale-title) * 0.12);
+  --sub-motion-distance: calc(var(--scale-sub) * 1.6);
 }
 
 * {
@@ -169,9 +170,9 @@ html, body {
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 980px;
+  max-width: 60rem;
   padding: 0 1.5rem;
-  gap: var(--scale-gap); /* Proportional lockup gap - scales perfectly on any zoom */
+  gap: var(--scale-gap); /* Proportional lockup gap - scales purely with rem */
 }
 
 /* Fixed text slots to prevent any vertical or horizontal layout shifts */
@@ -221,8 +222,8 @@ html, body {
 
 #caret-welcome {
   height: calc(var(--scale-welcome) * 0.95);
-  width: max(2.5px, calc(var(--scale-welcome) * 0.09));
-  margin-left: 6px;
+  width: calc(var(--scale-welcome) * 0.08);
+  margin-left: calc(var(--scale-welcome) * 0.2);
 }
 
 /* Slot 2: Main Title (rizkyby.web) */
@@ -243,8 +244,8 @@ html, body {
 
 #caret-title {
   height: calc(var(--scale-title) * 0.92);
-  width: max(3.5px, calc(var(--scale-title) * 0.07));
-  margin-left: 8px;
+  width: calc(var(--scale-title) * 0.06);
+  margin-left: calc(var(--scale-title) * 0.12);
 }
 
 /* Slot 3: Subtitle (animates down-to-up into center, and center-to-up when leaving, uncropped) */
@@ -264,7 +265,7 @@ html, body {
   white-space: pre;
   display: inline-block;
   opacity: 0;
-  transform: translateY(28px);
+  transform: translateY(var(--sub-motion-distance));
 }
 
 #text-sub.visible {
@@ -275,7 +276,7 @@ html, body {
 
 #text-sub.leaving {
   opacity: 0;
-  transform: translateY(-28px);
+  transform: translateY(calc(-1 * var(--sub-motion-distance)));
   transition: opacity 0.42s ease-in, transform 0.42s ease-in; /* Perlahan di awal, tajam menghilang */
 }
 
