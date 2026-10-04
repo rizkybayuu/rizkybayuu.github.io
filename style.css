@@ -48,8 +48,8 @@ html, body {
   pointer-events: none;
   transition: opacity 2.8s cubic-bezier(0.25, 1, 0.5, 1);
   background:
-    radial-gradient(circle 650px at var(--mx) var(--my), rgba(245, 120, 65, 0.22) 0%, rgba(180, 50, 95, 0.12) 42%, transparent 70%),
-    radial-gradient(ellipse 110% 80% at calc(100% - var(--mx) * 0.4) calc(100% - var(--my) * 0.3), rgba(110, 40, 140, 0.18) 0%, transparent 60%),
+    radial-gradient(circle 1200px at var(--mx) var(--my), rgba(245, 125, 65, 0.32) 0%, rgba(185, 45, 100, 0.18) 38%, rgba(85, 20, 95, 0.08) 65%, transparent 80%),
+    radial-gradient(ellipse 140% 100% at calc(100% - var(--mx) * 0.45) calc(100% - var(--my) * 0.35), rgba(120, 35, 150, 0.24) 0%, rgba(30, 10, 60, 0.12) 50%, transparent 75%),
     linear-gradient(180deg,
       #070512 0%,
       #140a24 25%,
@@ -63,25 +63,64 @@ html, body {
 
 #bg-sunset.active {
   opacity: 1;
+  animation: skyPaletteShift 32s ease-in-out infinite alternate;
 }
 
-/* Interactive Mouse Glow / Halo */
+/* Interactive Mouse Glow / Halo - Expanded radial gradient & dynamic color shift */
 #mouse-glow {
   position: fixed;
-  width: 480px;
-  height: 480px;
+  width: 900px;
+  height: 900px;
   border-radius: 50%;
   pointer-events: none;
   z-index: 2;
   transform: translate(-50%, -50%);
   opacity: 0;
-  filter: blur(80px);
+  filter: blur(110px);
   transition: opacity 1.5s ease;
-  background: radial-gradient(circle, rgba(255, 150, 80, 0.18) 0%, rgba(210, 70, 110, 0.08) 50%, transparent 75%);
+  background: radial-gradient(circle, rgba(255, 150, 80, 0.22) 0%, rgba(215, 65, 115, 0.12) 42%, rgba(110, 30, 140, 0.05) 65%, transparent 80%);
 }
 
 #mouse-glow.active {
   opacity: 1;
+  animation: mouseGlowPaletteShift 32s ease-in-out infinite alternate;
+}
+
+/* Dynamic Sky & Aurora Palette Shift over time */
+@keyframes skyPaletteShift {
+  0% {
+    filter: hue-rotate(0deg) saturate(1);
+  }
+  25% {
+    filter: hue-rotate(45deg) saturate(1.15); /* Twilight rose & deep royal purple */
+  }
+  50% {
+    filter: hue-rotate(110deg) saturate(1.2); /* Oceanic dusk & teal midnight */
+  }
+  75% {
+    filter: hue-rotate(175deg) saturate(1.15); /* Electric aurora azure & amethyst */
+  }
+  100% {
+    filter: hue-rotate(-45deg) saturate(1.3); /* Intense golden hour amber & crimson dusk */
+  }
+}
+
+@keyframes mouseGlowPaletteShift {
+  0% {
+    filter: blur(110px) hue-rotate(0deg);
+  }
+  25% {
+    filter: blur(110px) hue-rotate(45deg);
+  }
+  50% {
+    filter: blur(110px) hue-rotate(110deg);
+  }
+  75% {
+    filter: blur(110px) hue-rotate(175deg);
+  }
+  100% {
+    filter: blur(110px) hue-rotate(-45deg);
+  }
 }
 
 /* --- Centered App Viewport --- */
