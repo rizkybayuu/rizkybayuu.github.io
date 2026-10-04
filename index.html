@@ -16,26 +16,143 @@
   <div id="mouse-glow"></div>
 
   <main id="app">
-    <div class="content-card">
-      <!-- Fixed Slot 1: Welcome line -->
-      <div class="text-slot slot-welcome">
-        <div class="line-wrapper">
-          <span id="text-welcome"></span>
-          <span id="caret-welcome" class="type-caret"></span>
+    <nav id="site-nav" class="site-nav" aria-label="Main navigation">
+      <ul class="nav-list">
+        <li><a href="#work" class="nav-link" data-nav="work">Work</a></li>
+        <li><a href="#skills" class="nav-link" data-nav="skills">Skills</a></li>
+        <li><a href="#connect" class="nav-link" data-nav="connect">Connect</a></li>
+        <li><a href="#hire" class="nav-link" data-nav="hire">Hire Me</a></li>
+      </ul>
+    </nav>
+    
+    <!-- Main Hero View -->
+    <div id="hero-view" class="view active">
+      <div class="content-card">
+        <!-- Fixed Slot 1: Welcome line -->
+        <div class="text-slot slot-welcome">
+          <div class="line-wrapper">
+            <span id="text-welcome"></span>
+            <span id="caret-welcome" class="type-caret"></span>
+          </div>
+        </div>
+
+        <!-- Fixed Slot 2: Main title -->
+        <div class="text-slot slot-title">
+          <div class="line-wrapper">
+            <span id="text-title"></span>
+            <span id="caret-title" class="type-caret" style="display: none;"></span>
+          </div>
+        </div>
+
+        <!-- Fixed Slot 3: Subtitle / tagline -->
+        <div class="text-slot slot-sub">
+          <span id="text-sub"></span>
         </div>
       </div>
+    </div>
 
-      <!-- Fixed Slot 2: Main title -->
-      <div class="text-slot slot-title">
-        <div class="line-wrapper">
-          <span id="text-title"></span>
-          <span id="caret-title" class="type-caret" style="display: none;"></span>
+    <!-- Work View -->
+    <div id="work-view" class="view">
+      <div class="work-container">
+        <header class="work-header">
+          <div class="work-top-row">
+            <button id="work-back" class="work-back-btn" aria-label="Back to overview">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+              <span>Overview</span>
+            </button>
+            <div class="work-heading-group">
+              <h2 class="work-heading">Selected Works</h2>
+              <span class="work-count" id="work-counter">24 Projects</span>
+            </div>
+          </div>
+          <div class="work-cat-nav" id="work-cat-nav" role="tablist">
+            <!-- Category tabs generated dynamically by JS -->
+          </div>
+        </header>
+
+        <div class="work-display-area">
+          <div class="work-deck" id="work-deck">
+            <!-- Project cards rendered here by JS -->
+          </div>
+        </div>
+
+        <footer class="work-footer">
+          <div class="work-pagination">
+            <button id="work-prev-btn" class="page-nav-btn" aria-label="Previous page">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+              <span>Prev</span>
+            </button>
+            <span id="work-page-info" class="work-page-info">1 / 1</span>
+            <button id="work-next-btn" class="page-nav-btn" aria-label="Next page">
+              <span>Next</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+          </div>
+          <div class="work-hint">Use <kbd>←</kbd> <kbd>→</kbd> to navigate &bull; <kbd>ESC</kbd> to return</div>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Skills View -->
+    <div id="skills-view" class="view">
+      <div class="work-container">
+        <header class="work-header">
+          <div class="work-top-row">
+            <button class="view-back-btn work-back-btn" data-back="hero">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+              <span>Overview</span>
+            </button>
+            <h2 class="work-heading">Skills & Proficiency</h2>
+          </div>
+        </header>
+        <div class="work-display-area">
+          <div class="coming-soon-card">
+            <span class="card-category-badge">Under Construction</span>
+            <p class="coming-soon-text">Skills showcase and proficiency meters will be configured next.</p>
+          </div>
         </div>
       </div>
+    </div>
 
-      <!-- Fixed Slot 3: Subtitle / tagline -->
-      <div class="text-slot slot-sub">
-        <span id="text-sub"></span>
+    <!-- Connect View -->
+    <div id="connect-view" class="view">
+      <div class="work-container">
+        <header class="work-header">
+          <div class="work-top-row">
+            <button class="view-back-btn work-back-btn" data-back="hero">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+              <span>Overview</span>
+            </button>
+            <h2 class="work-heading">Connect</h2>
+          </div>
+        </header>
+        <div class="work-display-area">
+          <div class="coming-soon-card">
+            <span class="card-category-badge">Social Channels</span>
+            <p class="coming-soon-text">Instagram, GitHub, and Discord links incoming.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hire View -->
+    <div id="hire-view" class="view">
+      <div class="work-container">
+        <header class="work-header">
+          <div class="work-top-row">
+            <button class="view-back-btn work-back-btn" data-back="hero">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+              <span>Overview</span>
+            </button>
+            <h2 class="work-heading">Hire Me</h2>
+          </div>
+        </header>
+        <div class="work-display-area">
+          <div class="coming-soon-card">
+            <span class="card-category-badge">Freelance & Collaboration</span>
+            <p class="coming-soon-text">Direct contact channels and project inquiries.</p>
+          </div>
+        </div>
       </div>
     </div>
   </main>
