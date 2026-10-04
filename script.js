@@ -14,6 +14,7 @@
   const caretTitle = document.getElementById('caret-title');
   const textSub = document.getElementById('text-sub');
   const bgSunset = document.getElementById('bg-sunset');
+  const bgMouseRadial = document.getElementById('bg-mouse-radial');
   const mouseGlow = document.getElementById('mouse-glow');
 
   // Content definitions
@@ -127,6 +128,7 @@
   // Step 2: Transition background to sunset & activate mouse tracking
   function triggerSunset() {
     bgSunset.classList.add('active');
+    if (bgMouseRadial) bgMouseRadial.classList.add('active');
     mouseGlow.classList.add('active');
     mouseTrackingActive = true;
   }

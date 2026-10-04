@@ -11,6 +11,12 @@
   --color-text-sub: rgba(245, 245, 247, 0.55);
   --mx: 50%;
   --my: 50%;
+
+  /* Mathematically locked typography scale across any zoom level */
+  --scale-title: clamp(2.2rem, 6.4vw, 4.4rem);
+  --scale-welcome: calc(var(--scale-title) * 0.45);
+  --scale-sub: calc(var(--scale-title) * 0.27);
+  --scale-gap: calc(var(--scale-title) * 0.12);
 }
 
 * {
@@ -48,7 +54,6 @@ html, body {
   pointer-events: none;
   transition: opacity 2.8s cubic-bezier(0.25, 1, 0.5, 1);
   background:
-    radial-gradient(circle 1200px at var(--mx) var(--my), rgba(245, 125, 65, 0.32) 0%, rgba(185, 45, 100, 0.18) 38%, rgba(85, 20, 95, 0.08) 65%, transparent 80%),
     radial-gradient(ellipse 140% 100% at calc(100% - var(--mx) * 0.45) calc(100% - var(--my) * 0.35), rgba(120, 35, 150, 0.24) 0%, rgba(30, 10, 60, 0.12) 50%, transparent 75%),
     linear-gradient(180deg,
       #070512 0%,
@@ -66,6 +71,22 @@ html, body {
   animation: skyPaletteShift 32s ease-in-out infinite alternate;
 }
 
+/* Dedicated Large Cursor Radial Gradient (Smoothly fades out on mouseleave, fades in on mouseenter) */
+#bg-mouse-radial {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  background: radial-gradient(circle 1200px at var(--mx) var(--my), rgba(245, 125, 65, 0.34) 0%, rgba(185, 45, 100, 0.19) 38%, rgba(85, 20, 95, 0.08) 65%, transparent 80%);
+}
+
+#bg-mouse-radial.active {
+  opacity: 1;
+  animation: skyPaletteShift 32s ease-in-out infinite alternate;
+}
+
 /* Interactive Mouse Glow / Halo - Expanded radial gradient & dynamic color shift */
 #mouse-glow {
   position: fixed;
@@ -73,12 +94,12 @@ html, body {
   height: 900px;
   border-radius: 50%;
   pointer-events: none;
-  z-index: 2;
+  z-index: 3;
   transform: translate(-50%, -50%);
   opacity: 0;
   filter: blur(110px);
-  transition: opacity 1.5s ease;
-  background: radial-gradient(circle, rgba(255, 150, 80, 0.22) 0%, rgba(215, 65, 115, 0.12) 42%, rgba(110, 30, 140, 0.05) 65%, transparent 80%);
+  transition: opacity 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  background: radial-gradient(circle, rgba(255, 150, 80, 0.24) 0%, rgba(215, 65, 115, 0.13) 42%, rgba(110, 30, 140, 0.05) 65%, transparent 80%);
 }
 
 #mouse-glow.active {
@@ -86,40 +107,47 @@ html, body {
   animation: mouseGlowPaletteShift 32s ease-in-out infinite alternate;
 }
 
-/* Dynamic Sunset, Purple, and Dusk Blue Sky Palette (Strictly Orange, Purple, and Blue) */
+/* Fade out radial gradient when cursor leaves the window, restore smoothly when entering */
+#bg-mouse-radial.mouse-hidden,
+#mouse-glow.mouse-hidden {
+  opacity: 0 !important;
+  transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Dynamic Sunset, Purple, and Dusk Blue Palette with Natural Lightness Shifts (Cerah ke Sedikit Gelap) */
 @keyframes skyPaletteShift {
   0% {
-    filter: hue-rotate(0deg); /* Warm Sunset Amber & Purple */
+    filter: hue-rotate(0deg) brightness(1.08); /* Sunset Amber - Cerah Hangat */
   }
-  30% {
-    filter: hue-rotate(-35deg); /* Twilight Coral, Magenta & Rich Violet */
+  28% {
+    filter: hue-rotate(-30deg) brightness(0.96); /* Twilight Coral & Magenta */
   }
-  65% {
-    filter: hue-rotate(-75deg); /* Deep Amethyst Purple & Midnight Indigo */
+  55% {
+    filter: hue-rotate(-70deg) brightness(0.86); /* Deep Amethyst Purple - Sedikit lebih gelap/redup */
   }
-  85% {
-    filter: hue-rotate(-105deg); /* Deep Twilight Blue & Navy */
+  80% {
+    filter: hue-rotate(-100deg) brightness(0.93); /* Dusk Twilight Blue - Transisi kembali cerah */
   }
   100% {
-    filter: hue-rotate(0deg); /* Back smoothly to Sunset Orange */
+    filter: hue-rotate(0deg) brightness(1.08); /* Kembali ke Cerah Sunset */
   }
 }
 
 @keyframes mouseGlowPaletteShift {
   0% {
-    filter: blur(110px) hue-rotate(0deg);
+    filter: blur(110px) hue-rotate(0deg) brightness(1.12);
   }
-  30% {
-    filter: blur(110px) hue-rotate(-35deg);
+  28% {
+    filter: blur(110px) hue-rotate(-30deg) brightness(0.98);
   }
-  65% {
-    filter: blur(110px) hue-rotate(-75deg);
+  55% {
+    filter: blur(110px) hue-rotate(-70deg) brightness(0.88);
   }
-  85% {
-    filter: blur(110px) hue-rotate(-105deg);
+  80% {
+    filter: blur(110px) hue-rotate(-100deg) brightness(0.95);
   }
   100% {
-    filter: blur(110px) hue-rotate(0deg);
+    filter: blur(110px) hue-rotate(0deg) brightness(1.12);
   }
 }
 
@@ -143,6 +171,7 @@ html, body {
   width: 100%;
   max-width: 980px;
   padding: 0 1.5rem;
+  gap: var(--scale-gap); /* Proportional lockup gap - scales perfectly on any zoom */
 }
 
 /* Fixed text slots to prevent any vertical or horizontal layout shifts */
@@ -165,10 +194,8 @@ html, body {
 /* Type Caret Indicator (Sleek straight line bar, perfectly centered, blinks independently) */
 .type-caret {
   display: inline-block;
-  width: 3.5px;
   border-radius: 2px;
   background-color: var(--color-text-main);
-  margin-left: 6px;
   animation: caret-pulse 0.85s steps(2, start) infinite;
 }
 
@@ -179,13 +206,13 @@ html, body {
 
 /* Slot 1: Welcome */
 .slot-welcome {
-  height: 2.8rem;
-  margin-bottom: 0.25rem;
+  height: calc(var(--scale-welcome) * 1.35);
 }
 
 #text-welcome {
   font-family: var(--font-ui);
-  font-size: clamp(1.25rem, 3.2vw, 2.1rem);
+  font-size: var(--scale-welcome);
+  line-height: 1;
   font-weight: 400;
   letter-spacing: 0.03em;
   color: var(--color-text-dim);
@@ -193,18 +220,20 @@ html, body {
 }
 
 #caret-welcome {
-  height: clamp(1.2rem, 3vw, 1.8rem);
+  height: calc(var(--scale-welcome) * 0.95);
+  width: max(2.5px, calc(var(--scale-welcome) * 0.09));
+  margin-left: 6px;
 }
 
 /* Slot 2: Main Title (rizkyby.web) */
 .slot-title {
-  height: 5.6rem;
-  margin-bottom: 0.5rem;
+  height: calc(var(--scale-title) * 1.25);
 }
 
 #text-title {
   font-family: var(--font-mono);
-  font-size: clamp(2.2rem, 7vw, 4.6rem);
+  font-size: var(--scale-title);
+  line-height: 1;
   font-weight: 700;
   letter-spacing: -0.01em;
   color: var(--color-text-main);
@@ -213,20 +242,21 @@ html, body {
 }
 
 #caret-title {
-  height: clamp(2.2rem, 6.5vw, 4.2rem);
-  width: 4px;
+  height: calc(var(--scale-title) * 0.92);
+  width: max(3.5px, calc(var(--scale-title) * 0.07));
   margin-left: 8px;
 }
 
 /* Slot 3: Subtitle (animates down-to-up into center, and center-to-up when leaving, uncropped) */
 .slot-sub {
-  height: 2.4rem;
+  height: calc(var(--scale-sub) * 1.45);
   overflow: visible; /* no clipping so animation glides freely without cropping */
 }
 
 #text-sub {
   font-family: var(--font-ui);
-  font-size: clamp(0.85rem, 2vw, 1.15rem);
+  font-size: var(--scale-sub);
+  line-height: 1;
   font-weight: 400;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -234,7 +264,7 @@ html, body {
   white-space: pre;
   display: inline-block;
   opacity: 0;
-  transform: translateY(32px);
+  transform: translateY(28px);
 }
 
 #text-sub.visible {
@@ -245,7 +275,7 @@ html, body {
 
 #text-sub.leaving {
   opacity: 0;
-  transform: translateY(-32px);
+  transform: translateY(-28px);
   transition: opacity 0.42s ease-in, transform 0.42s ease-in; /* Perlahan di awal, tajam menghilang */
 }
 
