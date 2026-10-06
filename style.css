@@ -103,17 +103,54 @@ html, body {
   opacity: 1;
 }
 
+/* Twinkling Starfield - low opacity, random phase twinkle */
+#bg-starfield {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 1.5s ease-in;
+}
+
+#bg-starfield.active {
+  opacity: 1;
+}
+
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: #fff;
+  opacity: 0;
+  animation: starTwinkle var(--star-dur, 3s) ease-in-out infinite;
+  animation-delay: var(--star-delay, 0s);
+  transition: filter 0.3s ease;
+}
+
+@keyframes starTwinkle {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: var(--star-peak, 0.3);
+  }
+}
+
 .meteor {
   position: absolute;
   top: -160px;
   width: 2px;
   height: 90px;
   border-radius: 999px;
-  background: linear-gradient(180deg, transparent 0%, rgba(255, 230, 200, 0.4) 30%, rgba(255, 255, 255, 0.95) 100%);
-  filter: drop-shadow(0 0 6px rgba(255, 200, 160, 0.8));
+  background: linear-gradient(180deg, rgba(255, 230, 200, 0) 0%, rgba(255, 230, 200, 0.55) 45%, #ffffff 100%);
+  filter: drop-shadow(0 0 8px rgba(255, 215, 175, 0.95));
   pointer-events: none;
-  transform: rotate(25deg);
-  animation: meteorFall 1s linear forwards;
+  transform: rotate(45deg);
+  animation: meteorFall 4s linear forwards;
 }
 
 /* Interactive Mouse Glow / Halo - Expanded radial gradient & dynamic color shift */
@@ -446,17 +483,17 @@ html, body {
 
 @keyframes meteorFall {
   0% {
-    transform: translate3d(0, 0, 0) rotate(25deg);
+    transform: translate3d(0, 0, 0) rotate(45deg);
     opacity: 0;
   }
-  15% {
+  12% {
     opacity: 1;
   }
-  85% {
+  88% {
     opacity: 1;
   }
   100% {
-    transform: translate3d(-350px, calc(100vh + 300px), 0) rotate(25deg);
+    transform: translate3d(calc(-100vh - 420px), calc(100vh + 420px), 0) rotate(45deg);
     opacity: 0;
   }
 }
@@ -835,6 +872,11 @@ html, body {
   .type-caret {
     animation: none !important;
     opacity: 1 !important;
+  }
+  /* Stars stay visible at their low peak opacity without twinkling */
+  .star {
+    animation: none !important;
+    opacity: var(--star-peak, 0.3) !important;
   }
 }
 

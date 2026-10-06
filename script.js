@@ -15,6 +15,9 @@
   const textSub = document.getElementById('text-sub');
   const bgSunset = document.getElementById('bg-sunset');
   const bgMeteors = document.getElementById('bg-meteors');
+  const bgStarfield = document.getElementById('bg-starfield');
+  let stars = [];
+  const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const bgMouseRadial = document.getElementById('bg-mouse-radial');
   const mouseGlow = document.getElementById('mouse-glow');
 
@@ -83,6 +86,22 @@
       if (mouseGlow) {
         mouseGlow.style.left = `${currentX}px`;
         mouseGlow.style.top = `${currentY}px`;
+      }
+
+      // Stars glow brighter near the cursor (composes with twinkle via filter)
+      if (!REDUCED_MOTION && stars.length) {
+        for (const star of stars) {
+          const sx = (parseFloat(star.style.left) / 100) * window.innerWidth;
+          const sy = (parseFloat(star.style.top) / 100) * window.innerHeight;
+          const dx = currentX - sx;
+          const dy = currentY - sy;
+          const d = Math.sqrt(dx * dx + dy * dy);
+          const boost = d < 260 ? 1 + (1 - d / 260) * 1.8 : 1;
+          if (Math.abs(boost - (star._lastBoost || 1)) > 0.04) {
+            star._lastBoost = boost;
+            star.style.filter = boost > 1.02 ? `brightness(${boost.toFixed(2)})` : 'none';
+          }
+        }
       }
     }
     requestAnimationFrame(updateMousePhysics);
@@ -155,6 +174,10 @@
       bgMeteors.classList.add('active');
       spawnMeteors();
     }
+    if (bgStarfield) {
+      bgStarfield.classList.add('active');
+      spawnStars();
+    }
   }
 
   function spawnMeteors() {
@@ -169,10 +192,10 @@
       const x = Math.random() * (window.innerWidth + 200) - 100;
       meteor.style.left = `${x}px`;
 
-      const duration = 0.7 + Math.random() * 0.8;
+      const duration = 3.5 + Math.random() * 1.5;
       meteor.style.animationDuration = `${duration}s`;
 
-      const length = 70 + Math.random() * 80;
+      const length = 120 + Math.random() * 90;
       meteor.style.height = `${length}px`;
 
       bgMeteors.appendChild(meteor);
@@ -181,12 +204,35 @@
         meteor.remove();
       }, duration * 1000 + 100);
 
-      const nextDelay = 800 + Math.random() * 1200;
+      const nextDelay = 1800 + Math.random() * 1400;
       setTimeout(spawn, nextDelay);
     }
 
     spawn();
     setTimeout(spawn, 600);
+  }
+
+  function spawnStars() {
+    if (!bgStarfield) return;
+    const count = 70;
+    for (let i = 0; i < count; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.left = `${Math.random() * 100}%`;
+      star.style.top = `${Math.random() * 100}%`;
+      // Low, random peak opacity (0.22 - 0.55)
+      const peak = 0.22 + Math.random() * 0.33;
+      star.style.setProperty('--star-peak', peak.toFixed(2));
+      // Random twinkle speed & random phase start
+      star.style.setProperty('--star-dur', `${(1.8 + Math.random() * 2.7).toFixed(2)}s`);
+      star.style.setProperty('--star-delay', `${(-Math.random() * 4.5).toFixed(2)}s`);
+      // Mostly 2px, a few 3px for depth
+      const size = Math.random() < 0.15 ? 3 : 2;
+      star.style.width = `${size}px`;
+      star.style.height = `${size}px`;
+      bgStarfield.appendChild(star);
+      stars.push(star);
+    }
   }
 
   // Step 3: Type title with ease-in-out pacing, pause, trigger subtitle, backspace
