@@ -212,7 +212,7 @@ html, body {
 
 .nav-link {
   font-family: var(--font-ui);
-  font-size: calc(var(--scale-welcome) * 0.75);
+  font-size: 0.85rem;
   font-weight: 400;
   letter-spacing: 0.08em;
   text-transform: uppercase;
