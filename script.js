@@ -222,312 +222,7 @@
   /* --------------------------------------------------------------------------
      4. Portfolio Works Catalog & View Router
      -------------------------------------------------------------------------- */
-  const WORKS_DATA = [
-    {
-      id: 'ramadan-2026',
-      category: '3D Motion',
-      sub: 'Motion Graphics',
-      title: 'Ramadan 2026 Celebration',
-      desc: '3D celebratory motion graphic featuring illuminated crescent geometry, floating lanterns, and ambient golden particles.',
-        thumbnail: 'assets/media/thumbnail.svg',
-      links: [
-        { label: 'Instagram Reel', url: 'https://www.instagram.com/p/DVAAJk6FAx0/' }
-      ]
-    },
-    {
-      id: 'utbk-2026',
-      category: '3D Motion',
-      sub: 'Motion Graphics',
-      title: 'UTBK 2026 Motion & Code',
-      desc: 'Dynamic 3D motion graphic integrating terminal command streams, cyber aesthetic lighting, and rhythmic hacker typography.',
-        thumbnail: 'assets/media/thumbnail.svg',
-      links: [
-        { label: 'Instagram Reel', url: 'https://www.instagram.com/p/DYw6a_qTa1U/' }
-      ]
-    },
-    {
-      id: 'product-anim',
-      category: '3D Motion',
-      sub: 'Commercial Reel',
-      title: 'Product Motion Showcase',
-      desc: 'High-end commercial 3D product animation focusing on dynamic camera sweeps, materials, and fluid lighting.',
-        thumbnail: 'assets/media/thumbnail.svg',
-      links: [
-        { label: 'Instagram Part 1', url: 'https://www.instagram.com/p/DMzrefzvxnM/' },
-        { label: 'Instagram Part 2', url: 'https://www.instagram.com/p/DM0Tcx9vNOX/' }
-      ]
-    },
-    {
-      id: 'piano-rain',
-      category: '3D Motion',
-      sub: 'Conceptual Animation',
-      title: 'Piano & Musical Note Rain',
-      desc: 'Melancholic 3D scene depicting an expressive grand piano amidst a continuous downpour of physical sheet music notes.',
-        thumbnail: 'assets/media/thumbnail.svg',
-      links: [
-        { label: 'Instagram Post', url: 'https://www.instagram.com/p/DKonumiSbB2/' }
-      ]
-    },
-    {
-      id: 'lakeside-retreat',
-      category: 'Realistic 3D',
-      sub: 'Environment Design',
-      title: 'Lakeside Sanctuary',
-      desc: 'Photorealistic architectural render of a serene waterside deck and lounge chair bathed in tranquil twilight illumination.',
-        thumbnail: 'assets/media/thumbnail.svg',
-      links: [
-        { label: 'Instagram Post', url: 'https://www.instagram.com/p/DYvvJbXkmjn' }
-      ]
-    },
-    {
-      id: 'curved-gallery',
-      category: 'Realistic 3D',
-      sub: 'Architecture',
-      title: 'Curved Origami Gallery',
-      desc: 'Architectural concept study mimicking gracefully folded paper sheets with natural daytime bounce lighting and concrete textures.',
-        thumbnail: 'assets/media/thumbnail.svg',
-      links: [
-        { label: 'Instagram Post', url: 'https://www.instagram.com/p/DRZH4ZwkmBj/' }
-      ]
-    },
-    {
-      id: 'rolls-royce',
-      category: 'Realistic 3D',
-      sub: 'Automotive Hard-Surface',
-      title: 'Rolls Royce Phantom V',
-      desc: 'Exacting 3D automotive hard-surface reproduction showcasing metallic clearcoat reflections, studio lighting, and curves.',
-        thumbnail: 'assets/media/thumbnail.svg',
-      links: [
-        { label: 'Instagram Post', url: 'https://www.instagram.com/p/C9FIGbTSd5N/' }
-      ]
-    },
-    {
-      id: 'abandoned-room',
-      category: 'Realistic 3D',
-      sub: 'Interior Storytelling',
-      title: 'Abandoned Room & Laptop',
-      desc: 'Detailed storytelling render of a dusty forgotten workstation, volumetric sunlight shafts, and decaying concrete surroundings.',
-        thumbnail: 'assets/media/thumbnail.svg',
-      links: [
-        { label: 'Instagram Post', url: 'https://www.instagram.com/p/C868K1jymmw/?img_index=1' }
-      ]
-    },
-    {
-      id: 'morning-tea',
-      category: 'Realistic 3D',
-      sub: 'Still Life Study',
-      title: 'Morning Tea Still Life',
-      desc: 'Photorealistic morning beverage study modeled in Blender 4.0 with authentic glass refraction, condensation, and brass kettle.',
-        thumbnail: 'assets/media/thumbnail.svg',
-      links: [
-        { label: 'Instagram Post', url: 'https://www.instagram.com/p/C4LROTsyVNZ/?img_index=1' }
-      ]
-    },
-    {
-      id: 'interior-study',
-      category: 'Realistic 3D',
-      sub: 'Lighting Study',
-      title: 'Warm Interior Study',
-      desc: 'Carefully balanced natural ambient daylight and warm indoor accents exploring architectural material realism.',
-        thumbnail: 'assets/media/thumbnail.svg',
-      links: [
-        { label: 'Instagram Post', url: 'https://www.instagram.com/p/DMzqo-Tv8kM/' }
-      ]
-    },
-    {
-      id: 'iso-akyas',
-      category: 'Isometric',
-      sub: 'Level 2 Consecutive',
-      title: 'Akyas Lounge & Office (Day 28)',
-      desc: 'Eighth and concluding entry of Level 2 Consecutive Isometric series: personalized cozy workspace diorama created as a farewell tribute.',
-        thumbnail: 'assets/media/thumbnail.svg',
-      links: [
-        { label: 'Instagram Post', url: 'https://www.instagram.com/p/DH0IoOgyL6g/?img_index=1' }
-      ]
-    },
-    {
-      id: 'iso-military',
-      category: 'Isometric',
-      sub: 'Level 2 Consecutive',
-      title: 'Military Memorial Room (Day 27)',
-      desc: 'Seventh entry of Level 2 Isometric: dedicated military heritage quarters with medals, authentic posters, and foliage balance.',
-        thumbnail: 'assets/media/thumbnail.svg',
-      links: [
-        { label: 'Instagram Post', url: 'https://www.instagram.com/p/DH0IS42SUR3/?img_index=1' }
-      ]
-    },
-    {
-      id: 'iso-series',
-      category: 'Isometric',
-      sub: 'Diorama Worlds',
-      title: 'Isometric Living Spaces Series',
-      desc: 'Multi-part systematic collection exploring isometric room aesthetics, custom miniature props, and controlled studio palettes.',
-        thumbnail: 'assets/media/thumbnail.svg',
-      links: [
-        { label: 'Series Part 1', url: 'https://www.instagram.com/p/DIcXik2zBSr/?img_index=1' },
-        { label: 'Series Part 2', url: 'https://www.instagram.com/p/C3KzVawyzwz/?img_index=1' }
-      ]
-    },
-    {
-      id: 'surreal-floating',
-      category: 'Surreal & Astro',
-      sub: 'Surrealism',
-      title: 'Ethereal Spatial Landscapes',
-      desc: 'Surreal 3D dreamscape featuring gravity-defying geometries, impossible horizons, and emotive color balancing.',
-        thumbnail: 'assets/media/thumbnail.svg',
-      links: [
-        { label: 'Instagram Post', url: 'https://www.instagram.com/p/C11xXl0B_OF/?img_index=1' },
-        { label: 'Instagram Post', url: 'https://www.instagram.com/p/C3bes_TSWtC/?img_index=1' }
-      ]
-    },
-    {
-      id: 'celestial-dynamics',
-      category: 'Surreal & Astro',
-      sub: 'Astronomy',
-      title: 'Celestial Orbital Dynamics',
-      desc: 'Cosmic scale 3D astronomical simulations rendering deep-space nebulae, planetary alignments, and stellar illumination.',
-        thumbnail: 'assets/media/thumbnail.svg',
-      links: [
-        { label: 'Instagram Post', url: 'https://www.instagram.com/p/C9CVPMnyBRe/?img_index=1' },
-        { label: 'Instagram Post', url: 'https://www.instagram.com/p/DQ6PsyZErxM/?img_index=1' }
-      ]
-    },
-    {
-      id: 'street-collapse-vfx',
-      category: 'VFX & Nodes',
-      sub: 'Dynamics & Physics',
-      title: 'Collapsing Road VFX Sequence',
-      desc: 'Realistic physics-driven destruction simulation portraying sudden roadway surface collapse with detailed fracturing debris.',
-        thumbnail: 'assets/media/thumbnail.svg',
-      links: [
-        { label: 'Instagram Post', url: 'https://www.instagram.com/p/DMzpw5zPtLg/' }
-      ]
-    },
-    {
-      id: 'blendkit-staircase',
-      category: 'VFX & Nodes',
-      sub: 'Procedural Geometry',
-      title: 'Procedural Staircase Generator',
-      desc: 'Parametric procedural staircase asset generator created in Blender Geometry Nodes and officially published on BlendKit.',
-        thumbnail: 'assets/media/thumbnail.svg',
-      links: [
-        { label: 'Instagram Demo', url: 'https://www.instagram.com/p/DcQsphEy-_1/' },
-        { label: 'BlendKit Asset', url: 'https://www.blendkit.com/asset-gallery-detail/316be27d-8839-494d-96c8-ccccf71efdea/?query=author_id%3A1305503' }
-      ]
-    },
-    {
-      id: 'project-7466',
-      category: 'Audio & Music',
-      sub: 'Original Music',
-      title: 'Project No. 7466',
-      desc: 'Original electronic synthwave composition across 6 sequenced movements exploring driving basslines, arpeggios, and melodic progression.',
-        thumbnail: 'assets/media/thumbnail.svg',
-      links: [
-        { label: 'SoundCloud Track', url: 'https://soundcloud.com/rizky-bayuu/project-no-7466' }
-      ]
-    },
-    {
-      id: 'cai-drama-audio',
-      category: 'Audio & Music',
-      sub: 'Audio Engineering',
-      title: 'Drama CAI 2025 Vocal Engineering',
-      desc: 'Comprehensive voice acting, dialogue cleanup, dynamic vocal enhancement, and atmospheric sound design for PPM BKI theatrical production.',
-        thumbnail: 'assets/media/thumbnail.svg',
-      links: [
-        { label: 'Audio Demo', url: 'https://drive.google.com/file/d/1jE-CGjSDF2QoDXhjDVnOZeuB4_XEBTJA/view?usp=drive_link' }
-      ]
-    },
-    {
-      id: 'rizkyby-monitor',
-      category: 'Code & Systems',
-      sub: 'Linux Telemetry',
-      title: 'RizkybyMONITOR',
-      desc: 'Real-time Linux hardware monitor tracking CPU cores, RAM hierarchy, compressed ZRAM, temperature sensors, and process hierarchies.',
-        thumbnail: 'assets/media/thumbnail.svg',
-      links: [
-        { label: 'GitHub Repository', url: 'https://github.com/rizkybayuu/RizkybyMONITOR' },
-        { label: 'Instagram Demo', url: 'https://www.instagram.com/p/Dc3zoGzS4En/' }
-      ]
-    },
-    {
-      id: 'sky-retail',
-      category: 'Code & Systems',
-      sub: 'Desktop Application',
-      title: 'SkyRetail POS Suite',
-      desc: 'Modern desktop retail point-of-sale architecture designed for rapid local transactions, inventory indexing, and robust offline stability.',
-        thumbnail: 'assets/media/thumbnail.svg',
-      links: [
-        { label: 'In Development', url: '#' }
-      ]
-    },
-    {
-      id: 'writepath-app',
-      category: 'Code & Systems',
-      sub: 'Tauri & Rust',
-      title: 'Writepath Creative Suite',
-      desc: 'Focused desktop novel & story authoring suite built with Rust/Tauri v2, neural smart translation engine, and local-first encryption.',
-        thumbnail: 'assets/media/thumbnail.svg',
-      links: [
-        { label: 'In Development', url: '#' }
-      ]
-    },
-    {
-      id: 'vm-orchestration',
-      category: 'Code & Systems',
-      sub: 'Virtualization',
-      title: 'VM & Legacy OS Orchestration',
-      desc: 'Hands-on system deployment across virtual machine hypervisors, retro Windows environments, and bare-metal Void Linux builds.',
-        thumbnail: 'assets/media/thumbnail.svg',
-      links: [
-        { label: 'Instagram Demo', url: 'https://www.instagram.com/p/Dc72_ssSybI/' }
-      ]
-    },
-    {
-      id: 'bitmap-dither',
-      category: 'Graphic Design',
-      sub: 'Procedural Shader',
-      title: 'Bitmap & Dither Shader Pipeline',
-      desc: 'Experimental procedural aesthetic pipeline combining Blender Geometry Nodes procedural scattering with modern Affinity raster dithering.',
-        thumbnail: 'assets/media/thumbnail.svg',
-      links: [
-        { label: 'Project Assets', url: 'https://drive.google.com/file/d/1iSYJ3IjJkiEprGIN2lkRptp_sOMT7udc/view?usp=drive_open' }
-      ]
-    },
-    {
-      id: 'yearbook-25',
-      category: 'Graphic Design',
-      sub: 'Editorial Publication',
-      title: 'YEARBOOK 25 Publication',
-      desc: 'Complete editorial design, typography lockups, and high-resolution layout engineering for full-format commemorative yearbook.',
-        thumbnail: 'assets/media/thumbnail.svg',
-      links: [
-        { label: 'Editorial Design', url: '#' }
-      ]
-    },
-    {
-      id: 'magazine-perfect',
-      category: 'Graphic Design',
-      sub: 'Editorial & Motion',
-      title: 'Magazine Perfect & Motion Sequence',
-      desc: 'Stylized magazine publication artwork synchronized with fluid 3D commercial motion showcase sequences.',
-        thumbnail: 'assets/media/thumbnail.svg',
-      links: [
-        { label: 'Instagram Motion', url: 'https://www.instagram.com/p/DK50YJIgD99/' }
-      ]
-    },
-    {
-      id: 'video-editing-tiktok',
-      category: 'Graphic Design',
-      sub: 'Video Editing',
-      title: 'Cinematic Rhythm Video Editing',
-      desc: 'Dynamic pacing, audio beat synchronization, color treatment, and narrative micro-pacing for social video productions.',
-        thumbnail: 'assets/media/thumbnail.svg',
-      links: [
-        { label: 'TikTok Video', url: 'https://www.tiktok.com/@rizkybayu354/video/7578757396319800583' },
-        { label: 'Google Drive Reel', url: 'https://drive.google.com/file/d/1qLo_qkzzpYTNesiCakT9zoHGRXQvJvnr/view?usp=drive_link' }
-      ]
-    }
-  ];
+  const WORKS_DATA = [];
 
   /* View Navigation State */
   let currentView = 'hero';
@@ -543,19 +238,16 @@
     hire: document.getElementById('hire-view')
   };
 
-  function switchView(viewName) {
-    if (!views[viewName]) return;
-    currentView = viewName;
+  let isTransitioning = false;
 
-    Object.keys(views).forEach(key => {
-      if (views[key]) {
-        if (key === viewName) {
-          views[key].classList.add('active');
-        } else {
-          views[key].classList.remove('active');
-        }
-      }
-    });
+  function switchView(viewName) {
+    if (!views[viewName] || isTransitioning) return;
+    if (viewName === currentView) return;
+
+    isTransitioning = true;
+    const oldView = views[currentView];
+    const newView = views[viewName];
+    currentView = viewName;
 
     // Update nav links active indicator
     document.querySelectorAll('.nav-link').forEach(link => {
@@ -569,6 +261,21 @@
     if (viewName === 'work') {
       renderWorkView();
     }
+
+    if (oldView) {
+      oldView.classList.remove('active');
+      oldView.classList.add('leaving');
+    }
+
+    setTimeout(() => {
+      if (oldView) {
+        oldView.classList.remove('leaving');
+      }
+      if (newView) {
+        newView.classList.add('active');
+      }
+      isTransitioning = false;
+    }, 320);
   }
 
   function getFilteredWorks() {
@@ -624,6 +331,16 @@
     }
     if (nextBtn) {
       nextBtn.disabled = currentPage >= totalPages;
+    }
+
+    if (filtered.length === 0) {
+      deck.innerHTML = `
+        <div class="coming-soon-card">
+          <span class="card-category-badge">Selected Works</span>
+          <p class="coming-soon-text">Selected works catalog will be configured next.</p>
+        </div>
+      `;
+      return;
     }
 
     const start = (currentPage - 1) * CARDS_PER_PAGE;
@@ -737,6 +454,13 @@
     initRouter();
     setTimeout(() => {
       typeWelcome(() => {
+        // Reveal nav bar smoothly
+        const siteNav = document.getElementById('site-nav');
+        if (siteNav) {
+          siteNav.classList.remove('nav-bar-hidden');
+          siteNav.classList.add('nav-bar-visible');
+        }
+
         // Trigger sunset gradient background
         triggerSunset();
 

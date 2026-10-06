@@ -204,7 +204,7 @@ html, body {
   height: 1px;
   background: var(--color-text-main);
   transform: scaleX(0);
-  transform-origin: left;
+  transform-origin: center;
   transition: transform 0.3s ease;
 }
 
@@ -235,8 +235,8 @@ html, body {
   display: none;
   opacity: 0;
   visibility: hidden;
+  transform: translateY(24px);
   transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  transform: translateY(12px);
   pointer-events: none;
   box-sizing: border-box;
 }
@@ -248,6 +248,17 @@ html, body {
   transform: translateY(0);
   pointer-events: auto;
 }
+
+.view.leaving {
+  display: flex;
+  opacity: 0;
+  visibility: visible;
+  transform: translateY(-28px);
+  pointer-events: none;
+  transition: opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1), transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+
 
 #hero-view {
   flex-direction: column;
@@ -779,4 +790,18 @@ html, body {
     animation: none !important;
     opacity: 1 !important;
   }
+}
+
+/* Initially hide nav bar until welcome typing completes */
+.nav-bar-hidden {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease-out;
+}
+
+/* Show nav bar with fade-in */
+.nav-bar-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 0.5s ease-in 0.2s;
 }
