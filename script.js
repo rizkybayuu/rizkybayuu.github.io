@@ -14,6 +14,7 @@
   const caretTitle = document.getElementById('caret-title');
   const textSub = document.getElementById('text-sub');
   const bgSunset = document.getElementById('bg-sunset');
+  const bgMeteors = document.getElementById('bg-meteors');
   const bgMouseRadial = document.getElementById('bg-mouse-radial');
   const mouseGlow = document.getElementById('mouse-glow');
 
@@ -148,8 +149,44 @@
   function triggerSunset() {
     bgSunset.classList.add('active');
     if (bgMouseRadial) bgMouseRadial.classList.add('active');
-    mouseGlow.classList.add('active');
+    if (mouseGlow) mouseGlow.classList.add('active');
     mouseTrackingActive = true;
+    if (bgMeteors) {
+      bgMeteors.classList.add('active');
+      spawnMeteors();
+    }
+  }
+
+  function spawnMeteors() {
+    if (!bgMeteors) return;
+
+    function spawn() {
+      if (!bgMeteors.classList.contains('active')) return;
+
+      const meteor = document.createElement('div');
+      meteor.className = 'meteor';
+
+      const x = Math.random() * (window.innerWidth + 200) - 100;
+      meteor.style.left = `${x}px`;
+
+      const duration = 0.7 + Math.random() * 0.8;
+      meteor.style.animationDuration = `${duration}s`;
+
+      const length = 70 + Math.random() * 80;
+      meteor.style.height = `${length}px`;
+
+      bgMeteors.appendChild(meteor);
+
+      setTimeout(() => {
+        meteor.remove();
+      }, duration * 1000 + 100);
+
+      const nextDelay = 800 + Math.random() * 1200;
+      setTimeout(spawn, nextDelay);
+    }
+
+    spawn();
+    setTimeout(spawn, 600);
   }
 
   // Step 3: Type title with ease-in-out pacing, pause, trigger subtitle, backspace

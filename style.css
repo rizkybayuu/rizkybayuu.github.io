@@ -88,6 +88,34 @@ html, body {
   animation: skyPaletteShift 32s ease-in-out infinite alternate;
 }
 
+/* Meteor Layer - Glowing Shooting Stars Effect */
+#bg-meteors {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 1.5s ease-in;
+}
+
+#bg-meteors.active {
+  opacity: 1;
+}
+
+.meteor {
+  position: absolute;
+  top: -160px;
+  width: 2px;
+  height: 90px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, transparent 0%, rgba(255, 230, 200, 0.4) 30%, rgba(255, 255, 255, 0.95) 100%);
+  filter: drop-shadow(0 0 6px rgba(255, 200, 160, 0.8));
+  pointer-events: none;
+  transform: rotate(25deg);
+  animation: meteorFall 1s linear forwards;
+}
+
 /* Interactive Mouse Glow / Halo - Expanded radial gradient & dynamic color shift */
 #mouse-glow {
   position: fixed;
@@ -95,7 +123,7 @@ html, body {
   height: 900px;
   border-radius: 50%;
   pointer-events: none;
-  z-index: 3;
+  z-index: 5;
   transform: translate(-50%, -50%);
   opacity: 0;
   filter: blur(110px);
@@ -193,6 +221,7 @@ html, body {
   transition: color 0.3s ease, opacity 0.3s ease;
   opacity: 0.7;
   position: relative;
+  white-space: nowrap;
 }
 
 .nav-link::after {
@@ -232,21 +261,21 @@ html, body {
   inset: 0;
   width: 100%;
   height: 100%;
-  display: none;
+  display: flex;
   opacity: 0;
   visibility: hidden;
   transform: translateY(24px);
-  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.4s cubic-bezier(0,0,0.2,1), transform 0.4s cubic-bezier(0,0,0.2,1), visibility 0.4s;
   pointer-events: none;
   box-sizing: border-box;
 }
 
 .view.active {
-  display: flex;
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
   pointer-events: auto;
+  z-index: 10;
 }
 
 .view.leaving {
@@ -255,7 +284,7 @@ html, body {
   visibility: visible;
   transform: translateY(-28px);
   pointer-events: none;
-  transition: opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1), transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.32s cubic-bezier(0.4,0,1,1), transform 0.32s cubic-bezier(0.4,0,1,1);
 }
 
 
@@ -411,6 +440,23 @@ html, body {
   }
   100% {
     transform: translate(-50%, -50%) scale(3.5);
+    opacity: 0;
+  }
+}
+
+@keyframes meteorFall {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(25deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(-350px, calc(100vh + 300px), 0) rotate(25deg);
     opacity: 0;
   }
 }
