@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>rizkyby.web</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='%231a1030'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23ff9d66'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
@@ -14,13 +15,11 @@
   <div id="bg-sunset"></div>
   <div id="bg-meteors"></div>
   <div id="bg-starfield"></div>
-  <div id="bg-mouse-radial"></div>
-  <div id="mouse-glow"></div>
 
   <main id="app">
     <nav id="site-nav" class="site-nav nav-bar-hidden" aria-label="Main navigation">
       <ul class="nav-list">
-        <li><a href="#work" class="nav-link" data-nav="work">Work</a></li>
+        <li><a href="#work" class="nav-link" data-nav="work">Works</a></li>
         <li><a href="#skills" class="nav-link" data-nav="skills">Skills</a></li>
         <li><a href="#connect" class="nav-link" data-nav="connect">Connect</a></li>
         <li><a href="#hire" class="nav-link" data-nav="hire">Hire Me</a></li>
@@ -56,7 +55,135 @@
     <!-- Work View -->
     <div id="work-view" class="view">
       <div class="work-container">
-        <!-- Empty - user will populate with custom components -->
+        <header class="work-header">
+          <div class="work-top-row">
+            <button class="view-back-btn work-back-btn" data-back="hero">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+              <span>Overview</span>
+            </button>
+            <div class="work-heading-group">
+              <h2 class="work-heading">Works</h2>
+              <span class="work-count">[11 / 11]</span>
+            </div>
+          </div>
+        </header>
+
+        <!-- Constellation Node Map -->
+        <div class="constellation-map" id="constellation-map">
+          <!-- Constellation SVG Starlines -->
+          <svg class="constellation-svg" viewBox="0 0 1000 600" preserveAspectRatio="none">
+            <defs>
+              <filter id="starline-glow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="2" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+
+            <!-- Spatial / 3D Cluster Lines -->
+            <line class="constellation-line" data-nodes="1,2" x1="120" y1="150" x2="250" y2="228" />
+            <line class="constellation-line" data-nodes="1,6" x1="120" y1="150" x2="110" y2="372" />
+            <line class="constellation-line" data-nodes="6,3" x1="110" y1="372" x2="240" y2="456" />
+            <line class="constellation-line" data-nodes="2,3" x1="250" y1="228" x2="240" y2="456" />
+            <line class="constellation-line" data-nodes="2,4" x1="250" y1="228" x2="390" y2="132" />
+            <line class="constellation-line" data-nodes="4,5" x1="390" y1="132" x2="430" y2="336" />
+            <line class="constellation-line" data-nodes="2,5" x1="250" y1="228" x2="430" y2="336" />
+            <line class="constellation-line" data-nodes="3,7" x1="240" y1="456" x2="520" y2="480" />
+            <line class="constellation-line" data-nodes="5,7" x1="430" y1="336" x2="520" y2="480" />
+
+            <!-- Inter-Cluster Bridge Lines to Code & Systems -->
+            <line class="constellation-line" data-nodes="4,9" x1="390" y1="132" x2="580" y2="228" />
+            <line class="constellation-line" data-nodes="5,9" x1="430" y1="336" x2="580" y2="228" />
+            <line class="constellation-line" data-nodes="7,9" x1="520" y1="480" x2="580" y2="228" />
+
+            <!-- Bridge Lines to Sensory & Media Cluster -->
+            <line class="constellation-line" data-nodes="9,8" x1="580" y1="228" x2="740" y2="132" />
+            <line class="constellation-line" data-nodes="9,10" x1="580" y1="228" x2="780" y2="372" />
+            <line class="constellation-line" data-nodes="8,10" x1="740" y1="132" x2="780" y2="372" />
+            <line class="constellation-line" data-nodes="8,11" x1="740" y1="132" x2="900" y2="252" />
+            <line class="constellation-line" data-nodes="10,11" x1="780" y1="372" x2="900" y2="252" />
+          </svg>
+
+          <!-- Constellation Star Nodes (direct links, no embed players) -->
+          <a class="constellation-node" data-id="1" href="https://drive.google.com/file/d/1_WMwkBJZ8HK_9L6tj9Tju1nQaQHk5WYY/view?usp=drive_link" target="_blank" rel="noopener noreferrer" aria-label="Open 3D Motion Graphics works" style="left: 12%; top: 25%;">
+            <div class="node-ring">
+              <img src="https://lh3.googleusercontent.com/d/1_WMwkBJZ8HK_9L6tj9Tju1nQaQHk5WYY=s400" alt="3D Motion Graphics" class="node-thumb" loading="lazy" />
+            </div>
+            <div class="node-label">3D Motion Graphics</div>
+          </a>
+
+          <a class="constellation-node" data-id="2" href="https://drive.google.com/file/d/1zypRz7qBbwYNa9dZe57fUaBZ21spUalM/view?usp=drive_link" target="_blank" rel="noopener noreferrer" aria-label="Open Realistic 3D Render works" style="left: 25%; top: 38%;">
+            <div class="node-ring">
+              <img src="https://lh3.googleusercontent.com/d/1zypRz7qBbwYNa9dZe57fUaBZ21spUalM=s400" alt="Realistic 3D Render" class="node-thumb" loading="lazy" />
+            </div>
+            <div class="node-label">Realistic 3D Render</div>
+          </a>
+
+          <a class="constellation-node" data-id="3" data-label-pos="above" href="https://drive.google.com/file/d/1J6zlCclCzvJdGVXvqnsB_cz2xSI0dMvg/view?usp=drive_link" target="_blank" rel="noopener noreferrer" aria-label="Open Isometric works" style="left: 24%; top: 76%;">
+            <div class="node-ring">
+              <img src="https://lh3.googleusercontent.com/d/1J6zlCclCzvJdGVXvqnsB_cz2xSI0dMvg=s400" alt="Isometric" class="node-thumb" loading="lazy" />
+            </div>
+            <div class="node-label">Isometric</div>
+          </a>
+
+          <a class="constellation-node" data-id="4" data-label-pos="above" href="https://drive.google.com/file/d/1GX8LSY9fgmtD_EizTKTkGhA48eW6a7JJ/view?usp=drive_link" target="_blank" rel="noopener noreferrer" aria-label="Open Surrealism works" style="left: 39%; top: 22%;">
+            <div class="node-ring">
+              <img src="https://lh3.googleusercontent.com/d/1GX8LSY9fgmtD_EizTKTkGhA48eW6a7JJ=s400" alt="Surrealism" class="node-thumb" loading="lazy" />
+            </div>
+            <div class="node-label">Surrealism</div>
+          </a>
+
+          <a class="constellation-node" data-id="5" href="https://drive.google.com/file/d/1V9npfNKz5U6w3T2-UXjkYK_EDN8V9pZ1/view?usp=drive_link" target="_blank" rel="noopener noreferrer" aria-label="Open Astronomy works" style="left: 43%; top: 56%;">
+            <div class="node-ring">
+              <img src="https://lh3.googleusercontent.com/d/1V9npfNKz5U6w3T2-UXjkYK_EDN8V9pZ1=s400" alt="Astronomy" class="node-thumb" loading="lazy" />
+            </div>
+            <div class="node-label">Astronomy</div>
+          </a>
+
+          <a class="constellation-node" data-id="6" href="https://drive.google.com/file/d/1URq7Kyy2s_8-kCApk_0v6J1rC80egrME/view?usp=drive_link" target="_blank" rel="noopener noreferrer" aria-label="Open VFX & Dynamics works" style="left: 11%; top: 62%;">
+            <div class="node-ring">
+              <img src="https://lh3.googleusercontent.com/d/1URq7Kyy2s_8-kCApk_0v6J1rC80egrME=s400" alt="VFX & Dynamics" class="node-thumb" loading="lazy" />
+            </div>
+            <div class="node-label">VFX & Dynamics</div>
+          </a>
+
+          <a class="constellation-node" data-id="7" data-label-pos="above" href="https://drive.google.com/file/d/1bzbGobWwoNLVTX8_xG_uMvmC76W9o56B/view?usp=drive_link" target="_blank" rel="noopener noreferrer" aria-label="Open Procedural Modeling works" style="left: 52%; top: 80%;">
+            <div class="node-ring">
+              <img src="https://lh3.googleusercontent.com/d/1bzbGobWwoNLVTX8_xG_uMvmC76W9o56B=s400" alt="Procedural Modeling" class="node-thumb" loading="lazy" />
+            </div>
+            <div class="node-label">Procedural Modeling</div>
+          </a>
+
+          <a class="constellation-node" data-id="8" data-label-pos="above" href="https://drive.google.com/file/d/1Wa92wz8qP9GSZqTVhIvakBlaCngMewxe/view?usp=drive_link" target="_blank" rel="noopener noreferrer" aria-label="Open Audio & Music works" style="left: 74%; top: 22%;">
+            <div class="node-ring">
+              <img src="https://lh3.googleusercontent.com/d/1Wa92wz8qP9GSZqTVhIvakBlaCngMewxe=s400" alt="Audio & Music" class="node-thumb" loading="lazy" />
+            </div>
+            <div class="node-label">Audio & Music</div>
+          </a>
+
+          <a class="constellation-node" data-id="9" href="https://drive.google.com/file/d/16xvVB422oWcBh8U_1gQ4YGSoMcAEQJp3/view?usp=drive_link" target="_blank" rel="noopener noreferrer" aria-label="Open Code & Systems works" style="left: 58%; top: 38%;">
+            <div class="node-ring">
+              <img src="https://lh3.googleusercontent.com/d/16xvVB422oWcBh8U_1gQ4YGSoMcAEQJp3=s400" alt="Code & Systems" class="node-thumb" loading="lazy" />
+            </div>
+            <div class="node-label">Code & Systems</div>
+          </a>
+
+          <a class="constellation-node" data-id="10" href="https://drive.google.com/file/d/1zZkTg6KCPVigWifQ68eHdwH_pjDfgQFK/view?usp=drive_link" target="_blank" rel="noopener noreferrer" aria-label="Open Graphic Design works" style="left: 78%; top: 62%;">
+            <div class="node-ring">
+              <img src="https://lh3.googleusercontent.com/d/1zZkTg6KCPVigWifQ68eHdwH_pjDfgQFK=s400" alt="Graphic Design" class="node-thumb" loading="lazy" />
+            </div>
+            <div class="node-label">Graphic Design</div>
+          </a>
+
+          <a class="constellation-node" data-id="11" href="https://drive.google.com/file/d/1D0Q1PrshZRGyfE5jUYuJXANdunNMF4xd/view?usp=drive_link" target="_blank" rel="noopener noreferrer" aria-label="Open Video Editing works" style="left: 90%; top: 42%;">
+            <div class="node-ring">
+              <img src="https://lh3.googleusercontent.com/d/1D0Q1PrshZRGyfE5jUYuJXANdunNMF4xd=s400" alt="Video Editing" class="node-thumb" loading="lazy" />
+            </div>
+            <div class="node-label">Video Editing</div>
+          </a>
+        </div>
       </div>
     </div>
 

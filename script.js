@@ -18,8 +18,6 @@
   const bgStarfield = document.getElementById('bg-starfield');
   let stars = [];
   const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const bgMouseRadial = document.getElementById('bg-mouse-radial');
-  const mouseGlow = document.getElementById('mouse-glow');
 
   // Content definitions
   const WELCOME_STR = 'welcome to';
@@ -47,29 +45,10 @@
   let currentX = targetX;
   let currentY = targetY;
 
-  function showMouseRadial() {
-    if (bgMouseRadial) bgMouseRadial.classList.remove('mouse-hidden');
-    if (mouseGlow) mouseGlow.classList.remove('mouse-hidden');
-  }
-
-  function hideMouseRadial() {
-    if (bgMouseRadial) bgMouseRadial.classList.add('mouse-hidden');
-    if (mouseGlow) mouseGlow.classList.add('mouse-hidden');
-  }
-
   window.addEventListener('pointermove', (e) => {
     targetX = e.clientX;
     targetY = e.clientY;
-    showMouseRadial();
   }, { passive: true });
-
-  document.addEventListener('mouseleave', () => {
-    hideMouseRadial();
-  });
-
-  document.addEventListener('mouseenter', () => {
-    showMouseRadial();
-  });
 
   function updateMousePhysics() {
     if (mouseTrackingActive) {
@@ -77,22 +56,11 @@
       currentX += (targetX - currentX) * 0.055;
       currentY += (targetY - currentY) * 0.055;
 
-      const pctX = ((currentX / window.innerWidth) * 100).toFixed(2);
-      const pctY = ((currentY / window.innerHeight) * 100).toFixed(2);
-
-      document.documentElement.style.setProperty('--mx', `${pctX}%`);
-      document.documentElement.style.setProperty('--my', `${pctY}%`);
-
-      if (mouseGlow) {
-        mouseGlow.style.left = `${currentX}px`;
-        mouseGlow.style.top = `${currentY}px`;
-      }
-
       // Stars glow brighter near the cursor (composes with twinkle via filter)
       if (!REDUCED_MOTION && stars.length) {
         for (const star of stars) {
-          const sx = (parseFloat(star.style.left) / 100) * window.innerWidth;
-          const sy = (parseFloat(star.style.top) / 100) * window.innerHeight;
+          const sx = window.innerWidth / 2 + star._ox;
+          const sy = window.innerHeight / 2 + star._oy;
           const dx = currentX - sx;
           const dy = currentY - sy;
           const d = Math.sqrt(dx * dx + dy * dy);
@@ -167,8 +135,6 @@
   // Step 2: Transition background to sunset & activate mouse tracking
   function triggerSunset() {
     bgSunset.classList.add('active');
-    if (bgMouseRadial) bgMouseRadial.classList.add('active');
-    if (mouseGlow) mouseGlow.classList.add('active');
     mouseTrackingActive = true;
     if (bgMeteors) {
       bgMeteors.classList.add('active');
@@ -214,14 +180,20 @@
 
   function spawnStars() {
     if (!bgStarfield) return;
-    const count = 70;
+    const count = 105;
+    const referenceWidth = 1920;
+    const referenceHeight = 1080;
     for (let i = 0; i < count; i++) {
       const star = document.createElement('div');
       star.className = 'star';
-      star.style.left = `${Math.random() * 100}%`;
-      star.style.top = `${Math.random() * 100}%`;
-      // Low, random peak opacity (0.22 - 0.55)
-      const peak = 0.22 + Math.random() * 0.33;
+      const offsetX = (Math.random() - 0.5) * referenceWidth;
+      const offsetY = (Math.random() - 0.5) * referenceHeight;
+      star._ox = offsetX;
+      star._oy = offsetY;
+      star.style.left = `calc(50vw + ${offsetX}px)`;
+      star.style.top = `calc(50vh + ${offsetY}px)`;
+      // Brighter peak opacity (0.50 - 0.90)
+      const peak = 0.50 + Math.random() * 0.40;
       star.style.setProperty('--star-peak', peak.toFixed(2));
       // Random twinkle speed & random phase start
       star.style.setProperty('--star-dur', `${(1.8 + Math.random() * 2.7).toFixed(2)}s`);
