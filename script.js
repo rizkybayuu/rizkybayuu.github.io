@@ -534,6 +534,26 @@
     let closeTimer = null;
     let closingTimer = null;
     let warmedBig = false;
+    let isTouchInteraction = false;
+    let nodeOpenTime = 0;
+
+    window.addEventListener('pointerdown', e => {
+      isTouchInteraction = e.pointerType === 'touch' || e.pointerType === 'pen';
+      if (activeNode && !detailOpen && !e.target.closest('.constellation-node')) {
+        clearTimeout(closeTimer);
+        closeNode();
+      }
+    }, { passive: true });
+
+    window.addEventListener('touchstart', () => {
+      isTouchInteraction = true;
+    }, { passive: true });
+
+    window.addEventListener('mousemove', e => {
+      if (e.sourceCapabilities && !e.sourceCapabilities.firesTouchEvents) {
+        isTouchInteraction = false;
+      }
+    }, { passive: true });
 
     // A hover swaps the <img> to the sharper =s800 file, and naturalWidth reads 0
     // for as long as that request is in flight. Sizing the box from a live
@@ -718,6 +738,7 @@
       if (!ring || !img || !node.querySelector('.node-info')) return;
 
       activeNode = node;
+      nodeOpenTime = Date.now();
       node.classList.remove('is-closing');
       node.classList.add('is-hovered');
       map.classList.add('map-hovering');
@@ -745,24 +766,55 @@
 
     nodes.forEach(node => {
       node.addEventListener('mouseenter', () => {
-        clearTimeout(closeTimer);
-        openNode(node);
+        if (!isTouchInteraction) {
+          clearTimeout(closeTimer);
+          openNode(node);
+        }
       });
       node.addEventListener('mouseleave', () => {
-        clearTimeout(closeTimer);
-        closeTimer = setTimeout(closeNode, 110);
+        if (!isTouchInteraction) {
+          clearTimeout(closeTimer);
+          closeTimer = setTimeout(closeNode, 110);
+        }
       });
-      // Only the star actually under the pointer opens its submenu — a stray
-      // click elsewhere on the map does nothing (and never navigates away).
-      node.addEventListener('click', () => {
-        if (node !== activeNode) return;
-        openDetail(node.getAttribute('data-id'));
+
+      node.addEventListener('click', e => {
+        const id = node.getAttribute('data-id');
+
+        // Tap 1 (touch or un-hovered click): star is not active yet -> open hover state
+        if (activeNode !== node) {
+          e.preventDefault();
+          e.stopPropagation();
+          clearTimeout(closeTimer);
+          openNode(node);
+          return;
+        }
+
+        // Tap 1 ongoing: if touch synthetic click fires immediately after opening (< 400ms), don't navigate
+        if (isTouchInteraction && (Date.now() - nodeOpenTime < 400)) {
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
+
+        // Tap 2 (touch) or Click (mouse on PC): enter category detail
+        openDetail(id);
       });
     });
 
+    // Dismiss hover state when tapping/clicking anywhere outside any star
+    window.addEventListener('click', e => {
+      if (activeNode && !detailOpen && !e.target.closest('.constellation-node')) {
+        clearTimeout(closeTimer);
+        closeNode();
+      }
+    });
+
     map.addEventListener('mouseleave', () => {
-      clearTimeout(closeTimer);
-      closeNode();
+      if (!isTouchInteraction) {
+        clearTimeout(closeTimer);
+        closeNode();
+      }
     });
 
     /* ------------------------------------------------------------------------

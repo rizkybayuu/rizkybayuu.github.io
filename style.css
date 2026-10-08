@@ -715,6 +715,11 @@ html, body {
   opacity: 1;
 }
 
+.constellation-node.is-hovered .node-info {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
 /* =============================================================================
    Category detail submenu — opened by clicking the star under the pointer.
    The constellation fades to nothing first, then this panel enters; on the way
