@@ -2646,46 +2646,48 @@ body.detail-open #work-view .constellation-map {
 .donut-card-header {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-  width: 100%;
-}
-
-.donut-card-title-row {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
+  text-align: center;
+  gap: 0.3rem;
   width: 100%;
 }
 
-.donut-badge {
+.donut-kicker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   color: var(--card-accent, #ff9d66);
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
-.donut-card-open-arrow {
-  font-family: var(--font-mono);
-  font-size: 0.82rem;
-  color: var(--card-accent, #ff9d66);
-  opacity: 0.65;
-  transition: transform 0.25s ease, opacity 0.25s ease;
-}
-
-.skills-donut-card:hover .donut-card-open-arrow {
-  opacity: 1;
-  transform: translate(2px, -2px);
+.donut-kicker svg {
+  flex-shrink: 0;
+  opacity: 0.9;
 }
 
 .donut-card-title {
   font-family: var(--font-mono);
-  font-size: 1.28rem;
-  font-weight: 700;
+  font-size: 1.35rem;
+  font-weight: 800;
   color: var(--color-text-main);
   margin: 0;
   line-height: 1.2;
+  text-align: center;
+}
+
+.donut-card-sub {
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  color: var(--color-text-dim);
+  margin: 0;
+  text-align: center;
+  white-space: nowrap;
 }
 
 .donut-visual-wrap {
@@ -2839,16 +2841,16 @@ body.detail-open #work-view .constellation-map {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 0.85rem;
-  padding-top: 0.65rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  margin-top: 0.75rem;
+  padding-top: 0;
+  border-top: none;
   font-family: var(--font-mono);
   font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--card-accent, #ff9d66);
-  opacity: 0.7;
+  opacity: 0.65;
   transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
@@ -2917,37 +2919,6 @@ body.skills-detail-open #skills-detail {
 
 .sd-content-wrapper.sd-detail-wide .sd-head {
   max-width: 54rem;
-}
-
-.sd-inline-back-wrap {
-  width: 100%;
-  display: flex;
-  justify-content: flex-start;
-  margin-bottom: 0.85rem;
-}
-
-.sd-inline-back-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.42rem 0.95rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--color-text-dim);
-  font-family: var(--font-mono);
-  font-size: 0.74rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  cursor: pointer;
-  transition: filter 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.2s ease;
-}
-
-.sd-inline-back-btn:hover {
-  filter: brightness(1.3);
-  border-color: rgba(255, 255, 255, 0.25);
-  color: #ffffff;
-  transform: translateX(-2px);
 }
 
 #skills-view .skills-display-area {

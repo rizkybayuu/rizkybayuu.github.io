@@ -247,8 +247,10 @@
   /* Donut Card Component */
   function renderDonutCard({
     id,
-    badge,
+    kicker,
+    iconSvg,
     title,
+    subtitle,
     segments,
     overallScore,
     defaultTitle,
@@ -280,11 +282,12 @@
     return `
       <article class="skills-donut-card" id="donut-card-${id}" data-category="${id}" tabindex="0" role="button" aria-label="${escapeHtml(title)}, Average: ${overallScore}, click to view detailed breakdown" style="--card-accent: ${cardAccent}; --card-accent-rgb: ${hexToRgb(cardAccent)};">
         <header class="donut-card-header">
-          <div class="donut-card-title-row">
-            <span class="donut-badge">${escapeHtml(badge)}</span>
-            <span class="donut-card-open-arrow">↗</span>
+          <div class="donut-kicker">
+            ${iconSvg || ''}
+            <span>${escapeHtml(kicker)}</span>
           </div>
           <h3 class="donut-card-title">${escapeHtml(title)}</h3>
+          <p class="donut-card-sub">${escapeHtml(subtitle)}</p>
         </header>
 
         <div class="donut-visual-wrap">
@@ -902,12 +905,6 @@
     }).join('');
 
     el.innerHTML = `
-      <div class="sd-inline-back-wrap">
-        <button type="button" class="sd-inline-back-btn" data-back-skills aria-label="Back to skills overview">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
-          <span>Back to Skills Overview</span>
-        </button>
-      </div>
       <header class="sd-head">
         <div class="sd-titles">
           <div class="sd-kicker" style="color: #ff9d66;">
@@ -983,12 +980,6 @@
     }).join('');
 
     el.innerHTML = `
-      <div class="sd-inline-back-wrap">
-        <button type="button" class="sd-inline-back-btn" data-back-skills aria-label="Back to skills overview">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
-          <span>Back to Skills Overview</span>
-        </button>
-      </div>
       <header class="sd-head">
         <div class="sd-titles">
           <div class="sd-kicker" style="color: #7fd1ff;">
@@ -1109,12 +1100,6 @@
     }).join('');
 
     el.innerHTML = `
-      <div class="sd-inline-back-wrap">
-        <button type="button" class="sd-inline-back-btn" data-back-skills aria-label="Back to skills overview">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
-          <span>Back to Skills Overview</span>
-        </button>
-      </div>
       <header class="sd-head">
         <div class="sd-titles">
           <div class="sd-kicker" style="color: #00e5ff;">
@@ -1279,8 +1264,10 @@
         <div class="skills-donuts-grid">
           ${renderDonutCard({
             id: 'craft',
-            badge: '6 DISCIPLINES',
+            kicker: 'DISCIPLINE PROFICIENCY',
+            iconSvg: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>`,
             title: 'Craft & Disciplines',
+            subtitle: '6 Creative Domains · Multi-Disciplinary',
             segments: craftSegments,
             overallScore: craftOverallAvg,
             defaultTitle: '6 Disciplines',
@@ -1290,8 +1277,10 @@
           })}
           ${renderDonutCard({
             id: 'software',
-            badge: '5 TOOLCHAINS',
+            kicker: 'SOFTWARE PROFICIENCY',
+            iconSvg: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>`,
             title: 'Software & Tools',
+            subtitle: '5 Production Toolchains · Digital Pipeline',
             segments: softwareSegments,
             overallScore: softwareOverallAvg,
             defaultTitle: '5 Toolchains',
@@ -1301,8 +1290,10 @@
           })}
           ${renderDonutCard({
             id: 'language',
-            badge: '3 LANGUAGES',
+            kicker: 'LANGUAGE PROFICIENCY',
+            iconSvg: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>`,
             title: 'Language Fluency',
+            subtitle: '3 Languages · Spoken & Written',
             segments: languageSegments,
             overallScore: languageOverallAvg,
             defaultTitle: '3 Languages',
@@ -1379,14 +1370,6 @@
     renderCraftDetail();
     renderSoftwareDetail();
     renderLanguageDetail();
-
-    // Bind all in-panel back buttons
-    document.querySelectorAll('[data-back-skills]').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        closeSkillsDetail();
-      });
-    });
   }
 
   window.RIZKYBY_SKILLS = {
