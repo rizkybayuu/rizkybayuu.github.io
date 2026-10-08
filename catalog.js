@@ -223,7 +223,7 @@ window.RIZKYBY_CATALOG = {
         { t: 'Writepath Creative Suite', p: 'drive', tag: 'Upcoming', col: 'suite',
           u: 'https://docs.google.com/document/d/14G46WrN2gyP800BlGsMvbq0dAlqPe3U0/edit?usp=drive_link',
           d: 'Novel & story authoring suite on Rust/Tauri v2 with neural translation and local-first files.' },
-        { t: 'Virtual Machine & OS Installation', p: 'instagram', e: 'Dc72_ssSybI', aspect: 160 / 177, tag: 'Systems',
+        { t: 'Virtual Machine & OS Installation', p: 'instagram', e: 'Dc72_ssSybI', shape: 'vertical', aspect: 9 / 16, fill: 0.8, tag: 'Systems',
           u: 'https://www.instagram.com/p/Dc72_ssSybI/',
           strip: [
             { p: 'drive', e: '165A0UQe9kwIc0KzM2u-QLe3_QT_87r8a', u: 'https://drive.google.com/file/d/165A0UQe9kwIc0KzM2u-QLe3_QT_87r8a/view' },

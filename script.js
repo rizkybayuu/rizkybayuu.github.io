@@ -907,15 +907,28 @@
           strip.style.setProperty('--strip-n', String(item.strip.length));
           item.strip.forEach((sub, si) => {
             const cell = el('div', 'wd-strip-cell');
-            const sFrame = document.createElement('iframe');
-            sFrame.className = 'wd-strip-frame';
-            sFrame.src = embedSrcFor(Object.assign({ p: item.p }, sub), cat);
-            sFrame.loading = 'lazy';
-            sFrame.title = item.t + ' — ' + (si + 1);
-            sFrame.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture; fullscreen; clipboard-write');
-            sFrame.setAttribute('allowfullscreen', '');
-            sFrame.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
-            cell.appendChild(sFrame);
+            const targetUrl = sub.u || (sub.e ? 'https://drive.google.com/file/d/' + sub.e + '/view' : '#');
+            const a = linkOut('wd-strip-link', '', targetUrl);
+            a.title = (sub.t || item.t) + ' — Screenshot ' + (si + 1);
+
+            if (sub.p === 'drive' && sub.e) {
+              const img = el('img', 'wd-strip-img');
+              img.src = thumbUrl(sub.e);
+              img.alt = (item.t || '') + ' screenshot ' + (si + 1);
+              img.loading = 'lazy';
+              a.appendChild(img);
+            } else if (sub.e) {
+              const sFrame = document.createElement('iframe');
+              sFrame.className = 'wd-strip-frame';
+              sFrame.src = embedSrcFor(Object.assign({ p: item.p }, sub), cat);
+              sFrame.loading = 'lazy';
+              sFrame.title = item.t + ' — ' + (si + 1);
+              sFrame.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture; fullscreen; clipboard-write');
+              sFrame.setAttribute('allowfullscreen', '');
+              sFrame.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+              a.appendChild(sFrame);
+            }
+            cell.appendChild(a);
             strip.appendChild(cell);
           });
           if (item.stripSide === false) {
@@ -1214,13 +1227,169 @@
     });
     buildChips();
 
+    const lines = Array.from(map.querySelectorAll('.constellation-line'));
+    const nodeById = {};
+    nodes.forEach(n => {
+      const id = n.getAttribute('data-id');
+      if (id) nodeById[id] = n;
+    });
+
+    const RATIO_PRESETS = {
+      landscape: {
+        '1':  { x: 12, y: 25 },
+        '2':  { x: 25, y: 38 },
+        '3':  { x: 24, y: 76 },
+        '4':  { x: 39, y: 22 },
+        '5':  { x: 43, y: 56 },
+        '6':  { x: 11, y: 62 },
+        '7':  { x: 52, y: 80 },
+        '8':  { x: 74, y: 22 },
+        '9':  { x: 58, y: 38 },
+        '10': { x: 78, y: 62 },
+        '11': { x: 90, y: 42 }
+      },
+      compact: {
+        '1':  { x: 15, y: 22 },
+        '2':  { x: 27, y: 36 },
+        '3':  { x: 24, y: 76 },
+        '4':  { x: 40, y: 18 },
+        '5':  { x: 44, y: 54 },
+        '6':  { x: 13, y: 58 },
+        '7':  { x: 52, y: 82 },
+        '8':  { x: 73, y: 18 },
+        '9':  { x: 58, y: 36 },
+        '10': { x: 77, y: 62 },
+        '11': { x: 87, y: 40 }
+      },
+      square: {
+        '1':  { x: 20, y: 16 },
+        '2':  { x: 30, y: 34 },
+        '3':  { x: 24, y: 76 },
+        '4':  { x: 46, y: 14 },
+        '5':  { x: 45, y: 48 },
+        '6':  { x: 16, y: 52 },
+        '7':  { x: 48, y: 84 },
+        '8':  { x: 78, y: 18 },
+        '9':  { x: 65, y: 42 },
+        '10': { x: 78, y: 76 },
+        '11': { x: 84, y: 46 }
+      },
+      portrait: {
+        '1':  { x: 26, y: 10 },
+        '2':  { x: 48, y: 22 },
+        '3':  { x: 30, y: 45 },
+        '4':  { x: 74, y: 12 },
+        '5':  { x: 78, y: 32 },
+        '6':  { x: 22, y: 32 },
+        '7':  { x: 72, y: 47 },
+        '8':  { x: 24, y: 74 },
+        '9':  { x: 50, y: 60 },
+        '10': { x: 76, y: 76 },
+        '11': { x: 50, y: 89 }
+      }
+    };
+
+    let activePreset = null;
+    let lineAnimTimer = null;
+
+    function syncSvgLines(coords) {
+      lines.forEach(line => {
+        const pair = line.getAttribute('data-nodes');
+        if (!pair) return;
+        const [u, v] = pair.split(',');
+        const p1 = coords[u];
+        const p2 = coords[v];
+        if (p1 && p2) {
+          line.setAttribute('x1', (p1.x * 10).toFixed(1));
+          line.setAttribute('y1', (p1.y * 6).toFixed(1));
+          line.setAttribute('x2', (p2.x * 10).toFixed(1));
+          line.setAttribute('y2', (p2.y * 6).toFixed(1));
+        }
+      });
+    }
+
+    function animateSvgLines(duration = 520) {
+      if (lineAnimTimer) cancelAnimationFrame(lineAnimTimer);
+      const start = performance.now();
+      function step(now) {
+        const elapsed = now - start;
+        const mr = map.getBoundingClientRect();
+        if (mr.width > 0 && mr.height > 0) {
+          lines.forEach(line => {
+            const pair = line.getAttribute('data-nodes');
+            if (!pair) return;
+            const [u, v] = pair.split(',');
+            const nA = nodeById[u];
+            const nB = nodeById[v];
+            if (nA && nB) {
+              const x1 = (nA.offsetLeft / mr.width) * 1000;
+              const y1 = (nA.offsetTop / mr.height) * 600;
+              const x2 = (nB.offsetLeft / mr.width) * 1000;
+              const y2 = (nB.offsetTop / mr.height) * 600;
+              line.setAttribute('x1', x1.toFixed(1));
+              line.setAttribute('y1', y1.toFixed(1));
+              line.setAttribute('x2', x2.toFixed(1));
+              line.setAttribute('y2', y2.toFixed(1));
+            }
+          });
+        }
+        if (elapsed < duration) {
+          lineAnimTimer = requestAnimationFrame(step);
+        } else {
+          const targetCoords = RATIO_PRESETS[activePreset] || RATIO_PRESETS.landscape;
+          syncSvgLines(targetCoords);
+        }
+      }
+      lineAnimTimer = requestAnimationFrame(step);
+    }
+
+    function applyConstellationPreset(presetName, animate = true) {
+      if (!RATIO_PRESETS[presetName]) return;
+      const coords = RATIO_PRESETS[presetName];
+      const changed = activePreset !== presetName;
+      const wasInitial = activePreset === null;
+      activePreset = presetName;
+
+      nodes.forEach(node => {
+        const id = node.getAttribute('data-id');
+        const pos = coords[id];
+        if (!pos) return;
+        node.dataset.leftPct = pos.x + '%';
+        node.dataset.topPct = pos.y + '%';
+        if (node !== activeNode) {
+          node.style.left = pos.x + '%';
+          node.style.top = pos.y + '%';
+        }
+      });
+
+      if (changed && animate && !wasInitial) {
+        animateSvgLines(520);
+      } else {
+        syncSvgLines(coords);
+      }
+    }
+
     // The wrapper is fluid, so its own box decides how big a star may be. Keeping
     // --node-base proportional to the wrapper (never a fixed rem) means the box
     // always encloses the whole constellation: no zoom threshold, no bottom clip.
     function fitMap() {
       const r = map.getBoundingClientRect();
       if (r.width < 40 || r.height < 40) return;
-      const base = Math.max(16, Math.min(49.6, r.width * 0.05, r.height * 0.09));
+      const ratio = r.width / r.height;
+      let targetPreset = 'landscape';
+      if (ratio < 0.85) {
+        targetPreset = 'portrait';
+      } else if (ratio < 1.15) {
+        targetPreset = 'square';
+      } else if (ratio < 1.45) {
+        targetPreset = 'compact';
+      } else {
+        targetPreset = 'landscape';
+      }
+
+      applyConstellationPreset(targetPreset, true);
+
+      const base = Math.max(26, Math.min(49.6, r.width * 0.055, r.height * 0.09));
       map.style.setProperty('--node-base', base.toFixed(2) + 'px');
     }
 
