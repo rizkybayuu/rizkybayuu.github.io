@@ -444,55 +444,92 @@
     });
     const languageOverallAvg = Math.round(languageSegments.reduce((sum, l) => sum + l.score, 0) / languageSegments.length);
 
-    // Construct 4-part layout: Top typing hero + 3 donut charts grid
-    const typingHeroHtml = renderTypingHero();
+    // Render bare vertical touch typing display
+    grid.innerHTML = renderVerticalTyping();
+  }
 
-    const craftDonutHtml = renderDonutCard({
-      id: 'craft',
-      badge: 'Craft Portfolio',
-      title: 'Craft Skills',
-      segments: craftSegments,
-      overallScore: craftOverallAvg,
-      overallLabel: 'Craft Avg',
-      overallSub: `${craftSegments.length} Categories`,
-      cardAccent: '#ff9d66'
-    });
+  /* Render Vertical Touch Typing (Bare, Constellation-style, Top-to-Bottom Scale) */
+  function renderVerticalTyping() {
+    const typingTool = TOOLS[0] || { name: 'Touch Typing (Average)', wpm: 60 };
+    const wpm = typingTool.wpm || 60;
+    // 0 to 120 scale, 60 is exactly 50%
+    const pct = Math.min(100, Math.max(0, Math.round((wpm / 120) * 100)));
 
-    const softwareDonutHtml = renderDonutCard({
-      id: 'software',
-      badge: 'Tooling & Software',
-      title: 'Software & Tools',
-      segments: softwareSegments,
-      overallScore: softwareOverallAvg,
-      overallLabel: 'Software Avg',
-      overallSub: `${softwareSegments.length} Categories`,
-      cardAccent: '#7fd1ff'
-    });
+    return `
+      <div class="skills-vertical-typing">
+        <div class="typing-vert-info">
+          <div class="typing-vert-kicker">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
+              <line x1="6" y1="8" x2="6" y2="8"></line><line x1="10" y1="8" x2="10" y2="8"></line><line x1="14" y1="8" x2="14" y2="8"></line><line x1="18" y1="8" x2="18" y2="8"></line>
+              <line x1="6" y1="12" x2="6" y2="12"></line><line x1="10" y1="12" x2="10" y2="12"></line><line x1="14" y1="12" x2="14" y2="12"></line><line x1="18" y1="12" x2="18" y2="12"></line>
+              <line x1="7" y1="16" x2="17" y2="16"></line>
+            </svg>
+            <span>INPUT PROFICIENCY</span>
+          </div>
 
-    const languageDonutHtml = renderDonutCard({
-      id: 'languages',
-      badge: 'Communications',
-      title: 'Languages',
-      segments: languageSegments,
-      overallScore: languageOverallAvg,
-      overallLabel: 'Language Avg',
-      overallSub: `${languageSegments.length} Languages`,
-      cardAccent: '#00e5ff'
-    });
+          <h2 class="typing-vert-title">Touch Typing</h2>
+          <p class="typing-vert-sub">10-Finger Technique · QWERTY Blind Typing</p>
 
-    grid.innerHTML = `
-      ${typingHeroHtml}
-      <div class="skills-charts-grid">
-        ${craftDonutHtml}
-        ${softwareDonutHtml}
-        ${languageDonutHtml}
+          <div class="typing-vert-score-group">
+            <div class="typing-vert-num-wrap">
+              <span class="typing-vert-big-num">${wpm}</span>
+              <span class="typing-vert-big-unit">WPM</span>
+            </div>
+            <span class="typing-vert-status-pill">AVERAGE SPEED</span>
+          </div>
+
+          <div class="typing-vert-details">
+            <div class="typing-vert-stat">
+              <span class="stat-label">Keystroke Cadence</span>
+              <span class="stat-val">~${wpm * 5} CPM</span>
+            </div>
+            <div class="typing-vert-stat">
+              <span class="stat-label">Typing Style</span>
+              <span class="stat-val">10-Finger Flow</span>
+            </div>
+            <div class="typing-vert-stat">
+              <span class="stat-label">Muscle Memory</span>
+              <span class="stat-val">Zero-Look Cadence</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="typing-vert-gauge-wrap">
+          <div class="typing-vert-track">
+            <div class="typing-vert-fill" style="height: ${pct}%;"></div>
+            <div class="typing-vert-marker" style="top: ${pct}%;"></div>
+          </div>
+
+          <div class="typing-vert-scale">
+            <div class="scale-point" style="top: 0%; transform: translateY(0);">
+              <span class="scale-dash"></span>
+              <span class="scale-val">0</span>
+            </div>
+            <div class="scale-point" style="top: 25%; transform: translateY(-50%);">
+              <span class="scale-dash"></span>
+              <span class="scale-val">30</span>
+            </div>
+            <div class="scale-point is-current" style="top: ${pct}%; transform: translateY(-50%);">
+              <span class="scale-dash active"></span>
+              <div class="scale-current-bubble">
+                <span class="bubble-arrow">◀</span>
+                <span class="bubble-text">${wpm} WPM</span>
+                <span class="bubble-tag">YOUR POSITION</span>
+              </div>
+            </div>
+            <div class="scale-point" style="top: 75%; transform: translateY(-50%);">
+              <span class="scale-dash"></span>
+              <span class="scale-val">90</span>
+            </div>
+            <div class="scale-point" style="top: 100%; transform: translateY(-100%);">
+              <span class="scale-dash"></span>
+              <span class="scale-val">120+</span>
+            </div>
+          </div>
+        </div>
       </div>
     `;
-
-    // Wire up donut chart interactivity
-    attachDonutInteractions(document.getElementById('donut-card-craft'), craftSegments, craftOverallAvg, 'Craft Avg', `${craftSegments.length} Categories`);
-    attachDonutInteractions(document.getElementById('donut-card-software'), softwareSegments, softwareOverallAvg, 'Software Avg', `${softwareSegments.length} Categories`);
-    attachDonutInteractions(document.getElementById('donut-card-languages'), languageSegments, languageOverallAvg, 'Language Avg', `${languageSegments.length} Languages`);
   }
 
   window.RIZKYBY_SKILLS = {
@@ -502,6 +539,8 @@
     languages: LANGUAGES,
     levelOf,
     renderBar,
+    renderDonutCard,
+    renderVerticalTyping,
     render: renderSkills
   };
 
