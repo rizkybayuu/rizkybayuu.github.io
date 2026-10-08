@@ -125,14 +125,14 @@
     }
   ];
 
-  // 2. Curated Published Works from Instagram
+  // 2. Curated Published Works from Instagram (Direct Authentic Thumbnails)
   const SHOWCASE_WORKS = [
     {
       title: 'UTBK 2026 Motion & Code',
       category: '3D Motion',
       tag: 'Reel',
       url: 'https://www.instagram.com/p/DYw6a_qTa1U/',
-      thumb: '1_WMwkBJZ8HK_9L6tj9Tju1nQaQHk5WYY',
+      thumb: 'assets/media/showcase/DYw6a_qTa1U.jpg',
       desc: 'Terminal command streams, cyber lighting and rhythmic typography.'
     },
     {
@@ -140,7 +140,7 @@
       category: 'Realistic 3D',
       tag: 'Render',
       url: 'https://www.instagram.com/p/DYvvJbXkmjn/',
-      thumb: '1zypRz7qBbwYNa9dZe57fUaBZ21spUalM',
+      thumb: 'assets/media/showcase/DYvvJbXkmjn.jpg',
       desc: 'Waterside deck bathed in tranquil twilight illumination.'
     },
     {
@@ -148,7 +148,7 @@
       category: 'Surrealism',
       tag: 'Dreamscape',
       url: 'https://www.instagram.com/p/C11xXl0B_OF/',
-      thumb: '1GX8LSY9fgmtD_EizTKTkGhA48eW6a7JJ',
+      thumb: 'assets/media/showcase/C11xXl0B_OF.jpg',
       desc: 'Serene floating prayer sanctuary among golden hour clouds.'
     },
     {
@@ -156,7 +156,7 @@
       category: 'Isometric 3D',
       tag: 'Workspace',
       url: 'https://www.instagram.com/p/DH0IoOgyL6g/',
-      thumb: '1J6zlCclCzvJdGVXvqnsB_cz2xSI0dMvg',
+      thumb: 'assets/media/showcase/DH0IoOgyL6g.jpg',
       desc: 'Detailed personalised farewell workspace closing the series.'
     },
     {
@@ -164,15 +164,15 @@
       category: '3D Motion',
       tag: 'Reel',
       url: 'https://www.instagram.com/p/DMzrefzvxnM/',
-      thumb: '1_WMwkBJZ8HK_9L6tj9Tju1nQaQHk5WYY',
+      thumb: 'assets/media/showcase/DMzrefzvxnM.jpg',
       desc: 'Sweeping camera moves, material texture & fluid light.'
     },
     {
       title: 'Blackhole Accretion',
-      category: 'Astronomy',
+      category: 'Astronomy VFX',
       tag: 'Simulation',
       url: 'https://www.instagram.com/p/C9CVPMnyBRe/',
-      thumb: '1V9npfNKz5U6w3T2-UXjkYK_EDN8V9pZ1',
+      thumb: 'assets/media/showcase/C9CVPMnyBRe.jpg',
       desc: 'Lensed light accretion disc simulation and galactic depth.'
     },
     {
@@ -180,7 +180,7 @@
       category: 'VFX & Dynamics',
       tag: 'Simulation',
       url: 'https://www.instagram.com/p/DMzpw5zPtLg/',
-      thumb: '1URq7Kyy2s_8-kCApk_0v6J1rC80egrME',
+      thumb: 'assets/media/showcase/DMzpw5zPtLg.jpg',
       desc: 'Roadway fracturing debris simulation with dust dynamics.'
     },
     {
@@ -188,23 +188,39 @@
       category: 'Procedural',
       tag: 'Geometry Nodes',
       url: 'https://www.instagram.com/p/DcQsphEy-_1/',
-      thumb: '1bzbGobWwoNLVTX8_xG_uMvmC76W9o56B',
+      thumb: 'assets/media/showcase/DcQsphEy-_1.jpg',
       desc: 'Parametric staircase asset generated via Geometry Nodes.'
     },
     {
-      title: 'Modern Glass Living Space',
-      category: 'Realistic 3D',
+      title: 'Curved Origami Gallery',
+      category: 'Archviz',
       tag: 'Interior',
-      url: 'https://www.instagram.com/p/DBh8wNZyH9_/',
-      thumb: '1zypRz7qBbwYNa9dZe57fUaBZ21spUalM',
-      desc: 'Architectural interior study with soft daylight scattering.'
+      url: 'https://www.instagram.com/p/DRZH4ZwkmBj/',
+      thumb: 'assets/media/showcase/DRZH4ZwkmBj.jpg',
+      desc: 'Folded-paper architecture with daylight bounce and raw concrete.'
+    },
+    {
+      title: 'Morning Tea Still Life',
+      category: 'Still Life 3D',
+      tag: 'Blender 4.0',
+      url: 'https://www.instagram.com/p/C4LROTsyVNZ/',
+      thumb: 'assets/media/showcase/C4LROTsyVNZ.jpg',
+      desc: 'Authentic glass refraction, condensation droplets, brass kettle.'
+    },
+    {
+      title: 'Rolls Royce Phantom V',
+      category: 'Hard Surface',
+      tag: 'Automotive',
+      url: 'https://www.instagram.com/p/C9FIGbTSd5N/',
+      thumb: 'assets/media/showcase/C9FIGbTSd5N.jpg',
+      desc: 'Exacting automotive reproduction: clearcoat reflections, studio lighting.'
     },
     {
       title: 'Ramadan 2026 Celebration',
       category: '3D Motion',
       tag: 'Celebration',
       url: 'https://www.instagram.com/p/DVAAJk6FAx0/',
-      thumb: '1_WMwkBJZ8HK_9L6tj9Tju1nQaQHk5WYY',
+      thumb: 'assets/media/showcase/DVAAJk6FAx0.jpg',
       desc: 'Illuminated crescent geometry & floating ambient golden particles.'
     }
   ];
@@ -423,9 +439,11 @@
 
   /* Render Single Showcase Card */
   function renderShowcaseCard(item) {
-    const thumbUrl = `https://drive.google.com/thumbnail?id=${item.thumb}&sz=w600`;
+    const thumbUrl = item.thumb.startsWith('assets/') || item.thumb.startsWith('http')
+      ? item.thumb
+      : `https://drive.google.com/thumbnail?id=${item.thumb}&sz=w600`;
     return `
-      <a href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer" class="hire-showcase-card" aria-label="${escapeHtml(item.title)} on Instagram">
+      <a href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer" class="hire-showcase-card" draggable="false" aria-label="${escapeHtml(item.title)} on Instagram">
         <div class="hire-showcase-media">
           <img src="${thumbUrl}" alt="${escapeHtml(item.title)}" loading="lazy" class="hire-showcase-img" />
           <div class="hire-showcase-overlay"></div>
@@ -445,6 +463,121 @@
         </div>
       </a>
     `;
+  }
+
+  /* Interactive Drag & Wheel Infinite Marquee Scroller */
+  let marqueeRafId = null;
+  function initMarqueeScroller(container) {
+    if (marqueeRafId) {
+      cancelAnimationFrame(marqueeRafId);
+      marqueeRafId = null;
+    }
+
+    const wrapper = container.querySelector('.hire-marquee-wrapper');
+    const track = container.querySelector('.hire-marquee-track');
+    if (!wrapper || !track) return;
+
+    let pos = 0;
+    const baseSpeed = -0.7; // default auto-scroll speed (px/frame)
+    let isHovered = false;
+    let isDown = false;
+    let startX = 0;
+    let lastX = 0;
+    let dragDist = 0;
+    let velocity = 0;
+
+    // Measurement: single repeat unit width (total 3 repeated sets)
+    let singleWidth = 0;
+    function measureTrack() {
+      if (track.scrollWidth > 0) {
+        singleWidth = track.scrollWidth / 3;
+      }
+    }
+    measureTrack();
+    setTimeout(measureTrack, 250);
+    setTimeout(measureTrack, 800);
+    window.addEventListener('resize', measureTrack);
+
+    function loop() {
+      if (isDown) {
+        // Direct pointer follow while dragging
+      } else {
+        if (Math.abs(velocity) > 0.08) {
+          pos += velocity;
+          velocity *= 0.94; // friction inertia
+        } else {
+          velocity = 0;
+          if (!isHovered) {
+            pos += baseSpeed;
+          }
+        }
+      }
+
+      // Infinite Loop Wrap: mathematically seamless across 3 identical sets
+      if (singleWidth > 10) {
+        while (pos <= -singleWidth) {
+          pos += singleWidth;
+        }
+        while (pos > 0) {
+          pos -= singleWidth;
+        }
+      }
+
+      track.style.transform = `translate3d(${pos.toFixed(2)}px, 0, 0)`;
+      marqueeRafId = requestAnimationFrame(loop);
+    }
+
+    marqueeRafId = requestAnimationFrame(loop);
+
+    // Pointer Dragging (Mouse & Touch)
+    wrapper.addEventListener('pointerdown', (e) => {
+      isDown = true;
+      startX = e.clientX;
+      lastX = e.clientX;
+      dragDist = 0;
+      velocity = 0;
+      wrapper.classList.add('is-dragging');
+      try { wrapper.setPointerCapture(e.pointerId); } catch (_) {}
+    });
+
+    wrapper.addEventListener('pointermove', (e) => {
+      if (!isDown) return;
+      const delta = e.clientX - lastX;
+      lastX = e.clientX;
+      dragDist += Math.abs(delta);
+      pos += delta;
+      velocity = delta; // keep last movement momentum
+    });
+
+    const finishDrag = (e) => {
+      if (!isDown) return;
+      isDown = false;
+      wrapper.classList.remove('is-dragging');
+      try { wrapper.releasePointerCapture(e.pointerId); } catch (_) {}
+    };
+
+    wrapper.addEventListener('pointerup', finishDrag);
+    wrapper.addEventListener('pointercancel', finishDrag);
+
+    // Prevent navigation if user dragged more than 6px
+    wrapper.addEventListener('click', (e) => {
+      if (dragDist > 6) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    }, true);
+
+    // Hover pause
+    wrapper.addEventListener('mouseenter', () => { isHovered = true; });
+    wrapper.addEventListener('mouseleave', () => { isHovered = false; });
+
+    // Wheel & Trackpad Horizontal Scrolling
+    wrapper.addEventListener('wheel', (e) => {
+      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+      pos -= delta * 0.85;
+      velocity = -delta * 0.15;
+      e.preventDefault();
+    }, { passive: false });
   }
 
   /* Render Service Card */
@@ -478,7 +611,7 @@
     `;
   }
 
-  /* Bind Interactions for Toggles and Copy Buttons */
+  /* Bind Interactions for Toggles, Copy Buttons & Marquee Scroller */
   function bindInteractions(container) {
     // 1. Toggles
     const toggleBtns = container.querySelectorAll('.hire-toggle-btn');
@@ -513,6 +646,9 @@
 
     // 2. Initial copy buttons
     bindCopyButtons(container);
+
+    // 3. Initialize Interactive Infinite Marquee Scroller
+    initMarqueeScroller(container);
   }
 
   function bindCopyButtons(root) {
@@ -531,8 +667,10 @@
     const container = document.getElementById('hire-content');
     if (!container) return;
 
-    // Build repeated track for seamless marquee
+    // Build 3x repeated track for mathematically seamless bidirectional infinite marquee loop
     const showcaseCardsHtml = SHOWCASE_WORKS.map(renderShowcaseCard).join('');
+    const tripleTrackHtml = showcaseCardsHtml + showcaseCardsHtml + showcaseCardsHtml;
+
     const servicesHtml = SERVICES_DATA.map(renderServiceCard).join('');
     const workflowHtml = WORKFLOW_STEPS.map(renderWorkflowStep).join('');
     const principlesHtml = PRINCIPLES_DATA.map(p => `
@@ -591,18 +729,17 @@
           </div>
         </section>
 
-        <!-- Section 2: Horizontal Auto-Scrolling Instagram Works Showcase -->
+        <!-- Section 2: Horizontal Drag & Wheel Infinite Works Showcase -->
         <section class="hire-section" aria-label="Selected Works Showcase">
           <div class="hire-showcase-head-row">
             <div class="hire-section-kicker">
               <span>// VISUAL REPERTOIRE · LIVE WORKS FROM INSTAGRAM</span>
             </div>
-            <span class="hire-marquee-hint">Hover to pause · Click card to open on Instagram</span>
+            <span class="hire-marquee-hint">Drag or scroll · Infinite loop · Click to open Instagram</span>
           </div>
           <div class="hire-marquee-wrapper" id="hire-marquee-wrapper">
             <div class="hire-marquee-track">
-              ${showcaseCardsHtml}
-              ${showcaseCardsHtml}
+              ${tripleTrackHtml}
             </div>
           </div>
         </section>

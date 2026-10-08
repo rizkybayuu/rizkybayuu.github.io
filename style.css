@@ -4316,25 +4316,29 @@ body.skills-detail-open #skills-view .skills-display-area {
   width: 100%;
   overflow: hidden;
   padding: 0.5rem 0 1rem 0;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
   mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);
   -webkit-mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);
+}
+
+.hire-marquee-wrapper.is-dragging {
+  cursor: grabbing;
+}
+
+.hire-marquee-wrapper.is-dragging .hire-showcase-card {
+  pointer-events: none;
 }
 
 .hire-marquee-track {
   display: flex;
   gap: 1.15rem;
   width: max-content;
-  animation: hireMarqueeScroll 45s linear infinite;
   will-change: transform;
-}
-
-.hire-marquee-wrapper:hover .hire-marquee-track {
-  animation-play-state: paused;
-}
-
-@keyframes hireMarqueeScroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .hire-showcase-card {
@@ -4373,6 +4377,9 @@ body.skills-detail-open #skills-view .skills-display-area {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-drag: none;
   transition: transform 0.4s ease;
 }
 
@@ -4449,41 +4456,85 @@ body.skills-detail-open #skills-view .skills-display-area {
   opacity: 0.9;
 }
 
-/* Actions in cards */
+/* Actions in cards (Email, WhatsApp, Fiverr: perfectly symmetrical 50/50) */
 .hire-split-actions {
-  display: flex;
-  gap: 0.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
   width: 100%;
+  box-sizing: border-box;
 }
 
-.hire-primary-action {
-  flex: 1;
+.hire-split-actions .connect-action-btn {
+  width: 100%;
+  min-height: 44px;
+  padding: 0.7rem 1rem;
+  box-sizing: border-box;
+  white-space: nowrap;
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  text-decoration: none;
 }
 
-.hire-copy-btn {
-  flex-shrink: 0;
-  padding: 0.55rem 0.85rem;
-  font-size: 0.75rem;
+.hire-split-actions .hire-primary-action {
+  background: rgba(var(--card-accent-rgb, 255, 255, 255), 0.14);
+  border-color: rgba(var(--card-accent-rgb, 255, 255, 255), 0.4);
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.hire-split-actions .hire-primary-action:hover {
+  background: rgba(var(--card-accent-rgb, 255, 255, 255), 0.24);
+  border-color: rgba(var(--card-accent-rgb, 255, 255, 255), 0.65);
+  box-shadow: 0 0 18px rgba(var(--card-accent-rgb, 255, 255, 255), 0.35);
+  transform: translateY(-1px);
+}
+
+.hire-split-actions .hire-copy-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: var(--color-text-dim);
+  font-weight: 700;
+}
+
+.hire-split-actions .hire-copy-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
 }
 
 .hire-copy-btn.is-copied {
   border-color: rgba(63, 185, 80, 0.6) !important;
   color: #3fb950 !important;
-  background: rgba(63, 185, 80, 0.12) !important;
+  background: rgba(63, 185, 80, 0.14) !important;
   box-shadow: 0 0 14px rgba(63, 185, 80, 0.25);
 }
 
 .hire-dual-actions {
-  display: flex;
-  gap: 0.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
   width: 100%;
+  box-sizing: border-box;
 }
 
-.hire-sub-btn {
-  flex: 1;
+.hire-dual-actions .connect-action-btn {
+  width: 100%;
+  min-height: 44px;
+  padding: 0.7rem 1rem;
+  box-sizing: border-box;
+  white-space: nowrap;
+  font-size: 0.78rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
-  font-size: 0.74rem;
-  padding: 0.55rem 0.5rem;
 }
 
 /* Services 2x2 Grid */
@@ -4709,12 +4760,8 @@ body.skills-detail-open #skills-view .skills-display-area {
   }
   .hire-split-actions,
   .hire-dual-actions {
-    flex-direction: column;
-  }
-  .hire-copy-btn,
-  .hire-sub-btn {
-    width: 100%;
-    justify-content: center;
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
   }
   .hire-compact-card {
     padding: 1.1rem 0.95rem;
