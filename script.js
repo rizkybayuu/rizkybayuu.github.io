@@ -23,15 +23,25 @@
   const WELCOME_STR = 'welcome to';
   const TITLES = [
     'rizkyby.web',
-    'creative coder',
-    '3d & motion design',
-    'visual experimenter'
+    '3d visualization',
+    'motion & vfx',
+    'procedural design',
+    'isometric dioramas',
+    'creative engineering',
+    'graphic & print',
+    'sound & video',
+    'linux & systems'
   ];
   const SUBTITLES = [
     'portfolio & digital playground',
-    'crafting modern interactive web',
-    'blender, shaders, and animations',
-    'exploring the edge of design'
+    'photoreal scenes & lighting',
+    'kinetic animation & physics',
+    'geometry nodes & shaders',
+    'cozy miniature room studies',
+    'vanilla code & interactive ui',
+    'editorial layout & dither art',
+    'synthwave tracks & visual pacing',
+    'bare-metal tools & telemetry'
   ];
 
   let titleIndex = 0;

@@ -201,7 +201,7 @@
     },
     {
       title: 'Morning Tea Still Life',
-      category: 'Still Life 3D',
+      category: 'Realistic 3D',
       tag: 'Blender 4.0',
       url: 'https://www.instagram.com/p/C4LROTsyVNZ/',
       thumb: 'assets/media/showcase/C4LROTsyVNZ.jpg',
