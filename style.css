@@ -269,12 +269,22 @@ html, body {
 }
 
 /* Mode swap: hide 4 links, show back button centered */
+.site-nav.nav-back-mode {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .site-nav.nav-back-mode .nav-list {
   display: none;
 }
 
 .site-nav.nav-back-mode .nav-back-btn {
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  text-align: center;
 }
 
 /* Responsive & Touch Treatment for Mobile / Android */
@@ -304,6 +314,8 @@ html, body {
     font-size: 0.92rem;
     letter-spacing: 0.06em;
     padding: 0.35rem 0.5rem;
+    margin: 0 auto;
+    text-align: center;
     -webkit-tap-highlight-color: transparent;
   }
 }
@@ -548,6 +560,15 @@ html, body {
   justify-content: flex-start;
   padding: 2.8rem 2.5rem 1.5rem;
   overflow: hidden;
+}
+
+@media (max-width: 600px) {
+  #work-view,
+  #skills-view,
+  #connect-view,
+  #hire-view {
+    padding: 3rem 0.5rem 1rem 0.5rem;
+  }
 }
 
 .work-container {
@@ -2331,7 +2352,7 @@ body.detail-open #work-view .constellation-map {
 }
 
 .skills-overview-content {
-  margin: auto 0;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2584,18 +2605,33 @@ body.detail-open #work-view .constellation-map {
 
 @media (max-width: 600px) {
   .skills-typing-compact {
-    padding: 1rem 0.5rem;
+    padding: 1.15rem 0.85rem;
     gap: 1rem;
+    width: 100%;
+    max-width: 26rem;
+    margin: 0 auto;
+    box-sizing: border-box;
   }
   .typing-top-row {
     align-items: flex-end;
-    gap: 1rem;
+    gap: 0.65rem;
+    width: 100%;
+    min-width: 0;
+  }
+  .typing-left-col {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .typing-right-col {
+    flex: 0 0 auto;
   }
   .typing-title {
-    font-size: 1.55rem;
+    font-size: clamp(1.4rem, 6vw, 1.85rem);
+    white-space: normal;
   }
   .typing-sub {
     font-size: 0.82rem;
+    white-space: normal;
   }
   .typing-big-num {
     font-size: 2.5rem;
@@ -2613,6 +2649,10 @@ body.detail-open #work-view .constellation-map {
   .typing-scale .scale-mark.is-current {
     font-size: 0.85rem;
   }
+  .typing-meta {
+    white-space: normal;
+    text-align: center;
+  }
 }
 
 /* --- Donut Cards Grid (Craft, Software, Language beneath Typing) --- */
@@ -2628,6 +2668,8 @@ body.detail-open #work-view .constellation-map {
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  min-width: 0;
+  width: 100%;
   background: transparent;
   border: 1px solid transparent;
   border-radius: 18px;
@@ -2880,8 +2922,10 @@ body.detail-open #work-view .constellation-map {
 
 @media (max-width: 960px) {
   .skills-donuts-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     max-width: 26rem;
+    width: 100%;
+    margin: 0 auto;
   }
 }
 
@@ -3513,20 +3557,44 @@ body.skills-detail-open #skills-view .skills-display-area {
   }
   .skills-overview-content {
     gap: 1.2rem;
+    width: 100%;
+    margin: 0 auto;
   }
   .skills-donuts-grid {
-    grid-template-columns: 1fr;
-    max-width: 100%;
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 26rem;
+    width: 100%;
+    margin: 0 auto;
   }
   .skills-donut-card {
-    padding: 1.15rem 1rem;
+    padding: 1.15rem 0.85rem;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .donut-card-sub {
+    white-space: normal;
+    font-size: 0.78rem;
+    line-height: 1.35;
+  }
+  .donut-dynamic-strip {
+    padding: 0.65rem 0.75rem;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .donut-dyn-desc {
+    white-space: normal;
+    text-align: center;
+    font-size: 0.72rem;
+    line-height: 1.35;
   }
   .donut-visual-wrap {
-    width: 150px;
-    height: 150px;
+    width: 144px;
+    height: 144px;
   }
   .donut-center-score {
-    font-size: 2.1rem;
+    font-size: 2rem;
   }
   .sd-grid-cards {
     grid-template-columns: 1fr;
@@ -4121,22 +4189,44 @@ body.skills-detail-open #skills-view .skills-display-area {
 }
 
 .hire-status-strip {
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  justify-content: center;
   flex-wrap: wrap;
-  gap: 0.85rem;
-  margin-top: 0.65rem;
-  background: rgba(255, 255, 255, 0.025);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 999px;
-  padding: 0.38rem 1rem 0.38rem 0.75rem;
-  backdrop-filter: blur(8px);
+  gap: 0.55rem;
+  margin-top: 0.85rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
-.hire-status-pill {
+.hire-status-tag {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--color-text-dim);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 999px;
+  padding: 0.35rem 0.85rem;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  white-space: nowrap;
+  box-sizing: border-box;
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+
+.hire-status-tag svg {
+  flex-shrink: 0;
+  opacity: 0.75;
+}
+
+.hire-status-tag.is-available {
+  background: rgba(63, 185, 80, 0.08);
+  border-color: rgba(63, 185, 80, 0.28);
+  box-shadow: 0 0 16px rgba(63, 185, 80, 0.12);
 }
 
 .hire-status-dot {
@@ -4146,6 +4236,7 @@ body.skills-detail-open #skills-view .skills-display-area {
   background: #3fb950;
   box-shadow: 0 0 10px #3fb950, 0 0 16px rgba(63, 185, 80, 0.6);
   animation: pulseHireDot 2s infinite ease-in-out;
+  flex-shrink: 0;
 }
 
 @keyframes pulseHireDot {
@@ -4159,25 +4250,6 @@ body.skills-detail-open #skills-view .skills-display-area {
   font-weight: 700;
   letter-spacing: 0.08em;
   color: #3fb950;
-}
-
-.hire-status-meta {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.65rem;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  color: var(--color-text-dim);
-}
-
-.hire-meta-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-}
-
-.hire-meta-sep {
-  opacity: 0.35;
 }
 
 /* Sections & Grids */
@@ -4746,6 +4818,15 @@ body.skills-detail-open #skills-view .skills-display-area {
   }
   .hire-hero-title {
     font-size: 1.7rem;
+  }
+  .hire-status-strip {
+    gap: 0.45rem;
+    margin-top: 0.65rem;
+  }
+  .hire-status-tag {
+    font-size: 0.68rem;
+    padding: 0.3rem 0.65rem;
+    gap: 0.38rem;
   }
   .hire-grid-3,
   .hire-grid-2,

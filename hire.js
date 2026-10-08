@@ -729,27 +729,24 @@
           <h2 class="hire-hero-title">LET'S BUILD TOGETHER</h2>
           <p class="hire-hero-blurb">Open for select 3D visualization commissions, procedural asset creation, motion loops, and creative web engineering.</p>
 
-          <!-- Live Availability Status Strip -->
-          <div class="hire-status-strip">
-            <div class="hire-status-pill">
+          <!-- Live Availability Status Strip (3 Distinct Badges) -->
+          <div class="hire-status-strip" aria-label="Status & availability info">
+            <div class="hire-status-tag is-available">
               <span class="hire-status-dot"></span>
               <span class="hire-status-text">AVAILABLE FOR COMMISSIONS</span>
             </div>
-            <div class="hire-status-meta">
-              <span class="hire-meta-item">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <polyline points="12 6 12 12 16 14"></polyline>
-                </svg>
-                <span>Indonesia (UTC+7 / WIB)</span>
-              </span>
-              <span class="hire-meta-sep">/</span>
-              <span class="hire-meta-item">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                </svg>
-                <span>Avg. Reply: &lt; 24h</span>
-              </span>
+            <div class="hire-status-tag">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              <span>Indonesia (UTC+7 / WIB)</span>
+            </div>
+            <div class="hire-status-tag">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+              <span>Avg. Reply: &lt; 24h</span>
             </div>
           </div>
         </header>
