@@ -510,10 +510,10 @@
     `;
   }
 
-  /* Live 60 WPM Human Typing Simulator */
+  /* Live 60 WPM Human Typing Simulator with Realistic Human Imperfections */
   const SIM_PARAGRAPHS = [
-    "Building high-performance user interfaces requires harmony between human intent and machine execution. With ten fingers resting precisely on the home row, muscle memory eliminates the friction of looking down at the keyboard. Code syntax, semantic tags, reactive state handlers, and algorithmic structures flow directly from mind to screen at a natural sixty words per minute. Clean cadence, rhythm, and precision turn abstract concepts into elegant reality.",
-    "True typing mastery is not about erratic bursts, but sustained rhythm and effortless precision. Zero-look touch typing frees cognitive bandwidth, allowing the developer to focus entirely on architecture, clean logic, and user experience. Every bracket, indentation, and semicolon falls into place through muscle memory, sustaining steady cadence across complex codebases."
+    "Building responsive, event-driven architectures requires continuous synchronization between visual state and algorithmic logic. At sixty words per minute, ten-finger muscle memory navigates complex abstractions—asynchronous pipelines, nested components, and monospaced syntax—without ever looking down at the keyboard. Natural cadence balances rapid bursts on familiar patterns with careful deliberation through tricky code structures.",
+    "Mastering touch typing transforms software engineering into an uninterrupted flow of consciousness. When tricky keywords, curly braces, and multi-line indentations execute instinctively through muscle memory, cognitive load vanishes. From high-level architectural patterns to granular debugging routines, steady 60 WPM rhythm ensures thoughts materialize directly into robust code."
   ];
 
   const ADJACENT_KEYS = {
@@ -553,6 +553,37 @@
     'se', 'le', 'sa', 'si', 'ar', 've', 'ra', 'ld', 'ur', 'io'
   ]);
 
+  const EASY_WORDS = new Set([
+    'and', 'the', 'to', 'of', 'in', 'is', 'it', 'for', 'on', 'with',
+    'at', 'by', 'from', 'flow', 'code', 'ten', 'when', 'into', 'ever',
+    'down', 'state', 'mind', 'words', 'per', 'steady', 'load'
+  ]);
+
+  function getWordDetails(text, idx) {
+    let start = idx;
+    while (start > 0 && text[start - 1] !== ' ') start--;
+    let end = idx;
+    while (end < text.length && text[end] !== ' ') end++;
+    const rawWord = text.slice(start, end);
+    const cleanWord = rawWord.toLowerCase().replace(/[^a-z]/g, '');
+    const isFirstChar = (idx === start);
+    const isLastChar = (idx === end - 1);
+    const posInWord = idx - start;
+
+    // Difficulty score based on length, punctuation, and complexity
+    let difficulty = 0;
+    if (EASY_WORDS.has(cleanWord)) {
+      difficulty = 0;
+    } else {
+      if (cleanWord.length >= 8) difficulty += 2;
+      else if (cleanWord.length >= 5) difficulty += 1;
+      if (/[-—;,]/.test(rawWord)) difficulty += 1;
+      if (/[A-Z]/.test(rawWord)) difficulty += 1;
+    }
+
+    return { rawWord, cleanWord, isFirstChar, isLastChar, posInWord, difficulty };
+  }
+
   let simTimer = null;
   let simActive = false;
   let currentParagraphIdx = 0;
@@ -589,8 +620,8 @@
     wpmEl.textContent = `${Math.round(instantWpm)}`;
     cpmEl.textContent = `${Math.round(instantWpm * 5)}`;
     const acc = totalKeypresses > 0
-      ? Math.max(94, Math.min(100, Math.round(((totalKeypresses - errorCount) / totalKeypresses) * 1000) / 10))
-      : 98.4;
+      ? Math.max(93, Math.min(100, Math.round(((totalKeypresses - errorCount) / totalKeypresses) * 1000) / 10))
+      : 98.2;
     accEl.textContent = `${acc.toFixed(1)}%`;
   }
 
@@ -615,8 +646,14 @@
 
     const spans = stage.children;
     let charIndex = 0;
-    let hasPendingTypo = false;
-    let typoChar = '';
+
+    // Typo State Machine:
+    // 0: Normal
+    // 1: Single-key typo pending backspace
+    // 2: Overrun typo (two wrong keys typed), pending first backspace
+    // 3: Overrun typo second backspace pending
+    let typoState = 0;
+    let postTypoCaution = 0;
 
     // Mark initial active character
     if (spans.length > 0) {
@@ -625,16 +662,12 @@
 
     function scrollCurrentLineIntoView(activeSpan) {
       if (!activeSpan || !stage) return;
-      const stageBox = stage.getBoundingClientRect();
-      const spanBox = activeSpan.getBoundingClientRect();
-
-      // Determine computed line-height
-      const computedLineH = parseFloat(window.getComputedStyle(stage).lineHeight) || spanBox.height || 38;
+      const computedLineH = parseFloat(window.getComputedStyle(stage).lineHeight) || activeSpan.offsetHeight || 38;
       const baseTop = spans[0] ? spans[0].offsetTop : 0;
       const currentTop = activeSpan.offsetTop - baseTop;
       const currentLine = Math.round(currentTop / computedLineH);
 
-      // Keep at most 2 lines in view:
+      // Keep strictly at most 2 lines in view:
       // Line 0 & 1 -> translateY: 0
       // Line >= 2  -> translateY: - (currentLine - 1) * lineHeight
       const scrollLines = Math.max(0, currentLine - 1);
@@ -645,9 +678,9 @@
     function step() {
       if (!simActive) return;
 
-      // Handle backspace resolution for previous typo
-      if (hasPendingTypo) {
-        hasPendingTypo = false;
+      // Handle Compound Typo State 1: Single-key backspace resolution
+      if (typoState === 1) {
+        typoState = 0;
         const currentSpan = spans[charIndex];
         if (currentSpan) {
           // Revert character back to original in-place
@@ -655,9 +688,41 @@
           currentSpan.className = 'type-char active';
         }
         totalKeypresses++;
-        updateTelemetry(58 + Math.random() * 4);
+        postTypoCaution = 2; // slow down slightly on next 2 keystrokes
+        updateTelemetry(57 + Math.random() * 4);
         // Short pause after backspacing before typing correct key (~110-170ms)
-        simTimer = setTimeout(step, Math.floor(115 + Math.random() * 55));
+        simTimer = setTimeout(step, Math.floor(125 + Math.random() * 50));
+        return;
+      }
+
+      // Handle Compound Typo State 2: Overrun typo backspace #1
+      if (typoState === 2) {
+        typoState = 3;
+        const nextSpan = spans[charIndex + 1];
+        if (nextSpan) {
+          nextSpan.textContent = nextSpan.dataset.orig;
+          nextSpan.className = 'type-char pending';
+        }
+        totalKeypresses++;
+        updateTelemetry(55 + Math.random() * 4);
+        // Rapid double-backspace cascade (~90-130ms)
+        simTimer = setTimeout(step, Math.floor(105 + Math.random() * 35));
+        return;
+      }
+
+      // Handle Compound Typo State 3: Overrun typo backspace #2
+      if (typoState === 3) {
+        typoState = 0;
+        const currentSpan = spans[charIndex];
+        if (currentSpan) {
+          currentSpan.textContent = currentSpan.dataset.orig;
+          currentSpan.className = 'type-char active';
+        }
+        totalKeypresses++;
+        postTypoCaution = 3; // deliberate caution after compound typo
+        updateTelemetry(56 + Math.random() * 4);
+        // Reset pause before re-striking correct key (~150-230ms)
+        simTimer = setTimeout(step, Math.floor(160 + Math.random() * 70));
         return;
       }
 
@@ -678,32 +743,64 @@
 
       const activeSpan = spans[charIndex];
       const targetChar = text[charIndex];
+      const wordInfo = getWordDetails(text, charIndex);
 
-      // Typo injection (natural 2.5% rate, only on mid-word alphabetical letters)
+      // Realistic Human Typo Probability Model:
+      // Humans rarely typo on simple short words; typos spike on tricky words and complex sequences
+      let typoProbability = 0.015; // baseline 1.5%
+      if (wordInfo.difficulty >= 2) typoProbability = 0.065; // 6.5% on tricky technical words
+      else if (wordInfo.difficulty === 1) typoProbability = 0.035;
+
       const isAlpha = /[a-zA-Z]/.test(targetChar);
-      const canTypo = isAlpha && charIndex > 5 && charIndex < text.length - 4 && !hasPendingTypo;
-      const shouldTypo = canTypo && (Math.random() < 0.025);
+      const canTypo = isAlpha && charIndex > 6 && charIndex < text.length - 6 && (typoState === 0);
+      const shouldTypo = canTypo && (Math.random() < typoProbability);
 
       if (shouldTypo) {
         const lower = targetChar.toLowerCase();
         const adjacent = ADJACENT_KEYS[lower] || ['x'];
-        typoChar = adjacent[Math.floor(Math.random() * adjacent.length)];
+        let typoChar = adjacent[Math.floor(Math.random() * adjacent.length)];
         if (targetChar === targetChar.toUpperCase() && targetChar !== targetChar.toLowerCase()) {
           typoChar = typoChar.toUpperCase();
         }
 
-        // In-place typo: replace letter glyph without adding extra spans
-        activeSpan.textContent = typoChar;
-        activeSpan.className = 'type-char typo';
-        hasPendingTypo = true;
-        errorCount++;
-        totalKeypresses++;
+        // Determine if this is a single slip (60%) or momentum overrun (40% on tricky words)
+        const canOverrun = (charIndex + 1 < text.length) && (text[charIndex + 1] !== ' ') && (wordInfo.difficulty >= 1);
+        const shouldOverrun = canOverrun && (Math.random() < 0.42);
 
-        // Typist reaction pause before realizing error (~200 - 280ms)
-        const reactionDelay = Math.floor(210 + Math.random() * 75);
-        updateTelemetry(55 + Math.random() * 4);
-        simTimer = setTimeout(step, reactionDelay);
-        return;
+        if (shouldOverrun) {
+          // Overrun Momentum Typo: finger typed wrong key, and before brain reacted, already struck next letter
+          activeSpan.textContent = typoChar;
+          activeSpan.className = 'type-char typo';
+          errorCount += 2;
+          totalKeypresses += 2;
+
+          const nextSpan = spans[charIndex + 1];
+          if (nextSpan) {
+            nextSpan.textContent = text[charIndex + 1];
+            nextSpan.className = 'type-char typo active';
+          }
+
+          typoState = 2; // trigger double-backspace cascade
+          // Realization pause: typist freezes upon seeing 2 red errors (~260-380ms)
+          const realizationDelay = Math.floor(270 + Math.random() * 110);
+          updateTelemetry(54 + Math.random() * 4);
+          simTimer = setTimeout(step, realizationDelay);
+          return;
+        } else {
+          // Single-key slip: in-place letter substitution without layout shift
+          activeSpan.textContent = typoChar;
+          activeSpan.className = 'type-char typo';
+          hasPendingTypo = true;
+          errorCount++;
+          totalKeypresses++;
+          typoState = 1;
+
+          // Typist reaction pause before hitting backspace (~190 - 270ms)
+          const reactionDelay = Math.floor(205 + Math.random() * 75);
+          updateTelemetry(55 + Math.random() * 4);
+          simTimer = setTimeout(step, reactionDelay);
+          return;
+        }
       }
 
       // Mark current span done, advance index, mark next span active
@@ -718,46 +815,69 @@
         scrollCurrentLineIntoView(nextSpan);
       }
 
-      // Humanized Keystroke Timing Model with high variance averaging 60 WPM (~200ms/keystroke):
+      // =========================================================================
+      // Advanced Humanized Keystroke Timing Model with Tricky-Word Dynamics
+      // =========================================================================
       let baseDelay = 180;
       const prevChar = text[charIndex - 1] || '';
       const bigram = (prevChar + targetChar).toLowerCase();
 
-      if (COMMON_BIGRAMS.has(bigram)) {
-        // Fast syllable muscle-memory burst (~90-140ms, ~90-130 WPM burst)
-        baseDelay = 95 + Math.random() * 45;
+      if (postTypoCaution > 0) {
+        // Cautious recovery immediately following a typo (~220-290ms)
+        baseDelay = 230 + Math.random() * 70;
+        postTypoCaution--;
       } else if (targetChar === ' ') {
-        // Word boundary micro-pause (~230-320ms)
-        baseDelay = 240 + Math.random() * 80;
-      } else if (/[.,;:!?-]/.test(targetChar)) {
-        // Punctuation clause pause (~340-470ms)
-        baseDelay = 350 + Math.random() * 120;
+        // Word boundary pause: typist completes a word
+        baseDelay = 220 + Math.random() * 75;
+
+        // Cognitive Lookahead: if the upcoming next word is tricky, typist pauses to plan finger position!
+        if (charIndex < text.length) {
+          const nextWordInfo = getWordDetails(text, charIndex);
+          if (nextWordInfo.difficulty >= 2) {
+            // Planning hesitation before complex words (e.g. "architectures", "synchronization")
+            baseDelay += Math.floor(130 + Math.random() * 160); // +130-290ms pause
+          }
+        }
+      } else if (/[.,;!?:—-]/.test(targetChar)) {
+        // Punctuation and em-dash deliberate pause (~330-480ms)
+        baseDelay = 350 + Math.random() * 130;
       } else if (/[A-Z]/.test(targetChar)) {
-        // Shift key stretch delay (~210-280ms)
-        baseDelay = 220 + Math.random() * 60;
+        // Shift key hand reach delay (~210-280ms)
+        baseDelay = 220 + Math.random() * 65;
+      } else if (wordInfo.difficulty === 0 && COMMON_BIGRAMS.has(bigram)) {
+        // Easy word muscle-memory fast burst (~85-135ms, ~90-130 WPM speed)
+        baseDelay = 88 + Math.random() * 48;
+      } else if (wordInfo.difficulty >= 2) {
+        // Inside a tricky technical word: fingers deliberate more carefully
+        baseDelay = 165 + Math.random() * 85;
+
+        // Occasional mid-word syllable hesitation on monstrous words (pos 4 or 7)
+        if ((wordInfo.posInWord === 4 || wordInfo.posInWord === 7) && Math.random() < 0.35) {
+          baseDelay += Math.floor(95 + Math.random() * 125); // +95-220ms mid-word check
+        }
       } else if (charIndex > 1 && text[charIndex - 1] === text[charIndex - 2]) {
         // Double letter burst (e.g. 'ee', 'll', 'ss') (~90-130ms)
-        baseDelay = 100 + Math.random() * 35;
+        baseDelay = 95 + Math.random() * 35;
       } else {
-        // Normal letter with random variance (~140-215ms)
+        // Normal letter with random Gaussian-like variance (~135-215ms)
         baseDelay = 145 + Math.random() * 70;
       }
 
-      // Subtle thought cadence pause on occasional words (~1 in 15 words)
-      if (targetChar === ' ' && Math.random() < 0.08) {
-        baseDelay += Math.floor(130 + Math.random() * 150);
+      // Random hand realignment micro-stutter (~once every 22 words)
+      if (targetChar === ' ' && Math.random() < 0.045) {
+        baseDelay += Math.floor(180 + Math.random() * 190);
       }
 
-      // Closed-loop governor to ensure long-term net speed stays locked at ~60 WPM
+      // Closed-Loop Speed Governor:
+      // Preserves all high-variance human imperfections while anchoring net speed to ~60.0 WPM
       const now = performance.now();
       const elapsedSec = Math.max(0.1, (now - simStartTime) / 1000);
       const idealTimeSec = typedCount * 0.20; // 5 chars/sec = 200ms per char
       const drift = elapsedSec - idealTimeSec;
-      // Gently nudge delay to keep total speed around 60 WPM without flattening cadence variance
-      const speedAdjustment = Math.sign(drift) * Math.min(25, Math.abs(drift) * 15);
-      const delay = Math.max(75, Math.floor(baseDelay - speedAdjustment));
+      const speedAdjustment = Math.sign(drift) * Math.min(32, Math.abs(drift) * 14);
+      const delay = Math.max(75, Math.min(620, Math.floor(baseDelay - speedAdjustment)));
 
-      // Calculate smooth rolling live WPM telemetry
+      // Smooth rolling live WPM telemetry calculation
       const rollingWpm = elapsedSec > 1.2
         ? ((typedCount / 5) / (elapsedSec / 60))
         : 60.0;
