@@ -398,6 +398,7 @@
       const id = s.getAttribute('data-segment-id');
       s.addEventListener('mouseenter', () => activate(id));
       s.addEventListener('focus', () => activate(id));
+      s.addEventListener('pointerdown', () => activate(id), { passive: true });
     });
 
     // Reset immediately when mouse leaves the donut chart visual wrapper or enters the center hole
@@ -604,7 +605,7 @@
     wpmEl.textContent = `${Math.round(instantWpm)}`;
     cpmEl.textContent = `${Math.round(instantWpm * 5)}`;
     const acc = totalKeypresses > 0
-      ? Math.max(93, Math.min(100, Math.round(((totalKeypresses - errorCount) / totalKeypresses) * 1000) / 10))
+      ? Math.max(95.0, Math.min(99.6, Math.round(((totalKeypresses - errorCount) / totalKeypresses) * 1000) / 10))
       : 98.2;
     accEl.textContent = `${acc.toFixed(1)}%`;
   }
@@ -731,9 +732,9 @@
 
       // Realistic Human Typo Probability Model:
       // Humans rarely typo on simple short words; typos spike on tricky words and complex sequences
-      let typoProbability = 0.015; // baseline 1.5%
-      if (wordInfo.difficulty >= 2) typoProbability = 0.065; // 6.5% on tricky technical words
-      else if (wordInfo.difficulty === 1) typoProbability = 0.035;
+      let typoProbability = 0.012; // baseline 1.2%
+      if (wordInfo.difficulty >= 2) typoProbability = 0.038; // 3.8% on tricky technical words
+      else if (wordInfo.difficulty === 1) typoProbability = 0.022;
 
       const isAlpha = /[a-zA-Z]/.test(targetChar);
       const canTypo = isAlpha && charIndex > 6 && charIndex < text.length - 6 && (typoState === 0);
@@ -874,6 +875,51 @@
   }
 
   let skillsDetailOpen = false;
+  let activeSkillsCard = null;
+  let cardOpenTime = 0;
+  let isTouchInteraction = false;
+
+  window.addEventListener('pointerdown', e => {
+    isTouchInteraction = e.pointerType === 'touch' || e.pointerType === 'pen';
+    const isInsideCard = e.target && typeof e.target.closest === 'function' && e.target.closest('.skills-donut-card, .skills-typing-compact');
+    if (activeSkillsCard && !skillsDetailOpen && !isInsideCard) {
+      deactivateSkillsCards();
+    }
+  }, { passive: true });
+
+  window.addEventListener('touchstart', () => {
+    isTouchInteraction = true;
+  }, { passive: true });
+
+  window.addEventListener('mousemove', e => {
+    if (!e.sourceCapabilities || !e.sourceCapabilities.firesTouchEvents) {
+      isTouchInteraction = false;
+    }
+  }, { passive: true });
+
+  function activateSkillsCard(card) {
+    if (activeSkillsCard === card) return;
+    deactivateSkillsCards();
+    if (card) {
+      activeSkillsCard = card;
+      cardOpenTime = Date.now();
+      card.classList.add('is-hovered');
+    }
+  }
+
+  function deactivateSkillsCards() {
+    if (activeSkillsCard) {
+      activeSkillsCard.classList.remove('is-hovered');
+      activeSkillsCard = null;
+    }
+  }
+
+  window.addEventListener('click', e => {
+    const isInsideCard = e.target && typeof e.target.closest === 'function' && e.target.closest('.skills-donut-card, .skills-typing-compact');
+    if (activeSkillsCard && !skillsDetailOpen && !isInsideCard) {
+      deactivateSkillsCards();
+    }
+  });
 
   /* Detail Panel Renderers */
   function renderCraftDetail() {
@@ -1181,6 +1227,7 @@
 
   function closeSkillsDetail() {
     if (!skillsDetailOpen) return;
+    deactivateSkillsCards();
     const detailEl = document.getElementById('skills-detail');
     skillsDetailOpen = false;
     document.body.classList.remove('skills-detail-open');
@@ -1341,29 +1388,55 @@
       '#00e5ff'
     );
 
-    // Attach click to compact typing widget
+    // Attach unified two-tap (touch) and hover-click (mouse) interactions to all 4 overview cards
     const typingWidget = grid.querySelector('.skills-typing-compact');
-    if (typingWidget) {
-      typingWidget.addEventListener('click', () => openSkillsDetail('typing'));
-      typingWidget.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          openSkillsDetail('typing');
-        }
-      });
-    }
-
-    // Attach click to donut cards
-    [
+    const interactiveCards = [
+      { el: typingWidget, cat: 'typing' },
       { el: craftCard, cat: 'craft' },
       { el: softCard, cat: 'software' },
       { el: langCard, cat: 'language' }
-    ].forEach(({ el, cat }) => {
+    ];
+
+    interactiveCards.forEach(({ el, cat }) => {
       if (!el) return;
-      el.addEventListener('click', () => openSkillsDetail(cat));
+
+      el.addEventListener('mouseenter', () => {
+        if (!isTouchInteraction) {
+          activateSkillsCard(el);
+        }
+      });
+
+      el.addEventListener('mouseleave', () => {
+        if (!isTouchInteraction) {
+          deactivateSkillsCards();
+        }
+      });
+
+      el.addEventListener('click', (e) => {
+        // Tap 1 (touch or click before hover): card is not active yet -> activate hover state
+        if (activeSkillsCard !== el) {
+          e.preventDefault();
+          e.stopPropagation();
+          activateSkillsCard(el);
+          return;
+        }
+
+        // Tap 1 ongoing: if touch synthetic click fires immediately after opening (< 400ms), don't navigate
+        if (isTouchInteraction && (Date.now() - cardOpenTime < 400)) {
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
+
+        // Tap 2 (touch) or Click (mouse on PC): open skills detail
+        deactivateSkillsCards();
+        openSkillsDetail(cat);
+      });
+
       el.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
+          deactivateSkillsCards();
           openSkillsDetail(cat);
         }
       });

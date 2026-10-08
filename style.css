@@ -2387,7 +2387,8 @@ body.detail-open #work-view .constellation-map {
               transform 0.3s cubic-bezier(0.2, 0.8, 0.3, 1);
 }
 
-.skills-typing-compact:hover {
+.skills-typing-compact:hover,
+.skills-typing-compact.is-hovered {
   backdrop-filter: brightness(1.35) blur(10px);
   -webkit-backdrop-filter: brightness(1.35) blur(10px);
   background: rgba(255, 111, 94, 0.04);
@@ -2416,7 +2417,8 @@ body.detail-open #work-view .constellation-map {
   pointer-events: none;
 }
 
-.skills-typing-compact:hover .typing-click-hint {
+.skills-typing-compact:hover .typing-click-hint,
+.skills-typing-compact.is-hovered .typing-click-hint {
   opacity: 1;
   color: #ffb188;
 }
@@ -2690,7 +2692,8 @@ body.detail-open #work-view .constellation-map {
 }
 
 /* Glowing rounded rectangle on hover, identical to bare typing hover */
-.skills-donut-card:hover {
+.skills-donut-card:hover,
+.skills-donut-card.is-hovered {
   backdrop-filter: brightness(1.35) blur(10px);
   -webkit-backdrop-filter: brightness(1.35) blur(10px);
   background: rgba(var(--card-accent-rgb, 255, 157, 102), 0.04);
@@ -2915,7 +2918,8 @@ body.detail-open #work-view .constellation-map {
   transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
-.skills-donut-card:hover .donut-card-action {
+.skills-donut-card:hover .donut-card-action,
+.skills-donut-card.is-hovered .donut-card-action {
   opacity: 1;
   transform: translateY(-1px);
 }
