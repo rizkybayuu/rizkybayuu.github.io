@@ -54,7 +54,7 @@
         { name: 'Geometry Nodes (Procedural)', score: 90 },
         { name: 'Camera Animation', score: 79 },
         { name: 'Beat-Synced Pacing', score: 76 },
-        { name: 'Rigid Body & Fluid Sim', score: 70 }
+        { name: 'Simulation', score: 70 }
       ]
     },
     {
@@ -158,9 +158,9 @@
 
   /* Languages */
   const LANGUAGES = [
-    { name: 'Indonesia', level: 'Native', score: 90 },
-    { name: 'Javanese', level: 'Native', score: 87 },
-    { name: 'English', level: 'Intermediate', score: 63 }
+    { name: 'Indonesian', level: 'Native', score: 91 },
+    { name: 'Javanese', level: 'Native', score: 86 },
+    { name: 'English', level: 'Intermediate', score: 66 }
   ];
 
   /* Arc Generator for Donut Charts */
@@ -913,9 +913,9 @@
               <polyline points="2 17 12 22 22 17"></polyline>
               <polyline points="2 12 12 17 22 12"></polyline>
             </svg>
-            <span>SPECIALIZATION · DISCIPLINES & CRAFT</span>
+            <span>SHOWCASE · CREATIVE EXECUTION</span>
           </div>
-          <h2 class="sd-title">CRAFT & DISCIPLINES</h2>
+          <h2 class="sd-title">HOW I CRAFT & CREATE</h2>
           <p class="sd-blurb">Comprehensive assessment across 6 creative and technical domains, evaluated through production fidelity, creative direction, and technical execution.</p>
         </div>
 
@@ -987,9 +987,9 @@
               <polyline points="16 18 22 12 16 6"></polyline>
               <polyline points="8 6 2 12 8 18"></polyline>
             </svg>
-            <span>TOOLCHAIN · PRODUCTION ENVIRONMENT</span>
+            <span>SHOWCASE · DIGITAL TOOLCHAINS</span>
           </div>
-          <h2 class="sd-title">SOFTWARE & TOOLS</h2>
+          <h2 class="sd-title">WHAT I USE TO BUILD</h2>
           <p class="sd-blurb">Toolchain inventory covering 3D DCC software, graphics and print suites, audio/video editors, web platforms, and UNIX environments.</p>
         </div>
 
@@ -1032,44 +1032,47 @@
     const langDetails = [
       {
         name: 'Indonesian',
-        score: 90,
+        score: 91,
         level: 'Native Fluency',
         badge: 'Bahasa Indonesia · Native',
         accent: '#00e5ff',
-        blurb: 'Primary language used for daily communication, formal documentation, creative storytelling, and technical writing.',
+        blurb: 'Primary national language used for daily communication, formal documentation, creative storytelling, and technical writing.',
         skills: [
-          { name: 'Reading & Comprehension', score: 95 },
-          { name: 'Written Composition', score: 92 },
-          { name: 'Verbal Expression', score: 90 },
-          { name: 'Listening & Nuance', score: 94 }
+          { name: 'Reading', score: 93 },
+          { name: 'Listening', score: 86 },
+          { name: 'Writing', score: 94 },
+          { name: 'Speaking', score: 97 },
+          { name: 'Formal Register & Politeness', score: 87 }
         ]
       },
       {
         name: 'Javanese',
-        score: 87,
-        level: 'Native Dialect',
+        score: 86,
+        level: 'Native Regional',
         badge: 'Basa Jawa · Heritage',
         accent: '#c07bff',
-        blurb: 'Regional heritage language spoken fluently across informal speech, colloquial social communication, and cultural contexts.',
+        blurb: 'Regional mother tongue spoken fluently across everyday informal speech, social interaction, and traditional cultural etiquette.',
         skills: [
-          { name: 'Verbal Fluency (Ngoko/Krama)', score: 90 },
-          { name: 'Auditory Comprehension', score: 92 },
-          { name: 'Reading & Context', score: 82 },
-          { name: 'Written Expression', score: 78 }
+          { name: 'Reading', score: 89 },
+          { name: 'Listening', score: 74 },
+          { name: 'Writing', score: 91 },
+          { name: 'Speaking', score: 93 },
+          { name: 'Speech Levels (Ngoko & Krama)', score: 82 }
         ]
       },
       {
         name: 'English',
-        score: 63,
+        score: 66,
         level: 'Professional Working',
         badge: 'Professional Working',
         accent: '#ff9d66',
-        blurb: 'Working proficiency in reading technical documentation, developer specs, asynchronous Git collaboration, and written correspondence.',
+        blurb: 'Working proficiency spanning reading technical documentation, developer specs, asynchronous Git collaboration, and spoken dialogue.',
         skills: [
-          { name: 'Technical Docs & Reading', score: 78 },
-          { name: 'Written Correspondence', score: 68 },
-          { name: 'Listening & Multimedia', score: 62 },
-          { name: 'Spoken Communication', score: 56 }
+          { name: 'Reading', score: 68 },
+          { name: 'Listening', score: 53 },
+          { name: 'Writing', score: 71 },
+          { name: 'Speaking', score: 79 },
+          { name: 'Academic & Formal Register', score: 57 }
         ]
       }
     ];
@@ -1108,15 +1111,15 @@
               <line x1="2" y1="12" x2="22" y2="12"></line>
               <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
             </svg>
-            <span>COMMUNICATION · LINGUISTIC FLUENCY</span>
+            <span>SHOWCASE · LINGUISTIC FLUENCY</span>
           </div>
-          <h2 class="sd-title">LANGUAGE PROFICIENCY</h2>
+          <h2 class="sd-title">HOW I COMMUNICATE</h2>
           <p class="sd-blurb">Communication proficiencies spanning native national language, regional heritage mother tongue, and international technical English.</p>
         </div>
 
         <div class="sd-stats-cluster">
           <div class="sd-stat-pill">
-            <span class="sd-stat-num">80</span>
+            <span class="sd-stat-num">81</span>
             <span class="sd-stat-unit">SCORE</span>
             <span class="sd-stat-label">Fluency Avg</span>
           </div>
@@ -1126,12 +1129,12 @@
             <span class="sd-stat-label">Spoken & Written</span>
           </div>
           <div class="sd-stat-pill">
-            <span class="sd-stat-num">90</span>
+            <span class="sd-stat-num">91</span>
             <span class="sd-stat-unit">NATIVE</span>
             <span class="sd-stat-label">Indonesian</span>
           </div>
           <div class="sd-stat-pill">
-            <span class="sd-stat-num">63</span>
+            <span class="sd-stat-num">66</span>
             <span class="sd-stat-unit">WORKING</span>
             <span class="sd-stat-label">Technical English</span>
           </div>
@@ -1241,7 +1244,7 @@
 
     // 3. Languages
     const langAccents = {
-      'Indonesia': '#00e5ff',
+      'Indonesian': '#00e5ff',
       'Javanese': '#c07bff',
       'English': '#ff9d66'
     };
