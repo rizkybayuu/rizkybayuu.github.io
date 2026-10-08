@@ -1726,6 +1726,25 @@ body.detail-open #work-view .constellation-map {
   object-fit: cover;
 }
 
+.wd-local-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+}
+.wd-local-link:hover .wd-local-img {
+  opacity: 0.92;
+  transform: scale(1.015);
+}
+.wd-local-img {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.wd-item-info .wd-acts {
+  justify-content: center;
+  margin-top: 0.65rem;
+}
+
 /* Published-asset links (BlendKit): naked rows, no boxes. */
 .wd-body.layout-mixed-procedural .wd-asset-header {
   margin: 0.6rem auto 1rem;
@@ -4005,6 +4024,465 @@ body.skills-detail-open #skills-view .skills-display-area {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.75rem;
+  }
+}
+
+/* =============================================================================
+   Hire Me View: Client Onboarding, Availability & Services
+   ============================================================================= */
+
+.hire-container {
+  position: relative;
+  width: 100%;
+  max-width: 76rem;
+  height: 100%;
+  max-height: calc(100vh - 4.5rem);
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: transparent;
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: none;
+  box-sizing: border-box;
+}
+
+.hire-display-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  height: 100%;
+  flex: 1;
+  min-height: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 1.5rem 1rem 3.5rem 1rem;
+  box-sizing: border-box;
+}
+
+.hire-overview-content {
+  width: 100%;
+  max-width: 72rem;
+  margin: auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2.2rem;
+  box-sizing: border-box;
+}
+
+/* Hero & Availability */
+.hire-hero-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.65rem;
+  padding-bottom: 0.5rem;
+}
+
+.hire-hero-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent-cyan, #00f2fe);
+}
+
+.hire-hero-title {
+  font-family: var(--font-mono);
+  font-size: 2.2rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  margin: 0;
+  text-transform: uppercase;
+  text-shadow: 0 0 30px rgba(0, 242, 254, 0.25);
+}
+
+.hire-hero-blurb {
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  color: var(--color-text-dim);
+  max-width: 44rem;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+.hire-status-strip {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  margin-top: 0.65rem;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  padding: 0.38rem 1rem 0.38rem 0.75rem;
+  backdrop-filter: blur(8px);
+}
+
+.hire-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.hire-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #3fb950;
+  box-shadow: 0 0 10px #3fb950, 0 0 16px rgba(63, 185, 80, 0.6);
+  animation: pulseHireDot 2s infinite ease-in-out;
+}
+
+@keyframes pulseHireDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.hire-status-text {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #3fb950;
+}
+
+.hire-status-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--color-text-dim);
+}
+
+.hire-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.hire-meta-sep {
+  opacity: 0.35;
+}
+
+/* Sections & Grids */
+.hire-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  width: 100%;
+}
+
+.hire-section-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-dim);
+  padding-left: 0.35rem;
+  opacity: 0.85;
+}
+
+.hire-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.hire-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  max-width: 50rem;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Actions in cards */
+.hire-split-actions {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.hire-primary-action {
+  flex: 1;
+}
+
+.hire-copy-btn {
+  flex-shrink: 0;
+  padding: 0.55rem 0.85rem;
+  font-size: 0.75rem;
+}
+
+.hire-copy-btn.is-copied {
+  border-color: rgba(63, 185, 80, 0.6) !important;
+  color: #3fb950 !important;
+  background: rgba(63, 185, 80, 0.12) !important;
+  box-shadow: 0 0 14px rgba(63, 185, 80, 0.25);
+}
+
+.hire-dual-actions {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.hire-sub-btn {
+  flex: 1;
+  justify-content: center;
+  font-size: 0.74rem;
+  padding: 0.55rem 0.5rem;
+}
+
+/* Services 2x2 Grid */
+.hire-services-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.15rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.hire-service-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 18px;
+  padding: 1.35rem 1.4rem;
+  box-sizing: border-box;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: background 0.35s ease,
+              border-color 0.35s ease,
+              box-shadow 0.35s ease,
+              backdrop-filter 0.35s ease,
+              -webkit-backdrop-filter 0.35s ease,
+              transform 0.3s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+.hire-service-card:hover {
+  backdrop-filter: brightness(1.35) blur(14px);
+  -webkit-backdrop-filter: brightness(1.35) blur(14px);
+  background: rgba(var(--card-accent-rgb, 255, 255, 255), 0.04);
+  border-color: rgba(var(--card-accent-rgb, 255, 255, 255), 0.35);
+  box-shadow: 0 0 32px rgba(var(--card-accent-rgb, 255, 255, 255), 0.2),
+              inset 0 0 20px rgba(255, 255, 255, 0.02);
+  transform: translateY(-3px);
+}
+
+.hire-service-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.hire-service-num {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.hire-service-subtitle {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.hire-service-title {
+  font-family: var(--font-mono);
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.hire-service-blurb {
+  font-family: var(--font-ui);
+  font-size: 0.84rem;
+  color: var(--color-text-dim);
+  line-height: 1.45;
+  margin: 0;
+  flex: 1;
+}
+
+.hire-service-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.35rem;
+}
+
+.hire-service-tag {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* Workflow 4-Step Grid */
+.hire-workflow-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.hire-step-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  padding: 1.15rem 1.1rem;
+  box-sizing: border-box;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+}
+
+.hire-step-item:hover {
+  border-color: rgba(0, 242, 254, 0.3);
+  background: rgba(0, 242, 254, 0.025);
+  transform: translateY(-2px);
+}
+
+.hire-step-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.hire-step-index {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: var(--color-accent-cyan, #00f2fe);
+}
+
+.hire-step-tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-dim);
+}
+
+.hire-step-title {
+  font-family: var(--font-mono);
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.hire-step-desc {
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  color: var(--color-text-dim);
+  line-height: 1.42;
+  margin: 0;
+}
+
+/* Principles Grid */
+.hire-principles-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.hire-principle-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  background: rgba(255, 255, 255, 0.018);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  padding: 1.1rem;
+  box-sizing: border-box;
+}
+
+.hire-principle-title {
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.hire-principle-desc {
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  color: var(--color-text-dim);
+  line-height: 1.42;
+  margin: 0;
+}
+
+/* Hire Me Media Queries */
+@media (max-width: 1024px) {
+  .hire-workflow-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .hire-display-area {
+    padding: 1rem 0.5rem 3rem 0.5rem;
+  }
+  .hire-hero-title {
+    font-size: 1.7rem;
+  }
+  .hire-grid-3,
+  .hire-grid-2,
+  .hire-services-grid,
+  .hire-workflow-grid,
+  .hire-principles-grid {
+    grid-template-columns: 1fr;
+  }
+  .hire-split-actions,
+  .hire-dual-actions {
+    flex-direction: column;
+  }
+  .hire-copy-btn,
+  .hire-sub-btn {
+    width: 100%;
+    justify-content: center;
   }
 }
 
