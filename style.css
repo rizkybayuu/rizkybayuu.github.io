@@ -2205,3 +2205,461 @@ body.detail-open #work-view .constellation-map {
     opacity: 1;
   }
 }
+
+/* =============================================================================
+   Skills Redesign: Typing WPM Hero & 3 Interactive SVG Donut Charts
+   ============================================================================= */
+
+.skills-container {
+  max-width: 82rem;
+  justify-content: flex-start;
+  gap: 1.1rem;
+}
+
+.skills-display-area {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 6px;
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.skills-display-area::-webkit-scrollbar {
+  width: 6px;
+}
+
+.skills-display-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.skills-display-area::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+/* --- Top Banner: Touch Typing Speed --- */
+.skills-typing-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 1.15rem 1.75rem;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(255, 111, 94, 0.08), rgba(16, 8, 26, 0.75) 75%);
+  border: 1px solid rgba(255, 111, 94, 0.24);
+  box-shadow: 0 4px 28px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  box-sizing: border-box;
+  flex-shrink: 0;
+  width: 100%;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.skills-typing-hero:hover {
+  border-color: rgba(255, 111, 94, 0.4);
+  box-shadow: 0 6px 36px rgba(255, 111, 94, 0.12);
+}
+
+.typing-hero-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 220px;
+}
+
+.typing-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #ff8a7a;
+  text-transform: uppercase;
+}
+
+.typing-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.typing-title {
+  font-family: var(--font-mono);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.typing-sub-tag {
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  color: var(--color-text-dim);
+}
+
+.typing-metric-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0 1.75rem;
+  border-left: 1px solid rgba(255, 111, 94, 0.18);
+  border-right: 1px solid rgba(255, 111, 94, 0.18);
+  flex-shrink: 0;
+}
+
+.typing-score-cluster {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+}
+
+.typing-wpm-val {
+  font-family: var(--font-mono);
+  font-size: 2.35rem;
+  font-weight: 800;
+  color: #ff7e6e;
+  line-height: 1;
+  text-shadow: 0 0 20px rgba(255, 111, 94, 0.5);
+}
+
+.typing-wpm-unit {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-text-dim);
+  letter-spacing: 0.05em;
+}
+
+.typing-status-pill {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #ff9d66;
+  background: rgba(255, 157, 102, 0.14);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 157, 102, 0.25);
+}
+
+.typing-gauge-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+  max-width: 380px;
+}
+
+.typing-gauge-scale {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--color-text-dim);
+}
+
+.typing-gauge-scale .typing-current-pin {
+  color: #ff8a7a;
+  font-weight: 700;
+}
+
+.typing-gauge-track {
+  position: relative;
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: visible;
+}
+
+.typing-gauge-bar {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ff5238, #ff8a7a, #ffa07a);
+  box-shadow: 0 0 14px rgba(255, 111, 94, 0.6);
+}
+
+.typing-gauge-marker {
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid #ff5238;
+  box-shadow: 0 0 10px #ff5238;
+  transform: translate(-50%, -50%);
+}
+
+.typing-gauge-meta {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  color: var(--color-text-dim);
+  opacity: 0.8;
+}
+
+/* --- Donut Charts Grid --- */
+.skills-charts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+  width: 100%;
+  align-items: stretch;
+}
+
+.skills-donut-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.35rem 1.25rem;
+  border-radius: 18px;
+  border: 1px solid rgba(var(--card-accent-rgb, 255, 255, 255), 0.18);
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.025), rgba(10, 5, 18, 0.72));
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+.skills-donut-card:hover {
+  border-color: rgba(var(--card-accent-rgb, 255, 255, 255), 0.38);
+  box-shadow: 0 12px 40px rgba(var(--card-accent-rgb, 255, 255, 255), 0.12);
+}
+
+.donut-card-header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.donut-badge {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--card-accent, #ff9d66);
+  opacity: 0.9;
+}
+
+.donut-card-title {
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.donut-visual-wrap {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0.3rem 0 0.85rem;
+}
+
+.donut-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.3));
+}
+
+.donut-slice {
+  cursor: pointer;
+  transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.2s ease, filter 0.22s ease;
+  transform-origin: 80px 80px;
+  opacity: 0.86;
+}
+
+.donut-slice:hover,
+.donut-slice.is-hovered {
+  opacity: 1;
+  transform: scale(1.06);
+  filter: drop-shadow(0 0 10px currentColor);
+}
+
+.donut-center-info {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: none;
+  width: 90px;
+  max-width: 90px;
+}
+
+.donut-center-score {
+  font-family: var(--font-mono);
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: var(--color-text-main);
+  line-height: 1;
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+.donut-center-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-dim);
+  margin-top: 0.2rem;
+  line-height: 1.15;
+  transition: color 0.2s ease;
+}
+
+.donut-center-sub {
+  font-family: var(--font-ui);
+  font-size: 0.65rem;
+  color: var(--color-text-dim);
+  opacity: 0.75;
+  margin-top: 0.15rem;
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 86px;
+}
+
+.donut-legend {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 0.35rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  padding-top: 0.75rem;
+}
+
+.donut-legend-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: 0.32rem 0.55rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.18s ease, transform 0.18s ease;
+  background: transparent;
+}
+
+.donut-legend-item:hover,
+.donut-legend-item.is-hovered {
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateX(2px);
+}
+
+.donut-legend-left {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.donut-legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--item-accent);
+  box-shadow: 0 0 6px var(--item-accent);
+  flex-shrink: 0;
+}
+
+.donut-legend-name {
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  color: var(--color-text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.donut-legend-right {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.donut-legend-score {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--item-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.donut-legend-tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--color-text-dim);
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 1024px) {
+  .skills-charts-grid {
+    grid-template-columns: 1fr;
+  }
+  .skills-typing-hero {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.15rem;
+    padding: 1.25rem 1.4rem;
+  }
+  .typing-metric-box {
+    border-left: none;
+    border-right: none;
+    border-top: 1px solid rgba(255, 111, 94, 0.18);
+    border-bottom: 1px solid rgba(255, 111, 94, 0.18);
+    padding: 0.75rem 0;
+  }
+  .typing-gauge-container {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .donut-visual-wrap {
+    width: 160px;
+    height: 160px;
+  }
+  .donut-card-title {
+    font-size: 1.15rem;
+  }
+  .typing-title {
+    font-size: 1.25rem;
+  }
+}
+

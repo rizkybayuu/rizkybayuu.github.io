@@ -163,7 +163,214 @@
     { name: 'English', level: 'Intermediate', score: 63 }
   ];
 
-  /* Render: skill bar with progress */
+  /* Arc Generator for Donut Charts */
+  function polarToCartesian(cx, cy, r, angleInDegrees) {
+    const rad = (angleInDegrees - 90) * Math.PI / 180.0;
+    return {
+      x: cx + (r * Math.cos(rad)),
+      y: cy + (r * Math.sin(rad))
+    };
+  }
+
+  function describeArc(cx, cy, rOuter, rInner, startAngle, endAngle) {
+    const outerStart = polarToCartesian(cx, cy, rOuter, startAngle);
+    const outerEnd = polarToCartesian(cx, cy, rOuter, endAngle);
+    const innerEnd = polarToCartesian(cx, cy, rInner, endAngle);
+    const innerStart = polarToCartesian(cx, cy, rInner, startAngle);
+
+    const angleDiff = endAngle - startAngle;
+    const largeArcFlag = angleDiff > 180 ? 1 : 0;
+
+    return [
+      'M', outerStart.x.toFixed(2), outerStart.y.toFixed(2),
+      'A', rOuter, rOuter, 0, largeArcFlag, 1, outerEnd.x.toFixed(2), outerEnd.y.toFixed(2),
+      'L', innerEnd.x.toFixed(2), innerEnd.y.toFixed(2),
+      'A', rInner, rInner, 0, largeArcFlag, 0, innerStart.x.toFixed(2), innerStart.y.toFixed(2),
+      'Z'
+    ].join(' ');
+  }
+
+  /* Render Top Banner: Touch Typing Speed */
+  function renderTypingHero() {
+    const typingTool = TOOLS[0] || { name: 'Touch Typing (Average)', wpm: 60 };
+    const wpm = typingTool.wpm || 60;
+    const meterPct = Math.min(100, Math.max(10, Math.round((wpm / 120) * 100)));
+
+    return `
+      <section class="skills-typing-hero" style="--hero-accent: #ff6f5e; --hero-accent-rgb: 255, 111, 94;">
+        <div class="typing-hero-main">
+          <div class="typing-badge">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
+              <line x1="6" y1="8" x2="6" y2="8"></line><line x1="10" y1="8" x2="10" y2="8"></line><line x1="14" y1="8" x2="14" y2="8"></line><line x1="18" y1="8" x2="18" y2="8"></line>
+              <line x1="6" y1="12" x2="6" y2="12"></line><line x1="10" y1="12" x2="10" y2="12"></line><line x1="14" y1="12" x2="14" y2="12"></line><line x1="18" y1="12" x2="18" y2="12"></line>
+              <line x1="7" y1="16" x2="17" y2="16"></line>
+            </svg>
+            INPUT PROFICIENCY
+          </div>
+          <div class="typing-title-row">
+            <h3 class="typing-title">Touch Typing</h3>
+            <span class="typing-sub-tag">10-Finger Flow · QWERTY Blind Typing</span>
+          </div>
+        </div>
+
+        <div class="typing-metric-box">
+          <div class="typing-score-cluster">
+            <span class="typing-wpm-val">${wpm}</span>
+            <span class="typing-wpm-unit">WPM</span>
+          </div>
+          <div class="typing-status-pill">Average Speed</div>
+        </div>
+
+        <div class="typing-gauge-container">
+          <div class="typing-gauge-scale">
+            <span>0</span>
+            <span>30</span>
+            <span class="typing-current-pin">${wpm} WPM</span>
+            <span>90</span>
+            <span>120+</span>
+          </div>
+          <div class="typing-gauge-track">
+            <div class="typing-gauge-bar" style="width: ${meterPct}%;"></div>
+            <div class="typing-gauge-marker" style="left: ${meterPct}%;"></div>
+          </div>
+          <div class="typing-gauge-meta">
+            <span>~${wpm * 5} CPM</span>
+            <span>Fluent Cadence</span>
+            <span>Zero-Look Precision</span>
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  /* Donut Card Component */
+  function renderDonutCard({ id, badge, title, segments, overallScore, overallLabel, overallSub, cardAccent }) {
+    const totalScore = segments.reduce((sum, s) => sum + s.score, 0);
+    const gap = segments.length > 1 ? 2.5 : 0;
+    const availableDegrees = 360 - (segments.length * gap);
+
+    let currentAngle = 0;
+    const pathsHtml = segments.map((seg) => {
+      const span = (seg.score / totalScore) * availableDegrees;
+      const startAngle = currentAngle + (gap / 2);
+      const endAngle = startAngle + span;
+      currentAngle += span + gap;
+
+      const d = describeArc(80, 80, 70, 48, startAngle, endAngle);
+      return `<path class="donut-slice"
+        d="${d}"
+        fill="${seg.accent}"
+        data-segment-id="${seg.id}"
+        tabindex="0"
+        role="button"
+        aria-label="${escapeHtml(seg.name)}: ${seg.score}%"></path>`;
+    }).join('');
+
+    const legendHtml = segments.map(seg => `
+      <div class="donut-legend-item" data-segment-id="${seg.id}" style="--item-accent: ${seg.accent};">
+        <div class="donut-legend-left">
+          <span class="donut-legend-dot"></span>
+          <span class="donut-legend-name">${escapeHtml(seg.name)}</span>
+        </div>
+        <div class="donut-legend-right">
+          ${seg.sub ? `<span class="donut-legend-tag">${escapeHtml(seg.sub)}</span>` : ''}
+          <span class="donut-legend-score">${seg.score}%</span>
+        </div>
+      </div>
+    `).join('');
+
+    return `
+      <article class="skills-donut-card" id="donut-card-${id}" style="--card-accent: ${cardAccent}; --card-accent-rgb: ${hexToRgb(cardAccent)};">
+        <header class="donut-card-header">
+          <span class="donut-badge">${escapeHtml(badge)}</span>
+          <h3 class="donut-card-title">${escapeHtml(title)}</h3>
+        </header>
+
+        <div class="donut-visual-wrap">
+          <svg class="donut-svg" viewBox="0 0 160 160" aria-hidden="true">
+            <g class="donut-slices-group">
+              ${pathsHtml}
+            </g>
+          </svg>
+          <div class="donut-center-info">
+            <div class="donut-center-score">${overallScore}</div>
+            <div class="donut-center-label">${escapeHtml(overallLabel)}</div>
+            <div class="donut-center-sub">${escapeHtml(overallSub)}</div>
+          </div>
+        </div>
+
+        <div class="donut-legend">
+          ${legendHtml}
+        </div>
+      </article>
+    `;
+  }
+
+  /* Interaction Binder for Donut Cards */
+  function attachDonutInteractions(cardEl, segments, overallScore, overallLabel, overallSub) {
+    if (!cardEl) return;
+    const scoreEl = cardEl.querySelector('.donut-center-score');
+    const labelEl = cardEl.querySelector('.donut-center-label');
+    const subEl = cardEl.querySelector('.donut-center-sub');
+    const slices = cardEl.querySelectorAll('.donut-slice');
+    const legendItems = cardEl.querySelectorAll('.donut-legend-item');
+
+    function activate(id) {
+      const seg = segments.find(s => s.id === id);
+      if (!seg) return;
+      slices.forEach(s => {
+        s.classList.toggle('is-hovered', s.getAttribute('data-segment-id') === id);
+      });
+      legendItems.forEach(item => {
+        item.classList.toggle('is-hovered', item.getAttribute('data-segment-id') === id);
+      });
+      if (scoreEl) {
+        scoreEl.textContent = seg.score;
+        scoreEl.style.color = seg.accent;
+        scoreEl.style.textShadow = `0 0 16px ${seg.accent}`;
+      }
+      if (labelEl) labelEl.textContent = seg.name;
+      if (subEl) subEl.textContent = seg.sub ? `${seg.sub} · ${seg.level}` : seg.level;
+    }
+
+    function reset() {
+      slices.forEach(s => s.classList.remove('is-hovered'));
+      legendItems.forEach(item => item.classList.remove('is-hovered'));
+      if (scoreEl) {
+        scoreEl.textContent = overallScore;
+        scoreEl.style.color = '';
+        scoreEl.style.textShadow = '';
+      }
+      if (labelEl) labelEl.textContent = overallLabel;
+      if (subEl) subEl.textContent = overallSub;
+    }
+
+    slices.forEach(s => {
+      const id = s.getAttribute('data-segment-id');
+      s.addEventListener('mouseenter', () => activate(id));
+      s.addEventListener('click', (e) => {
+        e.stopPropagation();
+        activate(id);
+      });
+    });
+
+    legendItems.forEach(item => {
+      const id = item.getAttribute('data-segment-id');
+      item.addEventListener('mouseenter', () => activate(id));
+      item.addEventListener('click', (e) => {
+        e.stopPropagation();
+        activate(id);
+      });
+    });
+
+    cardEl.addEventListener('mouseleave', reset);
+    window.addEventListener('pointerdown', (e) => {
+      if (!cardEl.contains(e.target)) reset();
+    }, { passive: true });
+  }
+
+  /* Render: preserved skill bar helper for subcategory details */
   function renderBar(score, name) {
     const level = levelOf(score);
     const pct = Math.min(100, Math.max(0, score));
@@ -182,88 +389,120 @@
       </div>`;
   }
 
-  /* Craft section */
-  function renderCraft() {
-    let html = '<section class="skills-craft"><h2>Craft Skills</h2><div class="craft-categories">';
-    CRAFT_FIELDS.forEach((field) => {
-      const svc = field.service ? ' data-service="true"' : '';
-      html += `<div class="craft-category"${svc} style="${cardStyle(field.accent)}">`;
-      html += `<h3>${escapeHtml(field.title)}</h3>`;
-      field.skills.forEach(skill => html += renderBar(skill.score, skill.name));
-      html += '</div>';
-    });
-    html += '</div></section>';
-    return html;
-  }
-
-  /* Software section */
-  function renderSoftware() {
-    let html = '<section class="skills-software"><h2>Software & Tools</h2><div class="software-categories">';
-    SOFTWARE_GROUPS.forEach((group) => {
-      html += `<div class="software-category" style="${cardStyle(group.accent)}">`;
-      html += `<h3>${escapeHtml(group.title)}</h3>`;
-      group.tools.forEach(tool => html += renderBar(tool.score, tool.name));
-      html += '</div>';
-    });
-    html += '</div></section>';
-    return html;
-  }
-
-  /* Typing section */
-  function renderTyping() {
-    let html = '<section class="skills-tools"><h2>Typing & Input</h2><div class="tools-category" style="' + cardStyle('#ff6f5e') + '">';
-    html += '<h3>Touch Typing</h3>';
-    TOOLS.forEach(tool => {
-      html += `
-        <div class="skill-bar">
-          <div class="skill-bar-header">
-            <span class="skill-bar-name">${escapeHtml(tool.name)}</span>
-            <div class="skill-bar-meta">
-              <span class="skill-bar-wpm">${tool.wpm} WPM</span>
-            </div>
-          </div>
-        </div>`;
-    });
-    html += '</div></section>';
-    return html;
-  }
-
-  /* Languages section */
-  function renderLanguages() {
-    let html = '<section class="skills-languages"><h2>Languages</h2><div class="languages-category" style="' + cardStyle('#9aa6ff') + '">';
-    html += '<h3>Spoken & Written</h3>';
-    LANGUAGES.forEach(lang => {
-      const pct = lang.score;
-      html += `
-        <div class="skill-bar">
-          <div class="skill-bar-header">
-            <span class="skill-bar-name">${escapeHtml(lang.name)}</span>
-            <div class="skill-bar-meta">
-              <span class="skill-bar-level" data-level="${lang.level.toLowerCase()}">${lang.level}</span>
-              <span class="skill-bar-score">${lang.score}</span>
-            </div>
-          </div>
-          <div class="skill-bar-track">
-            <div class="skill-bar-fill" style="width: ${pct}%"></div>
-          </div>
-        </div>`;
-    });
-    html += '</div></section>';
-    return html;
-  }
-
-  /* Main render */
+  /* Main Skills View Render */
   function renderSkills() {
     const grid = document.getElementById('skills-grid');
     if (!grid) return;
-    grid.innerHTML = renderCraft() + renderSoftware() + renderTyping() + renderLanguages();
-    const meta = document.querySelector('.skills-meta');
-    if (meta) meta.style.display = 'none';
+
+    // 1. Calculate Craft categories & averages
+    const craftSegments = CRAFT_FIELDS.map((f, idx) => {
+      const sum = f.skills.reduce((acc, s) => acc + s.score, 0);
+      const avg = Math.round(sum / f.skills.length);
+      return {
+        id: `craft-${idx}`,
+        name: f.title,
+        score: avg,
+        accent: f.accent,
+        sub: `${f.skills.length} skills`,
+        level: LEVEL_LABEL[levelOf(avg)],
+        skills: f.skills
+      };
+    });
+    const craftOverallAvg = Math.round(craftSegments.reduce((sum, c) => sum + c.score, 0) / craftSegments.length);
+
+    // 2. Calculate Software groups & averages
+    const softwareSegments = SOFTWARE_GROUPS.map((g, idx) => {
+      const sum = g.tools.reduce((acc, t) => acc + t.score, 0);
+      const avg = Math.round(sum / g.tools.length);
+      return {
+        id: `soft-${idx}`,
+        name: g.title,
+        score: avg,
+        accent: g.accent,
+        sub: `${g.tools.length} tool${g.tools.length > 1 ? 's' : ''}`,
+        level: LEVEL_LABEL[levelOf(avg)],
+        tools: g.tools
+      };
+    });
+    const softwareOverallAvg = Math.round(softwareSegments.reduce((sum, s) => sum + s.score, 0) / softwareSegments.length);
+
+    // 3. Languages
+    const langAccents = {
+      'Indonesia': '#00e5ff',
+      'Javanese': '#c07bff',
+      'English': '#ff9d66'
+    };
+    const languageSegments = LANGUAGES.map((l, idx) => {
+      return {
+        id: `lang-${idx}`,
+        name: l.name,
+        score: l.score,
+        accent: langAccents[l.name] || '#9aa6ff',
+        sub: l.level,
+        level: l.level
+      };
+    });
+    const languageOverallAvg = Math.round(languageSegments.reduce((sum, l) => sum + l.score, 0) / languageSegments.length);
+
+    // Construct 4-part layout: Top typing hero + 3 donut charts grid
+    const typingHeroHtml = renderTypingHero();
+
+    const craftDonutHtml = renderDonutCard({
+      id: 'craft',
+      badge: 'Craft Portfolio',
+      title: 'Craft Skills',
+      segments: craftSegments,
+      overallScore: craftOverallAvg,
+      overallLabel: 'Craft Avg',
+      overallSub: `${craftSegments.length} Categories`,
+      cardAccent: '#ff9d66'
+    });
+
+    const softwareDonutHtml = renderDonutCard({
+      id: 'software',
+      badge: 'Tooling & Software',
+      title: 'Software & Tools',
+      segments: softwareSegments,
+      overallScore: softwareOverallAvg,
+      overallLabel: 'Software Avg',
+      overallSub: `${softwareSegments.length} Categories`,
+      cardAccent: '#7fd1ff'
+    });
+
+    const languageDonutHtml = renderDonutCard({
+      id: 'languages',
+      badge: 'Communications',
+      title: 'Languages',
+      segments: languageSegments,
+      overallScore: languageOverallAvg,
+      overallLabel: 'Language Avg',
+      overallSub: `${languageSegments.length} Languages`,
+      cardAccent: '#00e5ff'
+    });
+
+    grid.innerHTML = `
+      ${typingHeroHtml}
+      <div class="skills-charts-grid">
+        ${craftDonutHtml}
+        ${softwareDonutHtml}
+        ${languageDonutHtml}
+      </div>
+    `;
+
+    // Wire up donut chart interactivity
+    attachDonutInteractions(document.getElementById('donut-card-craft'), craftSegments, craftOverallAvg, 'Craft Avg', `${craftSegments.length} Categories`);
+    attachDonutInteractions(document.getElementById('donut-card-software'), softwareSegments, softwareOverallAvg, 'Software Avg', `${softwareSegments.length} Categories`);
+    attachDonutInteractions(document.getElementById('donut-card-languages'), languageSegments, languageOverallAvg, 'Language Avg', `${languageSegments.length} Languages`);
   }
 
   window.RIZKYBY_SKILLS = {
-    craft: CRAFT_FIELDS, software: SOFTWARE_GROUPS, tools: TOOLS, languages: LANGUAGES,
-    levelOf, render: renderSkills
+    craft: CRAFT_FIELDS,
+    software: SOFTWARE_GROUPS,
+    tools: TOOLS,
+    languages: LANGUAGES,
+    levelOf,
+    renderBar,
+    render: renderSkills
   };
 
   if (document.readyState === 'loading') {
