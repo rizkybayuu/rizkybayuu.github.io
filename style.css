@@ -475,6 +475,21 @@ html, body {
   transition: opacity 0.42s ease-in, transform 0.42s ease-in; /* Perlahan di awal, tajam menghilang */
 }
 
+/* Responsive Hero Typography for Mobile / Android */
+@media (max-width: 768px) {
+  :root {
+    --scale-title: clamp(1.55rem, 6.8vw, 2.75rem);
+    --scale-welcome: calc(var(--scale-title) * 0.48);
+    --scale-sub: calc(var(--scale-title) * 0.35);
+    --scale-gap: calc(var(--scale-title) * 0.2);
+    --sub-motion-distance: calc(var(--scale-sub) * 1.6);
+  }
+
+  .content-card {
+    padding: 0 1rem;
+  }
+}
+
 /* --- Click Ripple Interactions --- */
 .click-ripple {
   position: fixed;
