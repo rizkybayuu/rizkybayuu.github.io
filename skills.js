@@ -511,11 +511,9 @@
   }
 
   /* Live 60 WPM Human Typing Simulator */
-  const SIM_QUOTES = [
-    "Writing code is sculpting thought; every keystroke brings structure to ideas.",
-    "Speed without accuracy is noise. True flow is typing without looking.",
-    "Ten fingers moving in sync, turning thoughts into clean interactive interfaces.",
-    "Muscle memory bridges mind and screen, letting creativity take flight."
+  const SIM_PARAGRAPHS = [
+    "Building high-performance user interfaces requires harmony between human intent and machine execution. With ten fingers resting precisely on the home row, muscle memory eliminates the friction of looking down at the keyboard. Code syntax, semantic tags, reactive state handlers, and algorithmic structures flow directly from mind to screen at a natural sixty words per minute. Clean cadence, rhythm, and precision turn abstract concepts into elegant reality.",
+    "True typing mastery is not about erratic bursts, but sustained rhythm and effortless precision. Zero-look touch typing frees cognitive bandwidth, allowing the developer to focus entirely on architecture, clean logic, and user experience. Every bracket, indentation, and semicolon falls into place through muscle memory, sustaining steady cadence across complex codebases."
   ];
 
   const ADJACENT_KEYS = {
@@ -548,9 +546,17 @@
     ' ': ['c', 'v', 'b', 'n']
   };
 
+  const COMMON_BIGRAMS = new Set([
+    'th', 'he', 'in', 'er', 'an', 're', 'nd', 'at', 'on', 'nt',
+    'ha', 'es', 'st', 'en', 'ed', 'to', 'it', 'ou', 'ea', 'hi',
+    'is', 'or', 'ti', 'as', 'te', 'et', 'ng', 'of', 'al', 'de',
+    'se', 'le', 'sa', 'si', 'ar', 've', 'ra', 'ld', 'ur', 'io'
+  ]);
+
   let simTimer = null;
   let simActive = false;
-  let currentQuoteIdx = 0;
+  let currentParagraphIdx = 0;
+  let simStartTime = 0;
   let typedCount = 0;
   let errorCount = 0;
   let totalKeypresses = 0;
@@ -558,11 +564,12 @@
   function startSimulator() {
     stopSimulator();
     simActive = true;
-    currentQuoteIdx = 0;
+    currentParagraphIdx = 0;
     typedCount = 0;
     errorCount = 0;
     totalKeypresses = 0;
-    runQuote(SIM_QUOTES[currentQuoteIdx]);
+    simStartTime = performance.now();
+    runSimulationParagraph(SIM_PARAGRAPHS[currentParagraphIdx]);
   }
 
   function stopSimulator() {
@@ -582,111 +589,186 @@
     wpmEl.textContent = `${Math.round(instantWpm)}`;
     cpmEl.textContent = `${Math.round(instantWpm * 5)}`;
     const acc = totalKeypresses > 0
-      ? Math.max(93, Math.min(100, Math.round(((totalKeypresses - errorCount) / totalKeypresses) * 1000) / 10))
+      ? Math.max(94, Math.min(100, Math.round(((totalKeypresses - errorCount) / totalKeypresses) * 1000) / 10))
       : 98.4;
     accEl.textContent = `${acc.toFixed(1)}%`;
   }
 
-  function runQuote(text) {
+  function runSimulationParagraph(text) {
     if (!simActive) return;
     const stage = document.getElementById('sd-typing-text-flow');
     if (!stage) return;
 
+    // Zero-shift pre-rendering: all characters rendered into fixed spans once
+    stage.innerHTML = '';
+    stage.style.transform = 'translateY(0px)';
+
+    const fragment = document.createDocumentFragment();
+    for (let i = 0; i < text.length; i++) {
+      const span = document.createElement('span');
+      span.className = 'type-char pending';
+      span.textContent = text[i];
+      span.dataset.orig = text[i];
+      fragment.appendChild(span);
+    }
+    stage.appendChild(fragment);
+
+    const spans = stage.children;
     let charIndex = 0;
     let hasPendingTypo = false;
     let typoChar = '';
 
-    function renderStage() {
-      let html = '';
-      for (let i = 0; i < text.length; i++) {
-        const char = text[i];
-        const displayChar = char;
-        if (i < charIndex) {
-          html += `<span class="char-done">${displayChar}</span>`;
-        } else if (i === charIndex) {
-          if (hasPendingTypo) {
-            html += `<span class="char-typo">${typoChar}</span><span class="char-caret"></span><span class="char-pending">${displayChar}</span>`;
-          } else {
-            html += `<span class="char-current"><span class="char-caret"></span>${displayChar}</span>`;
-          }
-        } else {
-          html += `<span class="char-pending">${displayChar}</span>`;
-        }
-      }
-      stage.innerHTML = html;
+    // Mark initial active character
+    if (spans.length > 0) {
+      spans[0].className = 'type-char active';
+    }
+
+    function scrollCurrentLineIntoView(activeSpan) {
+      if (!activeSpan || !stage) return;
+      const stageBox = stage.getBoundingClientRect();
+      const spanBox = activeSpan.getBoundingClientRect();
+
+      // Determine computed line-height
+      const computedLineH = parseFloat(window.getComputedStyle(stage).lineHeight) || spanBox.height || 38;
+      const baseTop = spans[0] ? spans[0].offsetTop : 0;
+      const currentTop = activeSpan.offsetTop - baseTop;
+      const currentLine = Math.round(currentTop / computedLineH);
+
+      // Keep at most 2 lines in view:
+      // Line 0 & 1 -> translateY: 0
+      // Line >= 2  -> translateY: - (currentLine - 1) * lineHeight
+      const scrollLines = Math.max(0, currentLine - 1);
+      const translateY = scrollLines * computedLineH;
+      stage.style.transform = `translateY(-${translateY}px)`;
     }
 
     function step() {
       if (!simActive) return;
 
-      // 60 WPM cadence math: average ~200ms per keystroke (300 CPM = 5 chars/sec)
-      let delay = Math.floor(165 + Math.random() * 70); // 165 - 235ms baseline
-      let instantaneousWpm = 58 + (Math.random() * 5); // 58 - 63 WPM
-
+      // Handle backspace resolution for previous typo
       if (hasPendingTypo) {
-        // Backspacing typo: erase wrong character
         hasPendingTypo = false;
-        typoChar = '';
-        renderStage();
+        const currentSpan = spans[charIndex];
+        if (currentSpan) {
+          // Revert character back to original in-place
+          currentSpan.textContent = currentSpan.dataset.orig;
+          currentSpan.className = 'type-char active';
+        }
         totalKeypresses++;
-        updateTelemetry(instantaneousWpm);
-        // Delay before re-typing correct character
-        simTimer = setTimeout(step, Math.floor(110 + Math.random() * 50));
+        updateTelemetry(58 + Math.random() * 4);
+        // Short pause after backspacing before typing correct key (~110-170ms)
+        simTimer = setTimeout(step, Math.floor(115 + Math.random() * 55));
         return;
       }
 
+      // Check paragraph completion
       if (charIndex >= text.length) {
-        // Quote finished: wait 2.6s, then start next quote
+        if (charIndex > 0 && spans[charIndex - 1]) {
+          spans[charIndex - 1].className = 'type-char done';
+        }
         updateTelemetry(60);
+        // Pause at completion, then rotate to next paragraph
         simTimer = setTimeout(() => {
           if (!simActive) return;
-          currentQuoteIdx = (currentQuoteIdx + 1) % SIM_QUOTES.length;
-          runQuote(SIM_QUOTES[currentQuoteIdx]);
-        }, 2600);
+          currentParagraphIdx = (currentParagraphIdx + 1) % SIM_PARAGRAPHS.length;
+          runSimulationParagraph(SIM_PARAGRAPHS[currentParagraphIdx]);
+        }, 3200);
         return;
       }
 
+      const activeSpan = spans[charIndex];
       const targetChar = text[charIndex];
 
-      // Realistic Typo injection (1% - 8% probability, ~4.5% avg, only on letters)
-      const canTypo = /[a-zA-Z]/.test(targetChar) && charIndex > 3 && (charIndex < text.length - 2);
-      const shouldTypo = canTypo && Math.random() < 0.045;
+      // Typo injection (natural 2.5% rate, only on mid-word alphabetical letters)
+      const isAlpha = /[a-zA-Z]/.test(targetChar);
+      const canTypo = isAlpha && charIndex > 5 && charIndex < text.length - 4 && !hasPendingTypo;
+      const shouldTypo = canTypo && (Math.random() < 0.025);
 
       if (shouldTypo) {
         const lower = targetChar.toLowerCase();
         const adjacent = ADJACENT_KEYS[lower] || ['x'];
         typoChar = adjacent[Math.floor(Math.random() * adjacent.length)];
+        if (targetChar === targetChar.toUpperCase() && targetChar !== targetChar.toLowerCase()) {
+          typoChar = typoChar.toUpperCase();
+        }
+
+        // In-place typo: replace letter glyph without adding extra spans
+        activeSpan.textContent = typoChar;
+        activeSpan.className = 'type-char typo';
         hasPendingTypo = true;
         errorCount++;
         totalKeypresses++;
-        renderStage();
-        updateTelemetry(instantaneousWpm - 4);
-        // Human reaction pause before realizing typo and pressing backspace (~180 - 270ms)
-        simTimer = setTimeout(step, Math.floor(190 + Math.random() * 80));
+
+        // Typist reaction pause before realizing error (~200 - 280ms)
+        const reactionDelay = Math.floor(210 + Math.random() * 75);
+        updateTelemetry(55 + Math.random() * 4);
+        simTimer = setTimeout(step, reactionDelay);
         return;
       }
 
-      // Normal typing
+      // Mark current span done, advance index, mark next span active
+      activeSpan.className = 'type-char done';
       charIndex++;
       typedCount++;
       totalKeypresses++;
-      renderStage();
 
-      // Human rhythm variations:
-      if (targetChar === ' ') {
-        delay = Math.floor(220 + Math.random() * 70); // inter-word pause
-      } else if (/[.,;]/.test(targetChar)) {
-        delay = Math.floor(320 + Math.random() * 110); // punctuation pause
-      } else if (charIndex > 1 && text[charIndex - 1] === text[charIndex - 2]) {
-        delay = Math.floor(100 + Math.random() * 40); // double-letter burst
+      if (charIndex < spans.length) {
+        const nextSpan = spans[charIndex];
+        nextSpan.className = 'type-char active';
+        scrollCurrentLineIntoView(nextSpan);
       }
 
-      updateTelemetry(instantaneousWpm);
+      // Humanized Keystroke Timing Model with high variance averaging 60 WPM (~200ms/keystroke):
+      let baseDelay = 180;
+      const prevChar = text[charIndex - 1] || '';
+      const bigram = (prevChar + targetChar).toLowerCase();
+
+      if (COMMON_BIGRAMS.has(bigram)) {
+        // Fast syllable muscle-memory burst (~90-140ms, ~90-130 WPM burst)
+        baseDelay = 95 + Math.random() * 45;
+      } else if (targetChar === ' ') {
+        // Word boundary micro-pause (~230-320ms)
+        baseDelay = 240 + Math.random() * 80;
+      } else if (/[.,;:!?-]/.test(targetChar)) {
+        // Punctuation clause pause (~340-470ms)
+        baseDelay = 350 + Math.random() * 120;
+      } else if (/[A-Z]/.test(targetChar)) {
+        // Shift key stretch delay (~210-280ms)
+        baseDelay = 220 + Math.random() * 60;
+      } else if (charIndex > 1 && text[charIndex - 1] === text[charIndex - 2]) {
+        // Double letter burst (e.g. 'ee', 'll', 'ss') (~90-130ms)
+        baseDelay = 100 + Math.random() * 35;
+      } else {
+        // Normal letter with random variance (~140-215ms)
+        baseDelay = 145 + Math.random() * 70;
+      }
+
+      // Subtle thought cadence pause on occasional words (~1 in 15 words)
+      if (targetChar === ' ' && Math.random() < 0.08) {
+        baseDelay += Math.floor(130 + Math.random() * 150);
+      }
+
+      // Closed-loop governor to ensure long-term net speed stays locked at ~60 WPM
+      const now = performance.now();
+      const elapsedSec = Math.max(0.1, (now - simStartTime) / 1000);
+      const idealTimeSec = typedCount * 0.20; // 5 chars/sec = 200ms per char
+      const drift = elapsedSec - idealTimeSec;
+      // Gently nudge delay to keep total speed around 60 WPM without flattening cadence variance
+      const speedAdjustment = Math.sign(drift) * Math.min(25, Math.abs(drift) * 15);
+      const delay = Math.max(75, Math.floor(baseDelay - speedAdjustment));
+
+      // Calculate smooth rolling live WPM telemetry
+      const rollingWpm = elapsedSec > 1.2
+        ? ((typedCount / 5) / (elapsedSec / 60))
+        : 60.0;
+      const displayWpm = Math.max(54, Math.min(66, rollingWpm + (Math.random() * 1.8 - 0.9)));
+      updateTelemetry(displayWpm);
+
       simTimer = setTimeout(step, delay);
     }
 
-    renderStage();
-    simTimer = setTimeout(step, 400);
+    // Begin typing first letter after brief preparation pause
+    simTimer = setTimeout(step, 450);
   }
 
   let skillsDetailOpen = false;

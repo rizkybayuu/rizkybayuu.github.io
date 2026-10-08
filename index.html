@@ -192,104 +192,97 @@
 
         <!-- Dedicated Touch Typing Detail Panel -->
         <section class="skills-detail" id="skills-detail" aria-hidden="true">
-          <header class="sd-head">
-            <div class="sd-head-top">
-              <button class="wd-back sd-back" id="sd-back" type="button" aria-label="Back to skills overview">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="15 18 9 12 15 6"></polyline>
-                </svg>
-                <span>Skills Overview</span>
-              </button>
-            </div>
-
-            <div class="sd-titles">
-              <div class="sd-kicker">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
-                  <line x1="6" y1="8" x2="6" y2="8"></line><line x1="10" y1="8" x2="10" y2="8"></line><line x1="14" y1="8" x2="14" y2="8"></line><line x1="18" y1="8" x2="18" y2="8"></line>
-                  <line x1="6" y1="12" x2="6" y2="12"></line><line x1="10" y1="12" x2="10" y2="12"></line><line x1="14" y1="12" x2="14" y2="12"></line><line x1="18" y1="12" x2="18" y2="12"></line>
-                  <line x1="7" y1="16" x2="17" y2="16"></line>
-                </svg>
-                <span>INPUT MASTERY · BLIND CADENCE</span>
-              </div>
-              <h2 class="sd-title">Touch Typing Flow</h2>
-              <p class="sd-blurb">10-finger muscle memory with zero-look keyboard cadence. Consistent flow across code syntax, markup, and technical documentation.</p>
-            </div>
-
-            <!-- Stats Bar -->
-            <div class="sd-stats-cluster">
-              <div class="sd-stat-pill">
-                <span class="sd-stat-num">60</span>
-                <span class="sd-stat-unit">WPM</span>
-                <span class="sd-stat-label">Net Speed</span>
-              </div>
-              <div class="sd-stat-pill">
-                <span class="sd-stat-num">~300</span>
-                <span class="sd-stat-unit">CPM</span>
-                <span class="sd-stat-label">Characters / Min</span>
-              </div>
-              <div class="sd-stat-pill">
-                <span class="sd-stat-num">98%+</span>
-                <span class="sd-stat-unit">ACC</span>
-                <span class="sd-stat-label">Accuracy Rate</span>
-              </div>
-              <div class="sd-stat-pill">
-                <span class="sd-stat-num">10</span>
-                <span class="sd-stat-unit">FINGERS</span>
-                <span class="sd-stat-label">QWERTY Layout</span>
-              </div>
-            </div>
-
-            <!-- Proof link button -->
-            <div class="sd-proof-wrap">
-              <a href="https://drive.google.com/file/d/1K90z00wiL2pxEVNo9x66Td78QUNKyHEt/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="sd-proof-btn">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                  <polyline points="14 2 14 8 20 8"></polyline>
-                  <path d="M9 15l2 2 4-4"></path>
-                </svg>
-                <span>View Certified Test Result (Google Drive)</span>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sd-arrow-icon">
-                  <line x1="7" y1="17" x2="17" y2="7"></line>
-                  <polyline points="7 7 17 7 17 17"></polyline>
-                </svg>
-              </a>
-            </div>
-          </header>
-
-          <!-- Simulator Body -->
-          <div class="sd-body">
-            <div class="sd-sim-panel">
-              <div class="sd-sim-topbar">
-                <div class="sd-sim-kicker">
-                  <span class="sd-pulse-dot"></span>
-                  <span>LIVE CADENCE SIMULATION · 60 WPM FLOW</span>
+          <div class="sd-content-wrapper">
+            <header class="sd-head">
+              <div class="sd-titles">
+                <div class="sd-kicker">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
+                    <line x1="6" y1="8" x2="6" y2="8"></line><line x1="10" y1="8" x2="10" y2="8"></line><line x1="14" y1="8" x2="14" y2="8"></line><line x1="18" y1="8" x2="18" y2="8"></line>
+                    <line x1="6" y1="12" x2="6" y2="12"></line><line x1="10" y1="12" x2="10" y2="12"></line><line x1="14" y1="12" x2="14" y2="12"></line><line x1="18" y1="12" x2="18" y2="12"></line>
+                    <line x1="7" y1="16" x2="17" y2="16"></line>
+                  </svg>
+                  <span>SHOWCASE · RAW CADENCE</span>
                 </div>
-                <div class="sd-telemetry">
-                  <div class="sd-telemetry-badge">
-                    <span class="sd-telem-val" id="sim-live-wpm">60</span>
-                    <span class="sd-telem-lbl">WPM</span>
-                  </div>
-                  <div class="sd-telemetry-badge">
-                    <span class="sd-telem-val" id="sim-live-cpm">300</span>
-                    <span class="sd-telem-lbl">CPM</span>
-                  </div>
-                  <div class="sd-telemetry-badge">
-                    <span class="sd-telem-val" id="sim-live-acc">98.4%</span>
-                    <span class="sd-telem-lbl">ACC</span>
-                  </div>
+                <h2 class="sd-title">THIS IS HOW FAST I TYPE</h2>
+                <p class="sd-blurb">A live demonstration of my 60 WPM touch typing flow. Watch thoughts translate into code in real-time with zero-look muscle memory.</p>
+              </div>
+
+              <!-- Stats Bar -->
+              <div class="sd-stats-cluster">
+                <div class="sd-stat-pill">
+                  <span class="sd-stat-num">60</span>
+                  <span class="sd-stat-unit">WPM</span>
+                  <span class="sd-stat-label">Net Speed</span>
+                </div>
+                <div class="sd-stat-pill">
+                  <span class="sd-stat-num">~300</span>
+                  <span class="sd-stat-unit">CPM</span>
+                  <span class="sd-stat-label">Characters / Min</span>
+                </div>
+                <div class="sd-stat-pill">
+                  <span class="sd-stat-num">98%+</span>
+                  <span class="sd-stat-unit">ACC</span>
+                  <span class="sd-stat-label">Accuracy Rate</span>
+                </div>
+                <div class="sd-stat-pill">
+                  <span class="sd-stat-num">10</span>
+                  <span class="sd-stat-unit">FINGERS</span>
+                  <span class="sd-stat-label">QWERTY Layout</span>
                 </div>
               </div>
 
-              <!-- Typing Stage with Ghost Text and Active Typing -->
-              <div class="sd-typing-stage">
-                <div class="sd-typing-text-flow" id="sd-typing-text-flow">
-                  <!-- Injected via skills.js -->
-                </div>
+              <!-- Proof link button -->
+              <div class="sd-proof-wrap">
+                <a href="https://drive.google.com/file/d/1K90z00wiL2pxEVNo9x66Td78QUNKyHEt/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="sd-proof-btn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <path d="M9 15l2 2 4-4"></path>
+                  </svg>
+                  <span>View Certified Test Result (Google Drive)</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sd-arrow-icon">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </a>
               </div>
+            </header>
 
-              <div class="sd-sim-footer">
-                <span class="sd-sim-footnote">Simulating real-time keystroke cadence (~5 keys/sec) with natural inter-key rhythm, micro-pauses, and human self-corrections.</span>
+            <!-- Simulator Body -->
+            <div class="sd-body">
+              <div class="sd-sim-panel">
+                <div class="sd-sim-topbar">
+                  <div class="sd-sim-kicker">
+                    <span class="sd-pulse-dot"></span>
+                    <span>LIVE CADENCE SHOWCASE · 60 WPM FLOW</span>
+                  </div>
+                  <div class="sd-telemetry">
+                    <div class="sd-telemetry-badge">
+                      <span class="sd-telem-val" id="sim-live-wpm">60</span>
+                      <span class="sd-telem-lbl">WPM</span>
+                    </div>
+                    <div class="sd-telemetry-badge">
+                      <span class="sd-telem-val" id="sim-live-cpm">300</span>
+                      <span class="sd-telem-lbl">CPM</span>
+                    </div>
+                    <div class="sd-telemetry-badge">
+                      <span class="sd-telem-val" id="sim-live-acc">98.4%</span>
+                      <span class="sd-telem-lbl">ACC</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Typing Stage with Ghost Text and Active Typing -->
+                <div class="sd-typing-stage">
+                  <div class="sd-typing-text-flow" id="sd-typing-text-flow">
+                    <!-- Injected via skills.js -->
+                  </div>
+                </div>
+
+                <div class="sd-sim-footer">
+                  <span class="sd-sim-footnote">Simulating real-time keystroke cadence (~5 keys/sec) with natural inter-key rhythm, micro-pauses, and human self-corrections.</span>
+                </div>
               </div>
             </div>
           </div>
