@@ -722,15 +722,20 @@
       node.classList.add('is-hovered');
       map.classList.add('map-hovering');
 
-      // Same file at a larger size — identical aspect, so nothing shifts
+      // Load higher-res =s800 asynchronously without stalling the expansion animation
       const big = img.src.replace(/=s\d+(\?.*)?$/, '=s800');
-      if (big !== img.src && !img.dataset.bigFailed) {
-        img.onerror = () => {
-          img.onerror = null;
-          img.dataset.bigFailed = '1';
-          img.src = img.src.replace(/=s800(\?.*)?$/, '=s400');
+      if (big !== img.src && !img.dataset.bigFailed && !img.dataset.bigApplied) {
+        const pre = new Image();
+        pre.onload = () => {
+          if (activeNode === node) {
+            img.dataset.bigApplied = '1';
+            img.src = big;
+          }
         };
-        img.src = big;
+        pre.onerror = () => {
+          img.dataset.bigFailed = '1';
+        };
+        pre.src = big;
       }
 
       layout(node);
