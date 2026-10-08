@@ -277,6 +277,46 @@ html, body {
   display: block;
 }
 
+/* Responsive & Touch Treatment for Mobile / Android */
+@media (max-width: 600px) {
+  .site-nav {
+    padding: 0.75rem 0.5rem;
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
+  }
+
+  .nav-list {
+    gap: clamp(0.75rem, 3.5vw, 1.25rem);
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+  }
+
+  .nav-link {
+    font-size: clamp(0.82rem, 2.5vw, 0.92rem);
+    letter-spacing: 0.05em;
+    padding: 0.35rem 0.2rem;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .nav-back-btn {
+    font-size: 0.92rem;
+    letter-spacing: 0.06em;
+    padding: 0.35rem 0.5rem;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* Touch feedback for touchscreen/Android devices */
+@media (hover: none) and (pointer: coarse) {
+  .nav-link:active,
+  .nav-back-btn:active {
+    opacity: 1;
+    transform: scale(0.96);
+  }
+}
+
 /* --- View System --- */
 .view {
   position: absolute;
