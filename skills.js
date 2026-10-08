@@ -112,7 +112,7 @@
     {
       title: '3D & Render',
       accent: '#ff9d66',
-      tools: [{ name: 'Blender 4.0', score: 92 }]
+      tools: [{ name: 'Blender', score: 92 }]
     },
     {
       title: 'Graphic & Print',
