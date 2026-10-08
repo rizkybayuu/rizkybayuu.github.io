@@ -26,6 +26,18 @@
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: rgba(255, 111, 94, 0.4);
+  color: #ffffff;
+}
+
+button,
+.nav-link,
+.nav-back-btn,
+.constellation-node,
+.constellation-svg {
   user-select: none;
 }
 
