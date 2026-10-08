@@ -2258,39 +2258,52 @@ body.detail-open #work-view .constellation-map {
   overflow-x: hidden;
 }
 
-/* --- Bare Centered Typing Section --- */
-.skills-typing-centered {
+/* --- Bare Compact Typing Section (Left Info, Right Score, Bottom Horizontal Gauge) --- */
+.skills-typing-compact {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 1.15rem;
+  gap: 1.5rem;
   width: 100%;
-  max-width: 36rem;
+  max-width: 44rem;
   margin: auto;
-  padding: 1.5rem;
+  padding: 1.5rem 1rem;
   box-sizing: border-box;
   background: transparent;
   border: none;
   box-shadow: none;
 }
 
-.typing-center-kicker {
+.typing-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.typing-left-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 0.25rem;
+}
+
+.typing-kicker {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.45rem;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   color: #ff8a7a;
   text-transform: uppercase;
 }
 
-.typing-center-title {
+.typing-title {
   font-family: var(--font-mono);
-  font-size: 2.8rem;
+  font-size: 2.35rem;
   font-weight: 800;
   color: var(--color-text-main);
   margin: 0;
@@ -2298,72 +2311,76 @@ body.detail-open #work-view .constellation-map {
   line-height: 1.1;
 }
 
-.typing-center-sub {
+.typing-sub {
   font-family: var(--font-ui);
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   color: var(--color-text-dim);
-  margin: -0.35rem 0 0.2rem 0;
+  margin: 0;
 }
 
-.typing-center-score-group {
+.typing-right-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  gap: 0.35rem;
+}
+
+.typing-score-cluster {
   display: flex;
   align-items: baseline;
-  justify-content: center;
-  gap: 0.4rem;
-  margin-top: 0.4rem;
+  gap: 0.35rem;
 }
 
-.typing-center-big-num {
+.typing-big-num {
   font-family: var(--font-mono);
-  font-size: 5rem;
+  font-size: 3.8rem;
   font-weight: 800;
   color: #ff7e6e;
   line-height: 1;
-  text-shadow: 0 0 35px rgba(255, 111, 94, 0.45);
+  text-shadow: 0 0 30px rgba(255, 111, 94, 0.45);
 }
 
-.typing-center-big-unit {
+.typing-big-unit {
   font-family: var(--font-mono);
-  font-size: 1.55rem;
+  font-size: 1.25rem;
   font-weight: 700;
   color: var(--color-text-dim);
   letter-spacing: 0.05em;
 }
 
-.typing-center-status-pill {
+.typing-status-pill {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #ff9d66;
   background: rgba(255, 157, 102, 0.12);
   border: 1px solid rgba(255, 157, 102, 0.3);
-  padding: 0.35rem 0.95rem;
+  padding: 0.25rem 0.75rem;
   border-radius: 999px;
-  margin-bottom: 0.8rem;
 }
 
-/* Horizontal Progress Gauge (0 to 120+) */
-.typing-center-gauge-wrap {
+/* Horizontal Progress Gauge */
+.typing-bottom-gauge {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  max-width: 32rem;
-  gap: 0.65rem;
+  gap: 0.55rem;
 }
 
-.typing-center-scale {
+.typing-scale {
   position: relative;
   width: 100%;
   height: 20px;
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--color-text-dim);
 }
 
-.typing-center-scale .scale-mark {
+.typing-scale .scale-mark {
   position: absolute;
   top: 0;
   transform: translateX(-50%);
@@ -2371,73 +2388,94 @@ body.detail-open #work-view .constellation-map {
   opacity: 0.75;
 }
 
-.typing-center-scale .scale-mark[style*="left: 0%"] {
+.typing-scale .scale-mark[style*="left: 0%"] {
   transform: translateX(0);
 }
 
-.typing-center-scale .scale-mark[style*="left: 100%"] {
+.typing-scale .scale-mark[style*="left: 100%"] {
   transform: translateX(-100%);
 }
 
-.typing-center-scale .scale-mark.is-current {
+.typing-scale .scale-mark.is-current {
   color: #ff8a7a;
   font-weight: 800;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   opacity: 1;
   text-shadow: 0 0 12px rgba(255, 111, 94, 0.6);
 }
 
-.typing-center-track {
+.typing-track {
   position: relative;
   width: 100%;
-  height: 8px;
+  height: 7px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
 }
 
-.typing-center-fill {
+.typing-fill {
   height: 100%;
   border-radius: 999px;
   background: linear-gradient(90deg, #ff5238, #ff8a7a);
   box-shadow: 0 0 16px rgba(255, 111, 94, 0.6);
 }
 
-.typing-center-marker {
+.typing-marker {
   position: absolute;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   background: #ffffff;
   border: 3px solid #ff5238;
-  box-shadow: 0 0 16px #ff5238;
+  box-shadow: 0 0 14px #ff5238;
   z-index: 2;
 }
 
-.typing-center-meta {
+.typing-meta {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.8rem;
+  gap: 0.75rem;
   font-family: var(--font-mono);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   color: var(--color-text-dim);
   opacity: 0.8;
-  margin-top: 0.6rem;
+  margin-top: 0.35rem;
 }
 
-@media (max-width: 640px) {
-  .typing-center-title {
-    font-size: 2.2rem;
+@media (max-width: 600px) {
+  .skills-typing-compact {
+    padding: 1rem 0.75rem;
+    gap: 1.2rem;
   }
-  .typing-center-big-num {
-    font-size: 4rem;
+  .typing-top-row {
+    align-items: flex-end;
+    gap: 0.75rem;
   }
-  .typing-center-gauge-wrap {
-    max-width: 100%;
+  .typing-title {
+    font-size: 1.65rem;
+  }
+  .typing-sub {
+    font-size: 0.82rem;
+  }
+  .typing-big-num {
+    font-size: 2.75rem;
+  }
+  .typing-big-unit {
+    font-size: 1rem;
+  }
+  .typing-status-pill {
+    font-size: 0.62rem;
+    padding: 0.2rem 0.6rem;
+  }
+  .typing-scale {
+    font-size: 0.72rem;
+  }
+  .typing-scale .scale-mark.is-current {
+    font-size: 0.85rem;
   }
 }
 

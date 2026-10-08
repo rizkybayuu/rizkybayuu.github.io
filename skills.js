@@ -444,41 +444,46 @@
     });
     const languageOverallAvg = Math.round(languageSegments.reduce((sum, l) => sum + l.score, 0) / languageSegments.length);
 
-    // Render bare centered touch typing display
-    grid.innerHTML = renderCenteredTyping();
+    // Render bare compact touch typing display
+    grid.innerHTML = renderCompactTyping();
   }
 
-  /* Render Centered Touch Typing (Bare, Constellation-style, Horizontal Bar) */
-  function renderCenteredTyping() {
+  /* Render Compact Touch Typing (Left info, Right 60 WPM, Bottom horizontal bar) */
+  function renderCompactTyping() {
     const typingTool = TOOLS[0] || { name: 'Touch Typing (Average)', wpm: 60 };
     const wpm = typingTool.wpm || 60;
     // 0 to 120 scale, 60 is exactly 50%
     const pct = Math.min(100, Math.max(0, Math.round((wpm / 120) * 100)));
 
     return `
-      <div class="skills-typing-centered">
-        <div class="typing-center-kicker">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
-            <line x1="6" y1="8" x2="6" y2="8"></line><line x1="10" y1="8" x2="10" y2="8"></line><line x1="14" y1="8" x2="14" y2="8"></line><line x1="18" y1="8" x2="18" y2="8"></line>
-            <line x1="6" y1="12" x2="6" y2="12"></line><line x1="10" y1="12" x2="10" y2="12"></line><line x1="14" y1="12" x2="14" y2="12"></line><line x1="18" y1="12" x2="18" y2="12"></line>
-            <line x1="7" y1="16" x2="17" y2="16"></line>
-          </svg>
-          <span>INPUT PROFICIENCY</span>
-        </div>
+      <div class="skills-typing-compact">
+        <div class="typing-top-row">
+          <div class="typing-left-col">
+            <div class="typing-kicker">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
+                <line x1="6" y1="8" x2="6" y2="8"></line><line x1="10" y1="8" x2="10" y2="8"></line><line x1="14" y1="8" x2="14" y2="8"></line><line x1="18" y1="8" x2="18" y2="8"></line>
+                <line x1="6" y1="12" x2="6" y2="12"></line><line x1="10" y1="12" x2="10" y2="12"></line><line x1="14" y1="12" x2="14" y2="12"></line><line x1="18" y1="12" x2="18" y2="12"></line>
+                <line x1="7" y1="16" x2="17" y2="16"></line>
+              </svg>
+              <span>INPUT PROFICIENCY</span>
+            </div>
+            <h2 class="typing-title">Touch Typing</h2>
+            <p class="typing-sub">10-Finger Technique · QWERTY</p>
+          </div>
 
-        <h2 class="typing-center-title">Touch Typing</h2>
-        <p class="typing-center-sub">10-Finger Technique · QWERTY</p>
-
-        <div class="typing-center-score-group">
-          <span class="typing-center-big-num">${wpm}</span>
-          <span class="typing-center-big-unit">WPM</span>
+          <div class="typing-right-col">
+            <div class="typing-score-cluster">
+              <span class="typing-big-num">${wpm}</span>
+              <span class="typing-big-unit">WPM</span>
+            </div>
+            <div class="typing-status-pill">AVERAGE SPEED</div>
+          </div>
         </div>
-        <div class="typing-center-status-pill">AVERAGE SPEED</div>
 
         <!-- Horizontal Progress Gauge (0 to 120+) -->
-        <div class="typing-center-gauge-wrap">
-          <div class="typing-center-scale">
+        <div class="typing-bottom-gauge">
+          <div class="typing-scale">
             <span class="scale-mark" style="left: 0%;">0</span>
             <span class="scale-mark" style="left: 25%;">30</span>
             <span class="scale-mark is-current" style="left: ${pct}%;">${wpm} WPM</span>
@@ -486,12 +491,12 @@
             <span class="scale-mark" style="left: 100%;">120+</span>
           </div>
 
-          <div class="typing-center-track">
-            <div class="typing-center-fill" style="width: ${pct}%;"></div>
-            <div class="typing-center-marker" style="left: ${pct}%;"></div>
+          <div class="typing-track">
+            <div class="typing-fill" style="width: ${pct}%;"></div>
+            <div class="typing-marker" style="left: ${pct}%;"></div>
           </div>
 
-          <div class="typing-center-meta">
+          <div class="typing-meta">
             <span>~${wpm * 5} CPM</span>
             <span>•</span>
             <span>10-Finger Flow</span>
@@ -509,7 +514,7 @@
     levelOf,
     renderBar,
     renderDonutCard,
-    renderCenteredTyping,
+    renderCompactTyping,
     render: renderSkills
   };
 
