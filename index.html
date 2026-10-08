@@ -190,9 +190,16 @@
       <div class="work-container skills-container">
         <div class="skills-display-area" id="skills-grid"></div>
 
-        <!-- Dedicated Touch Typing Detail Panel -->
+        <!-- Dedicated Skills Detail Panels (Typing, Craft, Software, Language) -->
         <section class="skills-detail" id="skills-detail" aria-hidden="true">
-          <div class="sd-content-wrapper">
+          <!-- 1. Typing Detail -->
+          <div class="sd-content-wrapper sd-detail-section" id="sd-detail-typing">
+            <div class="sd-inline-back-wrap">
+              <button type="button" class="sd-inline-back-btn" data-back-skills aria-label="Back to skills overview">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                <span>Back to Skills Overview</span>
+              </button>
+            </div>
             <header class="sd-head">
               <div class="sd-titles">
                 <div class="sd-kicker">
@@ -238,7 +245,6 @@
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                     <polyline points="14 2 14 8 20 8"></polyline>
-                    <path d="M9 15l2 2 4-4"></path>
                   </svg>
                   <span>View Official Typing Test Result (Google Drive)</span>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sd-arrow-icon">
@@ -286,6 +292,15 @@
               </div>
             </div>
           </div>
+
+          <!-- 2. Craft Detail -->
+          <div class="sd-content-wrapper sd-detail-section sd-detail-wide" id="sd-detail-craft" style="display: none;"></div>
+
+          <!-- 3. Software Detail -->
+          <div class="sd-content-wrapper sd-detail-section sd-detail-wide" id="sd-detail-software" style="display: none;"></div>
+
+          <!-- 4. Language Detail -->
+          <div class="sd-content-wrapper sd-detail-section sd-detail-wide" id="sd-detail-language" style="display: none;"></div>
         </section>
       </div>
     </div>

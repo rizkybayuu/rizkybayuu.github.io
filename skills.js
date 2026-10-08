@@ -247,7 +247,7 @@
   /* Donut Card Component */
   function renderDonutCard({ id, badge, title, segments, overallScore, overallLabel, overallSub, cardAccent }) {
     const totalScore = segments.reduce((sum, s) => sum + s.score, 0);
-    const gap = segments.length > 1 ? 2.5 : 0;
+    const gap = segments.length > 1 ? 3 : 0;
     const availableDegrees = 360 - (segments.length * gap);
 
     let currentAngle = 0;
@@ -257,14 +257,14 @@
       const endAngle = startAngle + span;
       currentAngle += span + gap;
 
-      const d = describeArc(80, 80, 70, 48, startAngle, endAngle);
+      const d = describeArc(90, 90, 78, 56, startAngle, endAngle);
       return `<path class="donut-slice"
         d="${d}"
         fill="${seg.accent}"
         data-segment-id="${seg.id}"
         tabindex="0"
         role="button"
-        aria-label="${escapeHtml(seg.name)}: ${seg.score}%"></path>`;
+        aria-label="${escapeHtml(seg.name)}: ${seg.score}"></path>`;
     }).join('');
 
     const legendHtml = segments.map(seg => `
@@ -275,20 +275,23 @@
         </div>
         <div class="donut-legend-right">
           ${seg.sub ? `<span class="donut-legend-tag">${escapeHtml(seg.sub)}</span>` : ''}
-          <span class="donut-legend-score">${seg.score}%</span>
+          <span class="donut-legend-score">${seg.score}</span>
         </div>
       </div>
     `).join('');
 
     return `
-      <article class="skills-donut-card" id="donut-card-${id}" style="--card-accent: ${cardAccent}; --card-accent-rgb: ${hexToRgb(cardAccent)};">
+      <article class="skills-donut-card" id="donut-card-${id}" data-category="${id}" tabindex="0" role="button" aria-label="${escapeHtml(title)}, Average: ${overallScore}, click to view detailed breakdown" style="--card-accent: ${cardAccent}; --card-accent-rgb: ${hexToRgb(cardAccent)};">
         <header class="donut-card-header">
-          <span class="donut-badge">${escapeHtml(badge)}</span>
+          <div class="donut-card-title-row">
+            <span class="donut-badge">${escapeHtml(badge)}</span>
+            <span class="donut-card-open-arrow">↗</span>
+          </div>
           <h3 class="donut-card-title">${escapeHtml(title)}</h3>
         </header>
 
         <div class="donut-visual-wrap">
-          <svg class="donut-svg" viewBox="0 0 160 160" aria-hidden="true">
+          <svg class="donut-svg" viewBox="0 0 180 180" aria-hidden="true">
             <g class="donut-slices-group">
               ${pathsHtml}
             </g>
@@ -302,6 +305,10 @@
 
         <div class="donut-legend">
           ${legendHtml}
+        </div>
+
+        <div class="donut-card-action">
+          <span>Explore Details ↗</span>
         </div>
       </article>
     `;
@@ -328,10 +335,14 @@
       if (scoreEl) {
         scoreEl.textContent = seg.score;
         scoreEl.style.color = seg.accent;
-        scoreEl.style.textShadow = `0 0 16px ${seg.accent}`;
+        scoreEl.style.textShadow = `0 0 18px ${seg.accent}`;
       }
       if (labelEl) labelEl.textContent = seg.name;
-      if (subEl) subEl.textContent = seg.sub ? `${seg.sub} · ${seg.level}` : seg.level;
+      if (subEl) {
+        subEl.textContent = seg.sub && seg.sub !== seg.level
+          ? `${seg.sub} · ${seg.level}`
+          : (seg.level || seg.sub || '');
+      }
     }
 
     function reset() {
@@ -350,7 +361,6 @@
       const id = s.getAttribute('data-segment-id');
       s.addEventListener('mouseenter', () => activate(id));
       s.addEventListener('click', (e) => {
-        e.stopPropagation();
         activate(id);
       });
     });
@@ -359,7 +369,6 @@
       const id = item.getAttribute('data-segment-id');
       item.addEventListener('mouseenter', () => activate(id));
       item.addEventListener('click', (e) => {
-        e.stopPropagation();
         activate(id);
       });
     });
@@ -384,68 +393,9 @@
           </div>
         </div>
         <div class="skill-bar-track">
-          <div class="skill-bar-fill" style="width: ${pct}%"></div>
+          <div class="skill-bar-fill" style="width: ${pct}%;"></div>
         </div>
       </div>`;
-  }
-
-  /* Main Skills View Render */
-  function renderSkills() {
-    const grid = document.getElementById('skills-grid');
-    if (!grid) return;
-
-    // 1. Calculate Craft categories & averages
-    const craftSegments = CRAFT_FIELDS.map((f, idx) => {
-      const sum = f.skills.reduce((acc, s) => acc + s.score, 0);
-      const avg = Math.round(sum / f.skills.length);
-      return {
-        id: `craft-${idx}`,
-        name: f.title,
-        score: avg,
-        accent: f.accent,
-        sub: `${f.skills.length} skills`,
-        level: LEVEL_LABEL[levelOf(avg)],
-        skills: f.skills
-      };
-    });
-    const craftOverallAvg = Math.round(craftSegments.reduce((sum, c) => sum + c.score, 0) / craftSegments.length);
-
-    // 2. Calculate Software groups & averages
-    const softwareSegments = SOFTWARE_GROUPS.map((g, idx) => {
-      const sum = g.tools.reduce((acc, t) => acc + t.score, 0);
-      const avg = Math.round(sum / g.tools.length);
-      return {
-        id: `soft-${idx}`,
-        name: g.title,
-        score: avg,
-        accent: g.accent,
-        sub: `${g.tools.length} tool${g.tools.length > 1 ? 's' : ''}`,
-        level: LEVEL_LABEL[levelOf(avg)],
-        tools: g.tools
-      };
-    });
-    const softwareOverallAvg = Math.round(softwareSegments.reduce((sum, s) => sum + s.score, 0) / softwareSegments.length);
-
-    // 3. Languages
-    const langAccents = {
-      'Indonesia': '#00e5ff',
-      'Javanese': '#c07bff',
-      'English': '#ff9d66'
-    };
-    const languageSegments = LANGUAGES.map((l, idx) => {
-      return {
-        id: `lang-${idx}`,
-        name: l.name,
-        score: l.score,
-        accent: langAccents[l.name] || '#9aa6ff',
-        sub: l.level,
-        level: l.level
-      };
-    });
-    const languageOverallAvg = Math.round(languageSegments.reduce((sum, l) => sum + l.score, 0) / languageSegments.length);
-
-    // Render bare compact touch typing display
-    grid.innerHTML = renderCompactTyping();
   }
 
   /* Render Compact Touch Typing (Left info, Right 60 WPM, Bottom horizontal bar) */
@@ -891,19 +841,323 @@
 
   let skillsDetailOpen = false;
 
-  function openSkillsDetail() {
+  /* Detail Panel Renderers */
+  function renderCraftDetail() {
+    const el = document.getElementById('sd-detail-craft');
+    if (!el) return;
+
+    const cardsHtml = CRAFT_FIELDS.map((f) => {
+      const sum = f.skills.reduce((acc, s) => acc + s.score, 0);
+      const avg = Math.round(sum / f.skills.length);
+      const barsHtml = f.skills.map(s => renderBar(s.score, s.name)).join('');
+
+      return `
+        <article class="sd-detail-card" style="--field-accent: ${f.accent}; --field-accent-rgb: ${hexToRgb(f.accent)};">
+          <header class="sd-card-head">
+            <div class="sd-card-title-wrap">
+              <span class="sd-card-dot" style="background: ${f.accent}; box-shadow: 0 0 10px ${f.accent};"></span>
+              <h3 class="sd-card-title">${escapeHtml(f.title)}</h3>
+            </div>
+            <div class="sd-card-score-pill">
+              <span class="sd-card-score-val">${avg}</span>
+              <span class="sd-card-score-lbl">AVG</span>
+            </div>
+          </header>
+          <div class="sd-card-bars">
+            ${barsHtml}
+          </div>
+        </article>
+      `;
+    }).join('');
+
+    el.innerHTML = `
+      <div class="sd-inline-back-wrap">
+        <button type="button" class="sd-inline-back-btn" data-back-skills aria-label="Back to skills overview">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          <span>Back to Skills Overview</span>
+        </button>
+      </div>
+      <header class="sd-head">
+        <div class="sd-titles">
+          <div class="sd-kicker" style="color: #ff9d66;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+            <span>SPECIALIZATION · DISCIPLINES & CRAFT</span>
+          </div>
+          <h2 class="sd-title">CRAFT & DISCIPLINES</h2>
+          <p class="sd-blurb">Comprehensive assessment across 6 creative and technical domains, evaluated through production fidelity, creative direction, and technical execution.</p>
+        </div>
+
+        <div class="sd-stats-cluster">
+          <div class="sd-stat-pill">
+            <span class="sd-stat-num">74</span>
+            <span class="sd-stat-unit">SCORE</span>
+            <span class="sd-stat-label">Discipline Avg</span>
+          </div>
+          <div class="sd-stat-pill">
+            <span class="sd-stat-num">6</span>
+            <span class="sd-stat-unit">DOMAINS</span>
+            <span class="sd-stat-label">Active Disciplines</span>
+          </div>
+          <div class="sd-stat-pill">
+            <span class="sd-stat-num">34</span>
+            <span class="sd-stat-unit">SKILLS</span>
+            <span class="sd-stat-label">Total Competencies</span>
+          </div>
+          <div class="sd-stat-pill">
+            <span class="sd-stat-num">78</span>
+            <span class="sd-stat-unit">TOP DOMAIN</span>
+            <span class="sd-stat-label">3D Art & Motion</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="sd-body">
+        <div class="sd-grid-cards">
+          ${cardsHtml}
+        </div>
+      </div>
+    `;
+  }
+
+  function renderSoftwareDetail() {
+    const el = document.getElementById('sd-detail-software');
+    if (!el) return;
+
+    const cardsHtml = SOFTWARE_GROUPS.map((g) => {
+      const sum = g.tools.reduce((acc, t) => acc + t.score, 0);
+      const avg = Math.round(sum / g.tools.length);
+      const barsHtml = g.tools.map(t => renderBar(t.score, t.name)).join('');
+
+      return `
+        <article class="sd-detail-card" style="--field-accent: ${g.accent}; --field-accent-rgb: ${hexToRgb(g.accent)};">
+          <header class="sd-card-head">
+            <div class="sd-card-title-wrap">
+              <span class="sd-card-dot" style="background: ${g.accent}; box-shadow: 0 0 10px ${g.accent};"></span>
+              <h3 class="sd-card-title">${escapeHtml(g.title)}</h3>
+            </div>
+            <div class="sd-card-score-pill">
+              <span class="sd-card-score-val">${avg}</span>
+              <span class="sd-card-score-lbl">AVG</span>
+            </div>
+          </header>
+          <div class="sd-card-bars">
+            ${barsHtml}
+          </div>
+        </article>
+      `;
+    }).join('');
+
+    el.innerHTML = `
+      <div class="sd-inline-back-wrap">
+        <button type="button" class="sd-inline-back-btn" data-back-skills aria-label="Back to skills overview">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          <span>Back to Skills Overview</span>
+        </button>
+      </div>
+      <header class="sd-head">
+        <div class="sd-titles">
+          <div class="sd-kicker" style="color: #7fd1ff;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+            <span>TOOLCHAIN · PRODUCTION ENVIRONMENT</span>
+          </div>
+          <h2 class="sd-title">SOFTWARE & TOOLS</h2>
+          <p class="sd-blurb">Toolchain inventory covering 3D DCC software, graphics and print suites, audio/video editors, web platforms, and UNIX environments.</p>
+        </div>
+
+        <div class="sd-stats-cluster">
+          <div class="sd-stat-pill">
+            <span class="sd-stat-num">75</span>
+            <span class="sd-stat-unit">SCORE</span>
+            <span class="sd-stat-label">Toolchain Avg</span>
+          </div>
+          <div class="sd-stat-pill">
+            <span class="sd-stat-num">5</span>
+            <span class="sd-stat-unit">STACKS</span>
+            <span class="sd-stat-label">Functional Toolchains</span>
+          </div>
+          <div class="sd-stat-pill">
+            <span class="sd-stat-num">14</span>
+            <span class="sd-stat-unit">TOOLS</span>
+            <span class="sd-stat-label">Primary Applications</span>
+          </div>
+          <div class="sd-stat-pill">
+            <span class="sd-stat-num">92</span>
+            <span class="sd-stat-unit">PEAK TOOL</span>
+            <span class="sd-stat-label">Blender 4.0</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="sd-body">
+        <div class="sd-grid-cards">
+          ${cardsHtml}
+        </div>
+      </div>
+    `;
+  }
+
+  function renderLanguageDetail() {
+    const el = document.getElementById('sd-detail-language');
+    if (!el) return;
+
+    const langDetails = [
+      {
+        name: 'Indonesian',
+        score: 90,
+        level: 'Native Fluency',
+        badge: 'Bahasa Indonesia · Native',
+        accent: '#00e5ff',
+        blurb: 'Primary language used for daily communication, formal documentation, creative storytelling, and technical writing.',
+        skills: [
+          { name: 'Reading & Comprehension', score: 95 },
+          { name: 'Written Composition', score: 92 },
+          { name: 'Verbal Expression', score: 90 },
+          { name: 'Listening & Nuance', score: 94 }
+        ]
+      },
+      {
+        name: 'Javanese',
+        score: 87,
+        level: 'Native Dialect',
+        badge: 'Basa Jawa · Heritage',
+        accent: '#c07bff',
+        blurb: 'Regional heritage language spoken fluently across informal speech, colloquial social communication, and cultural contexts.',
+        skills: [
+          { name: 'Verbal Fluency (Ngoko/Krama)', score: 90 },
+          { name: 'Auditory Comprehension', score: 92 },
+          { name: 'Reading & Context', score: 82 },
+          { name: 'Written Expression', score: 78 }
+        ]
+      },
+      {
+        name: 'English',
+        score: 63,
+        level: 'Professional Working',
+        badge: 'Professional Working',
+        accent: '#ff9d66',
+        blurb: 'Working proficiency in reading technical documentation, developer specs, asynchronous Git collaboration, and written correspondence.',
+        skills: [
+          { name: 'Technical Docs & Reading', score: 78 },
+          { name: 'Written Correspondence', score: 68 },
+          { name: 'Listening & Multimedia', score: 62 },
+          { name: 'Spoken Communication', score: 56 }
+        ]
+      }
+    ];
+
+    const cardsHtml = langDetails.map(l => {
+      const barsHtml = l.skills.map(s => renderBar(s.score, s.name)).join('');
+      return `
+        <article class="sd-detail-card sd-lang-card" style="--field-accent: ${l.accent}; --field-accent-rgb: ${hexToRgb(l.accent)};">
+          <header class="sd-card-head">
+            <div class="sd-card-title-wrap">
+              <span class="sd-card-dot" style="background: ${l.accent}; box-shadow: 0 0 10px ${l.accent};"></span>
+              <div class="sd-lang-title-group">
+                <h3 class="sd-card-title">${escapeHtml(l.name)}</h3>
+                <span class="sd-lang-badge">${escapeHtml(l.badge)}</span>
+              </div>
+            </div>
+            <div class="sd-card-score-pill">
+              <span class="sd-card-score-val">${l.score}</span>
+              <span class="sd-card-score-lbl">OVERALL</span>
+            </div>
+          </header>
+          <p class="sd-lang-blurb">${escapeHtml(l.blurb)}</p>
+          <div class="sd-card-bars">
+            ${barsHtml}
+          </div>
+        </article>
+      `;
+    }).join('');
+
+    el.innerHTML = `
+      <div class="sd-inline-back-wrap">
+        <button type="button" class="sd-inline-back-btn" data-back-skills aria-label="Back to skills overview">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          <span>Back to Skills Overview</span>
+        </button>
+      </div>
+      <header class="sd-head">
+        <div class="sd-titles">
+          <div class="sd-kicker" style="color: #00e5ff;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <span>COMMUNICATION · LINGUISTIC FLUENCY</span>
+          </div>
+          <h2 class="sd-title">LANGUAGE PROFICIENCY</h2>
+          <p class="sd-blurb">Communication proficiencies spanning native national language, regional heritage mother tongue, and international technical English.</p>
+        </div>
+
+        <div class="sd-stats-cluster">
+          <div class="sd-stat-pill">
+            <span class="sd-stat-num">80</span>
+            <span class="sd-stat-unit">SCORE</span>
+            <span class="sd-stat-label">Fluency Avg</span>
+          </div>
+          <div class="sd-stat-pill">
+            <span class="sd-stat-num">3</span>
+            <span class="sd-stat-unit">LANGUAGES</span>
+            <span class="sd-stat-label">Spoken & Written</span>
+          </div>
+          <div class="sd-stat-pill">
+            <span class="sd-stat-num">90</span>
+            <span class="sd-stat-unit">NATIVE</span>
+            <span class="sd-stat-label">Indonesian</span>
+          </div>
+          <div class="sd-stat-pill">
+            <span class="sd-stat-num">63</span>
+            <span class="sd-stat-unit">WORKING</span>
+            <span class="sd-stat-label">Technical English</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="sd-body">
+        <div class="sd-grid-cards sd-grid-lang">
+          ${cardsHtml}
+        </div>
+      </div>
+    `;
+  }
+
+  function openSkillsDetail(category = 'typing') {
     const detailEl = document.getElementById('skills-detail');
     if (!detailEl) return;
     skillsDetailOpen = true;
+
+    // Toggle specific detail sections
+    const detailIds = ['typing', 'craft', 'software', 'language'];
+    detailIds.forEach(id => {
+      const target = document.getElementById(`sd-detail-${id}`);
+      if (target) {
+        target.style.display = (id === category) ? 'flex' : 'none';
+      }
+    });
+
     document.body.classList.add('skills-detail-open');
     detailEl.setAttribute('aria-hidden', 'false');
+    detailEl.scrollTop = 0;
 
     // Swap top nav to back mode
     const nav = document.getElementById('site-nav');
     if (nav) nav.classList.add('nav-back-mode');
 
-    // Start live 60 WPM simulator
-    startSimulator();
+    // Start live simulator only if typing section is open
+    if (category === 'typing') {
+      startSimulator();
+    } else {
+      stopSimulator();
+    }
   }
 
   function closeSkillsDetail() {
@@ -921,34 +1175,160 @@
 
     // Stop live simulator
     stopSimulator();
+
+    // After animation, hide all panels
+    setTimeout(() => {
+      if (!skillsDetailOpen) {
+        ['typing', 'craft', 'software', 'language'].forEach(id => {
+          const target = document.getElementById(`sd-detail-${id}`);
+          if (target) target.style.display = 'none';
+        });
+      }
+    }, 360);
   }
 
   function renderSkills() {
     const grid = document.getElementById('skills-grid');
     if (!grid) return;
-    grid.innerHTML = renderCompactTyping();
+
+    // 1. Calculate Craft categories & averages
+    const craftSegments = CRAFT_FIELDS.map((f, idx) => {
+      const sum = f.skills.reduce((acc, s) => acc + s.score, 0);
+      const avg = Math.round(sum / f.skills.length);
+      return {
+        id: `craft-${idx}`,
+        name: f.title,
+        score: avg,
+        accent: f.accent,
+        sub: `${f.skills.length} skills`,
+        level: LEVEL_LABEL[levelOf(avg)],
+        skills: f.skills
+      };
+    });
+    const craftOverallAvg = Math.round(craftSegments.reduce((sum, c) => sum + c.score, 0) / craftSegments.length);
+
+    // 2. Calculate Software groups & averages
+    const softwareSegments = SOFTWARE_GROUPS.map((g, idx) => {
+      const sum = g.tools.reduce((acc, t) => acc + t.score, 0);
+      const avg = Math.round(sum / g.tools.length);
+      return {
+        id: `soft-${idx}`,
+        name: g.title,
+        score: avg,
+        accent: g.accent,
+        sub: `${g.tools.length} tool${g.tools.length > 1 ? 's' : ''}`,
+        level: LEVEL_LABEL[levelOf(avg)],
+        tools: g.tools
+      };
+    });
+    const softwareOverallAvg = Math.round(softwareSegments.reduce((sum, s) => sum + s.score, 0) / softwareSegments.length);
+
+    // 3. Languages
+    const langAccents = {
+      'Indonesia': '#00e5ff',
+      'Javanese': '#c07bff',
+      'English': '#ff9d66'
+    };
+    const languageSegments = LANGUAGES.map((l, idx) => {
+      return {
+        id: `lang-${idx}`,
+        name: l.name,
+        score: l.score,
+        accent: langAccents[l.name] || '#9aa6ff',
+        sub: l.level === 'Native' ? 'Native Fluency' : 'Working Proficiency',
+        level: l.level
+      };
+    });
+    const languageOverallAvg = Math.round(languageSegments.reduce((sum, l) => sum + l.score, 0) / languageSegments.length);
+
+    // Render Compact Typing + 3 Donut Cards inside .skills-overview-content
+    grid.innerHTML = `
+      <div class="skills-overview-content">
+        ${renderCompactTyping()}
+        <div class="skills-donuts-grid">
+          ${renderDonutCard({
+            id: 'craft',
+            badge: '6 DISCIPLINES',
+            title: 'Craft & Disciplines',
+            segments: craftSegments,
+            overallScore: craftOverallAvg,
+            overallLabel: 'AVERAGE',
+            overallSub: '6 Disciplines',
+            cardAccent: '#ff9d66'
+          })}
+          ${renderDonutCard({
+            id: 'software',
+            badge: '5 TOOLCHAINS',
+            title: 'Software & Tools',
+            segments: softwareSegments,
+            overallScore: softwareOverallAvg,
+            overallLabel: 'AVERAGE',
+            overallSub: '5 Toolchains',
+            cardAccent: '#7fd1ff'
+          })}
+          ${renderDonutCard({
+            id: 'language',
+            badge: '3 LANGUAGES',
+            title: 'Language Fluency',
+            segments: languageSegments,
+            overallScore: languageOverallAvg,
+            overallLabel: 'AVERAGE',
+            overallSub: '3 Languages',
+            cardAccent: '#00e5ff'
+          })}
+        </div>
+      </div>
+    `;
+
+    // Attach Donut Hover Interactions
+    const craftCard = document.getElementById('donut-card-craft');
+    const softCard = document.getElementById('donut-card-software');
+    const langCard = document.getElementById('donut-card-language');
+
+    attachDonutInteractions(craftCard, craftSegments, craftOverallAvg, 'AVERAGE', '6 Disciplines');
+    attachDonutInteractions(softCard, softwareSegments, softwareOverallAvg, 'AVERAGE', '5 Toolchains');
+    attachDonutInteractions(langCard, languageSegments, languageOverallAvg, 'AVERAGE', '3 Languages');
 
     // Attach click to compact typing widget
     const typingWidget = grid.querySelector('.skills-typing-compact');
     if (typingWidget) {
-      typingWidget.addEventListener('click', () => {
-        openSkillsDetail();
-      });
+      typingWidget.addEventListener('click', () => openSkillsDetail('typing'));
       typingWidget.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          openSkillsDetail();
+          openSkillsDetail('typing');
         }
       });
     }
 
-    // Attach click to internal back button
-    const backBtn = document.getElementById('sd-back');
-    if (backBtn) {
-      backBtn.addEventListener('click', () => {
+    // Attach click to donut cards
+    [
+      { el: craftCard, cat: 'craft' },
+      { el: softCard, cat: 'software' },
+      { el: langCard, cat: 'language' }
+    ].forEach(({ el, cat }) => {
+      if (!el) return;
+      el.addEventListener('click', () => openSkillsDetail(cat));
+      el.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openSkillsDetail(cat);
+        }
+      });
+    });
+
+    // Populate detail panels HTML
+    renderCraftDetail();
+    renderSoftwareDetail();
+    renderLanguageDetail();
+
+    // Bind all in-panel back buttons
+    document.querySelectorAll('[data-back-skills]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
         closeSkillsDetail();
       });
-    }
+    });
   }
 
   window.RIZKYBY_SKILLS = {
