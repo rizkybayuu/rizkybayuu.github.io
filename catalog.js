@@ -231,8 +231,8 @@ window.RIZKYBY_CATALOG = {
             { p: 'drive', e: '1tZsysFylBdMKOyrKoqfTy20uG35vbshA', u: 'https://drive.google.com/file/d/1tZsysFylBdMKOyrKoqfTy20uG35vbshA/view' }
           ],
           d: 'Hands-on deployment across VM hypervisors, retro Windows environments and bare-metal Void Linux.' },
-        { t: 'rizkyby.web.github.io', p: 'web', tag: 'This site',
-          u: 'https://rizkyby.web.github.io/',
+        { t: 'rizkybayuu.github.io', p: 'web', tag: 'This site',
+          u: 'https://rizkybayuu.github.io/',
           d: 'The portfolio you are looking at: vanilla HTML, CSS and JS by hand, no framework.' }
       ]
     },

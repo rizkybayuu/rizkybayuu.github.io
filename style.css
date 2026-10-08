@@ -1,5 +1,5 @@
 /* ==========================================================================
-   rizkyby.web - Overview Stylesheet
+   rizkybayuu.github.io - Overview Stylesheet
    Fonts: Atkinson Hyperlegible (UI) & JetBrains Mono (Technical/Title)
    ========================================================================== */
 
@@ -421,7 +421,7 @@ html, body {
   margin-left: calc(var(--scale-welcome) * 0.2);
 }
 
-/* Slot 2: Main Title (rizkyby.web) */
+/* Slot 2: Main Title (rizkybayuu.github.io) */
 .slot-title {
   height: calc(var(--scale-title) * 1.25);
 }

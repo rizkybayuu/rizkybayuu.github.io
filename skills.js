@@ -1,5 +1,5 @@
 /**
- * rizkyby.web - Skills & Craft + Software
+ * rizkybayuu.github.io - Skills & Craft + Software
  * Beginner 0-59 · Intermediate 60-79 · Advanced 80-100
  * Level derived from score; progress bar visual
  */

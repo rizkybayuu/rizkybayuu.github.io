@@ -1,7 +1,7 @@
-# rizkyby.web
+# rizkybayuu.github.io
 
 > **Creative 3D Artist, Procedural Designer & Frontend Technologist Portfolio**  
-> Live Website: [https://rizkyby.web.github.io/](https://rizkyby.web.github.io/)
+> Live Website: [https://rizkybayuu.github.io/](https://rizkybayuu.github.io/)
 
 A bespoke, lightweight, frameworkless personal portfolio showcasing 3D CGI artwork, Blender Geometry Nodes procedural generators, VFX dynamics, sound engineering, and creative web development. Handcrafted with pure Vanilla HTML5, modern CSS3, and vanilla JavaScript ES6+.
 
@@ -66,8 +66,8 @@ No npm dependencies or compilation steps required! Simply clone and serve with a
 
 ```bash
 # Clone the repository
-git clone https://github.com/rizkybayuu/rizkyby.web.github.io.git
-cd rizkyby.web.github.io
+git clone https://github.com/rizkybayuu/rizkybayuu.github.io.git
+cd rizkybayuu.github.io
 
 # Start a local static HTTP server (Python 3)
 python3 -m http.server 8080

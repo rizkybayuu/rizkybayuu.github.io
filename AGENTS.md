@@ -1,4 +1,4 @@
-# rizkyby.web.github.io — Project Context
+# rizkybayuu.github.io — Project Context
 
 Portfolio statis (HTML/CSS/JS), dilayani lokal via `python http.server`.
 Sebelum bind port, matikan listener lama di 8080/8081.

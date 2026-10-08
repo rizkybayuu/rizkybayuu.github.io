@@ -1,5 +1,5 @@
 /**
- * rizkyby.web - Overview Controller
+ * rizkybayuu.github.io - Overview Controller
  * Handles typewriter sequencing, sunset background transition,
  * damped mouse position mixing, and interactive click effects.
  */
@@ -22,7 +22,7 @@
   // Content definitions
   const WELCOME_STR = 'welcome to';
   const TITLES = [
-    'rizkyby.web',
+    'rizkybayuu.github.io',
     '3d visualization',
     'motion & vfx',
     'procedural design',

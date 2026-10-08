@@ -1,5 +1,5 @@
 /**
- * rizkyby.web - Hire Me & Commissions Controller
+ * rizkybayuu.github.io - Hire Me & Commissions Controller
  * Features:
  * 1. Live availability status strip
  * 2. Compact single card with 5 interactive toggles (Default: Email) for WhatsApp, Email, Fiverr, Discord, Instagram

@@ -121,7 +121,7 @@ This directory contains documentation for the complete portfolio showcase. Media
 - Hands-on system deployment across VM hypervisors, retro Windows environments, bare-metal Void Linux builds
 
 #### Web Development
-- **rizkyby.web.github.io** (Current portfolio implementation)
+- **rizkybayuu.github.io** (Current portfolio implementation)
 
 ### 10. Graphic Design
 - **Constellation Thumbnail**: https://drive.google.com/file/d/1zZkTg6KCPVigWifQ68eHdwH_pjDfgQFK/view?usp=drive_link

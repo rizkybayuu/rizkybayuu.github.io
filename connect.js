@@ -1,5 +1,5 @@
 /**
- * rizkyby.web - Connect & Social Channels Controller
+ * rizkybayuu.github.io - Connect & Social Channels Controller
  * Renders social media hubs (unified Instagram 3-profile card, YouTube, TikTok, Discord)
  * and creative/developer platforms (GitHub, BlenderKit, Shutterstock, Fiverr)
  * with bare glassmorphism cards, glowing brand accents, and copy interaction.
