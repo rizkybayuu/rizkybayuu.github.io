@@ -245,7 +245,17 @@
   }
 
   /* Donut Card Component */
-  function renderDonutCard({ id, badge, title, segments, overallScore, overallLabel, overallSub, cardAccent }) {
+  function renderDonutCard({
+    id,
+    badge,
+    title,
+    segments,
+    overallScore,
+    defaultTitle,
+    defaultLevel,
+    defaultDesc,
+    cardAccent
+  }) {
     const totalScore = segments.reduce((sum, s) => sum + s.score, 0);
     const gap = segments.length > 1 ? 3 : 0;
     const availableDegrees = 360 - (segments.length * gap);
@@ -267,19 +277,6 @@
         aria-label="${escapeHtml(seg.name)}: ${seg.score}"></path>`;
     }).join('');
 
-    const legendHtml = segments.map(seg => `
-      <div class="donut-legend-item" data-segment-id="${seg.id}" style="--item-accent: ${seg.accent};">
-        <div class="donut-legend-left">
-          <span class="donut-legend-dot"></span>
-          <span class="donut-legend-name">${escapeHtml(seg.name)}</span>
-        </div>
-        <div class="donut-legend-right">
-          ${seg.sub ? `<span class="donut-legend-tag">${escapeHtml(seg.sub)}</span>` : ''}
-          <span class="donut-legend-score">${seg.score}</span>
-        </div>
-      </div>
-    `).join('');
-
     return `
       <article class="skills-donut-card" id="donut-card-${id}" data-category="${id}" tabindex="0" role="button" aria-label="${escapeHtml(title)}, Average: ${overallScore}, click to view detailed breakdown" style="--card-accent: ${cardAccent}; --card-accent-rgb: ${hexToRgb(cardAccent)};">
         <header class="donut-card-header">
@@ -292,19 +289,28 @@
 
         <div class="donut-visual-wrap">
           <svg class="donut-svg" viewBox="0 0 180 180" aria-hidden="true">
+            <circle cx="90" cy="90" r="54" fill="transparent" class="donut-hole-trigger"></circle>
             <g class="donut-slices-group">
               ${pathsHtml}
             </g>
           </svg>
           <div class="donut-center-info">
-            <div class="donut-center-score">${overallScore}</div>
-            <div class="donut-center-label">${escapeHtml(overallLabel)}</div>
-            <div class="donut-center-sub">${escapeHtml(overallSub)}</div>
+            <span class="donut-center-score">${overallScore}</span>
           </div>
         </div>
 
-        <div class="donut-legend">
-          ${legendHtml}
+        <div class="donut-dynamic-strip" style="--strip-accent: ${cardAccent};">
+          <div class="donut-dyn-header">
+            <div class="donut-dyn-left">
+              <span class="donut-dyn-dot"></span>
+              <span class="donut-dyn-title">${escapeHtml(defaultTitle)}</span>
+            </div>
+            <div class="donut-dyn-right">
+              <span class="donut-dyn-level">${escapeHtml(defaultLevel)}</span>
+              <span class="donut-dyn-score">${overallScore}</span>
+            </div>
+          </div>
+          <div class="donut-dyn-desc">${escapeHtml(defaultDesc)}</div>
         </div>
 
         <div class="donut-card-action">
@@ -315,13 +321,17 @@
   }
 
   /* Interaction Binder for Donut Cards */
-  function attachDonutInteractions(cardEl, segments, overallScore, overallLabel, overallSub) {
+  function attachDonutInteractions(cardEl, segments, overallScore, defaultTitle, defaultLevel, defaultDesc, defaultAccent) {
     if (!cardEl) return;
     const scoreEl = cardEl.querySelector('.donut-center-score');
-    const labelEl = cardEl.querySelector('.donut-center-label');
-    const subEl = cardEl.querySelector('.donut-center-sub');
+    const visualWrap = cardEl.querySelector('.donut-visual-wrap');
+    const holeTrigger = cardEl.querySelector('.donut-hole-trigger');
+    const stripEl = cardEl.querySelector('.donut-dynamic-strip');
+    const stripTitle = cardEl.querySelector('.donut-dyn-title');
+    const stripLevel = cardEl.querySelector('.donut-dyn-level');
+    const stripScore = cardEl.querySelector('.donut-dyn-score');
+    const stripDesc = cardEl.querySelector('.donut-dyn-desc');
     const slices = cardEl.querySelectorAll('.donut-slice');
-    const legendItems = cardEl.querySelectorAll('.donut-legend-item');
 
     function activate(id) {
       const seg = segments.find(s => s.id === id);
@@ -329,50 +339,71 @@
       slices.forEach(s => {
         s.classList.toggle('is-hovered', s.getAttribute('data-segment-id') === id);
       });
-      legendItems.forEach(item => {
-        item.classList.toggle('is-hovered', item.getAttribute('data-segment-id') === id);
-      });
       if (scoreEl) {
         scoreEl.textContent = seg.score;
         scoreEl.style.color = seg.accent;
-        scoreEl.style.textShadow = `0 0 18px ${seg.accent}`;
+        scoreEl.style.textShadow = `0 0 22px ${seg.accent}`;
       }
-      if (labelEl) labelEl.textContent = seg.name;
-      if (subEl) {
-        subEl.textContent = seg.sub && seg.sub !== seg.level
-          ? `${seg.sub} · ${seg.level}`
-          : (seg.level || seg.sub || '');
+      if (stripEl) {
+        stripEl.style.setProperty('--strip-accent', seg.accent);
+      }
+      if (stripTitle) stripTitle.textContent = seg.name;
+      if (stripLevel) {
+        stripLevel.textContent = seg.level || 'PROFICIENT';
+        stripLevel.style.color = seg.accent;
+        stripLevel.style.borderColor = `${seg.accent}55`;
+      }
+      if (stripScore) {
+        stripScore.textContent = seg.score;
+        stripScore.style.color = seg.accent;
+      }
+      if (stripDesc) {
+        let descText = seg.sub || '';
+        if (seg.skills && seg.skills.length > 0) {
+          descText = seg.skills.map(s => s.name).join(' · ');
+        } else if (seg.tools && seg.tools.length > 0) {
+          descText = seg.tools.map(t => t.name).join(' · ');
+        }
+        stripDesc.textContent = descText;
       }
     }
 
     function reset() {
       slices.forEach(s => s.classList.remove('is-hovered'));
-      legendItems.forEach(item => item.classList.remove('is-hovered'));
       if (scoreEl) {
         scoreEl.textContent = overallScore;
         scoreEl.style.color = '';
         scoreEl.style.textShadow = '';
       }
-      if (labelEl) labelEl.textContent = overallLabel;
-      if (subEl) subEl.textContent = overallSub;
+      if (stripEl) {
+        stripEl.style.setProperty('--strip-accent', defaultAccent);
+      }
+      if (stripTitle) stripTitle.textContent = defaultTitle;
+      if (stripLevel) {
+        stripLevel.textContent = defaultLevel;
+        stripLevel.style.color = '';
+        stripLevel.style.borderColor = '';
+      }
+      if (stripScore) {
+        stripScore.textContent = overallScore;
+        stripScore.style.color = '';
+      }
+      if (stripDesc) stripDesc.textContent = defaultDesc;
     }
 
     slices.forEach(s => {
       const id = s.getAttribute('data-segment-id');
       s.addEventListener('mouseenter', () => activate(id));
-      s.addEventListener('click', (e) => {
-        activate(id);
-      });
+      s.addEventListener('focus', () => activate(id));
     });
 
-    legendItems.forEach(item => {
-      const id = item.getAttribute('data-segment-id');
-      item.addEventListener('mouseenter', () => activate(id));
-      item.addEventListener('click', (e) => {
-        activate(id);
-      });
-    });
-
+    // Reset immediately when mouse leaves the donut chart visual wrapper or enters the center hole
+    if (visualWrap) {
+      visualWrap.addEventListener('mouseleave', reset);
+    }
+    if (holeTrigger) {
+      holeTrigger.addEventListener('mouseenter', reset);
+    }
     cardEl.addEventListener('mouseleave', reset);
     window.addEventListener('pointerdown', (e) => {
       if (!cardEl.contains(e.target)) reset();
@@ -1252,8 +1283,9 @@
             title: 'Craft & Disciplines',
             segments: craftSegments,
             overallScore: craftOverallAvg,
-            overallLabel: 'AVERAGE',
-            overallSub: '6 Disciplines',
+            defaultTitle: '6 Disciplines',
+            defaultLevel: LEVEL_LABEL[levelOf(craftOverallAvg)],
+            defaultDesc: 'Overall mean across 6 specialized craft disciplines',
             cardAccent: '#ff9d66'
           })}
           ${renderDonutCard({
@@ -1262,8 +1294,9 @@
             title: 'Software & Tools',
             segments: softwareSegments,
             overallScore: softwareOverallAvg,
-            overallLabel: 'AVERAGE',
-            overallSub: '5 Toolchains',
+            defaultTitle: '5 Toolchains',
+            defaultLevel: LEVEL_LABEL[levelOf(softwareOverallAvg)],
+            defaultDesc: 'Toolchain mean across digital production stacks',
             cardAccent: '#7fd1ff'
           })}
           ${renderDonutCard({
@@ -1272,8 +1305,9 @@
             title: 'Language Fluency',
             segments: languageSegments,
             overallScore: languageOverallAvg,
-            overallLabel: 'AVERAGE',
-            overallSub: '3 Languages',
+            defaultTitle: '3 Languages',
+            defaultLevel: LEVEL_LABEL[levelOf(languageOverallAvg)],
+            defaultDesc: 'Overall fluency across spoken & written communication',
             cardAccent: '#00e5ff'
           })}
         </div>
@@ -1285,9 +1319,33 @@
     const softCard = document.getElementById('donut-card-software');
     const langCard = document.getElementById('donut-card-language');
 
-    attachDonutInteractions(craftCard, craftSegments, craftOverallAvg, 'AVERAGE', '6 Disciplines');
-    attachDonutInteractions(softCard, softwareSegments, softwareOverallAvg, 'AVERAGE', '5 Toolchains');
-    attachDonutInteractions(langCard, languageSegments, languageOverallAvg, 'AVERAGE', '3 Languages');
+    attachDonutInteractions(
+      craftCard,
+      craftSegments,
+      craftOverallAvg,
+      '6 Disciplines',
+      LEVEL_LABEL[levelOf(craftOverallAvg)],
+      'Overall mean across 6 specialized craft disciplines',
+      '#ff9d66'
+    );
+    attachDonutInteractions(
+      softCard,
+      softwareSegments,
+      softwareOverallAvg,
+      '5 Toolchains',
+      LEVEL_LABEL[levelOf(softwareOverallAvg)],
+      'Toolchain mean across digital production stacks',
+      '#7fd1ff'
+    );
+    attachDonutInteractions(
+      langCard,
+      languageSegments,
+      languageOverallAvg,
+      '3 Languages',
+      LEVEL_LABEL[levelOf(languageOverallAvg)],
+      'Overall fluency across spoken & written communication',
+      '#00e5ff'
+    );
 
     // Attach click to compact typing widget
     const typingWidget = grid.querySelector('.skills-typing-compact');
