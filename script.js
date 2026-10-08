@@ -867,7 +867,15 @@
 
     // Google renders a real thumbnail for the Drive files it can (images,
     // videos); anything it cannot gets the plate art instead of a broken image.
-    const thumbUrl = id => 'https://drive.google.com/thumbnail?id=' + id + '&sz=w800';
+    const thumbUrl = id => {
+      if (!id) return '';
+      if (id.startsWith('http')) {
+        const m = id.match(/\/d\/([a-zA-Z0-9_-]+)/);
+        if (m) return 'https://drive.google.com/thumbnail?id=' + m[1] + '&sz=w1200';
+        return id;
+      }
+      return 'https://drive.google.com/thumbnail?id=' + id + '&sz=w1200';
+    };
 
     function el(tag, cls, text) {
       const n = document.createElement(tag);
@@ -1006,11 +1014,25 @@
           const info = el('div', 'wd-item-info');
           if (item.t) info.appendChild(el('h3', 'wd-t', item.t));
           if (item.d) info.appendChild(el('p', 'wd-d', item.d));
-          if (item.alt && item.alt.u) {
-            const acts = el('div', 'wd-acts');
-            acts.appendChild(linkOut('wd-act', (item.alt.label || 'Open') + ' ↗', item.alt.u));
-            info.appendChild(acts);
+          const acts = el('div', 'wd-acts');
+          if (item.u) {
+            let label = item.btn || 'Open ↗';
+            if (!item.btn) {
+              if (item.p === 'instagram') label = 'Instagram ↗';
+              else if (item.p === 'tiktok') label = 'TikTok ↗';
+              else if (item.p === 'soundcloud') label = 'SoundCloud ↗';
+              else if (item.p === 'github') label = 'GitHub ↗';
+              else if (item.p === 'drive') label = 'Drive ↗';
+              else if (item.p === 'blendkit') label = 'BlendKit ↗';
+            } else if (!label.endsWith('↗')) {
+              label += ' ↗';
+            }
+            acts.appendChild(linkOut('wd-act primary', label, item.u));
           }
+          if (item.alt && item.alt.u) {
+            acts.appendChild(linkOut('wd-act', (item.alt.label || 'Open') + ' ↗', item.alt.u));
+          }
+          if (acts.children.length) info.appendChild(acts);
           itemEl.appendChild(info);
           return itemEl;
         }
@@ -1044,42 +1066,70 @@
         return itemEl;
       }
 
+      // If bare layout & item has thumbnail (Drive ID / URL) or local file: render naked image
+      if (bare && (item.thumb || (item.p === 'local' && item.path))) {
+        const itemEl = el('article', 'wd-item wd-naked-local shape-' + shape);
+        if (item.p) itemEl.classList.add('p-' + item.p);
+        if (aspectRatio) itemEl.style.setProperty('--aspect', aspectRatio);
+        itemEl.style.setProperty('--min-w', '240px');
+
+        const imgWrap = el('div', 'wd-local-wrap');
+        const img = el('img', 'wd-local-img');
+        img.loading = 'lazy';
+        img.alt = item.t;
+        img.src = item.thumb ? thumbUrl(item.thumb) : item.path;
+
+        if (item.u) {
+          const a = linkOut('wd-local-link', '', item.u);
+          a.title = item.t;
+          a.appendChild(img);
+          imgWrap.appendChild(a);
+        } else {
+          imgWrap.appendChild(img);
+        }
+        itemEl.appendChild(imgWrap);
+
+        // Info overlay below
+        const info = el('div', 'wd-item-info');
+        if (item.t) info.appendChild(el('h3', 'wd-t', item.t));
+        if (item.d) info.appendChild(el('p', 'wd-d', item.d));
+
+        const acts = el('div', 'wd-acts');
+        if (item.u) {
+          let label = item.btn || (item.p === 'drive' ? 'PDF ↗' : 'Open ↗');
+          if (!label.endsWith('↗')) label += ' ↗';
+          acts.appendChild(linkOut('wd-act primary', label, item.u));
+        }
+        if (item.alt && item.alt.u) {
+          acts.appendChild(linkOut('wd-act', (item.alt.label || 'Open') + ' ↗', item.alt.u));
+        }
+        if (acts.children.length) info.appendChild(acts);
+
+        itemEl.appendChild(info);
+        return itemEl;
+      }
+
       // WRAPPED CARD: Exclusively for items that cannot be embedded (BlendKit variants, GitHub, Docs, specs, local files)
       // Bare layout & no embeddable source: pure typographic link card (no panel).
-      if (bare && !src && item.p !== 'local') {
+      if (bare && !src) {
         const card = el('article', 'wd-item wd-text-card');
         if (item.t) card.appendChild(el('h3', 'wd-t', item.t));
         if (item.d) card.appendChild(el('p', 'wd-d', item.d));
         if (item.tag) card.appendChild(el('span', 'wd-tag', item.tag));
         if (item.u) {
-          let label = 'Open ↗';
-          if (item.p === 'drive') label = 'Drive ↗';
-          else if (item.p === 'doc') label = 'Doc ↗';
-          else if (item.p === 'web') label = 'Visit ↗';
-          else if (item.p === 'github') label = 'GitHub ↗';
-          else if (item.p === 'soundcloud') label = 'SoundCloud ↗';
+          let label = item.btn || 'Open ↗';
+          if (!item.btn) {
+            if (item.p === 'drive') label = 'Drive ↗';
+            else if (item.p === 'doc') label = 'Doc ↗';
+            else if (item.p === 'web') label = 'Visit ↗';
+            else if (item.p === 'github') label = 'GitHub ↗';
+            else if (item.p === 'soundcloud') label = 'SoundCloud ↗';
+          } else if (!label.endsWith('↗')) {
+            label += ' ↗';
+          }
           card.appendChild(linkOut('wd-act primary', label, item.u));
         }
         return card;
-      }
-
-      // If bare layout & local file, render as naked image
-      if (bare && item.p === 'local' && item.path) {
-        const itemEl = el('article', 'wd-item wd-naked-local');
-        if (aspectRatio) itemEl.style.setProperty('--aspect', aspectRatio);
-        const imgWrap = el('div', 'wd-local-wrap');
-        const img = el('img', 'wd-local-img');
-        img.loading = 'lazy';
-        img.alt = item.t;
-        img.src = item.path;
-        imgWrap.appendChild(img);
-        itemEl.appendChild(imgWrap);
-        // Info overlay below
-        const info = el('div', 'wd-item-info');
-        if (item.t) info.appendChild(el('h3', 'wd-t', item.t));
-        if (item.d) info.appendChild(el('p', 'wd-d', item.d));
-        itemEl.appendChild(info);
-        return itemEl;
       }
 
       const card = el('article', 'wd-item wd-wrapped shape-' + shape);

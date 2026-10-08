@@ -131,11 +131,13 @@ This directory contains documentation for the complete portfolio showcase. Media
 - Experimental procedural aesthetic pipeline combining Blender Geometry Nodes procedural scattering with modern Affinity raster dithering (Affinity now united with Canva)
 
 #### YEARBOOK 25 Publication (Editorial Publication)
-- Google Drive: drive.google.com/file/d/1-ittBfeoloB273J0gI9WA7rhITm3CoMx/view?usp=drive_link
+- Thumbnail: https://drive.google.com/file/d/1r_SncCUh_e9Uub9jwdS2xvN7bh88BY7w/view?usp=drive_link
+- Google Drive PDF: drive.google.com/file/d/1-ittBfeoloB273J0gI9WA7rhITm3CoMx/view?usp=drive_link
 - Complete editorial design, typography lockups, high-resolution layout engineering for full-format commemorative yearbook
 
 #### Magazine Perfect & Motion Sequence (Editorial & Motion)
-- Google Drive: https://drive.google.com/file/d/1HuAMsS2i2uSsdHEqV5ilpdFKe1gh-Jsw/view?usp=drive_link
+- Thumbnail: https://drive.google.com/file/d/1CdeWr4jQ5UsZfLzjBOjukozElIgmGNQ6/view?usp=drive_link
+- Google Drive PDF: https://drive.google.com/file/d/1HuAMsS2i2uSsdHEqV5ilpdFKe1gh-Jsw/view?usp=drive_link
 - Instagram: /p/DK50YJIgD99
 - Stylized magazine publication artwork synchronized with fluid 3D commercial motion showcase sequences
 

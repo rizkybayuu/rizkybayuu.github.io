@@ -4199,22 +4199,254 @@ body.skills-detail-open #skills-view .skills-display-area {
   opacity: 0.85;
 }
 
-.hire-grid-3 {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.25rem;
+/* Compact Toggle Card (1 Card with 5 Toggles) */
+.hire-compact-wrapper {
+  display: flex;
+  justify-content: center;
   width: 100%;
-  box-sizing: border-box;
 }
 
-.hire-grid-2 {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.25rem;
-  max-width: 50rem;
-  margin: 0 auto;
+.hire-compact-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
   width: 100%;
+  max-width: 48rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 20px;
+  padding: 1.35rem 1.45rem;
   box-sizing: border-box;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 0 32px rgba(var(--card-accent-rgb, 56, 189, 248), 0.1),
+              inset 0 0 20px rgba(255, 255, 255, 0.015);
+  transition: border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.hire-toggles-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 0.35rem;
+  box-sizing: border-box;
+  overflow-x: auto;
+}
+
+.hire-toggle-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  padding: 0.55rem 0.75rem;
+  color: var(--color-text-dim);
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+.hire-toggle-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.hire-toggle-btn.active {
+  color: #ffffff;
+  background: rgba(var(--tab-accent-rgb, 255, 255, 255), 0.16);
+  border-color: rgba(var(--tab-accent-rgb, 255, 255, 255), 0.4);
+  box-shadow: 0 0 16px rgba(var(--tab-accent-rgb, 255, 255, 255), 0.25);
+}
+
+.hire-toggle-icon {
+  display: inline-flex;
+  align-items: center;
+  color: var(--tab-accent);
+}
+
+.hire-channel-container {
+  width: 100%;
+}
+
+.hire-channel-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  width: 100%;
+  animation: hireChannelFade 0.25s ease-out;
+}
+
+@keyframes hireChannelFade {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hire-channel-action-box {
+  margin-top: 0.35rem;
+}
+
+/* Horizontal Auto-Scrolling Works Showcase */
+.hire-showcase-head-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.hire-marquee-hint {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--color-text-dim);
+  opacity: 0.75;
+  padding-right: 0.35rem;
+}
+
+.hire-marquee-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding: 0.5rem 0 1rem 0;
+  mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);
+}
+
+.hire-marquee-track {
+  display: flex;
+  gap: 1.15rem;
+  width: max-content;
+  animation: hireMarqueeScroll 45s linear infinite;
+  will-change: transform;
+}
+
+.hire-marquee-wrapper:hover .hire-marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes hireMarqueeScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.hire-showcase-card {
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 16px;
+  overflow: hidden;
+  text-decoration: none;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.3, 1),
+              border-color 0.3s ease,
+              box-shadow 0.3s ease;
+}
+
+.hire-showcase-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  border-color: rgba(225, 48, 108, 0.5);
+  box-shadow: 0 0 24px rgba(225, 48, 108, 0.25),
+              inset 0 0 16px rgba(255, 255, 255, 0.03);
+}
+
+.hire-showcase-media {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  background: #0d0e15;
+  overflow: hidden;
+}
+
+.hire-showcase-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.hire-showcase-card:hover .hire-showcase-img {
+  transform: scale(1.06);
+}
+
+.hire-showcase-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(13, 14, 21, 0.85) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hire-showcase-badge {
+  position: absolute;
+  top: 0.65rem;
+  left: 0.65rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  backdrop-filter: blur(6px);
+}
+
+.hire-showcase-info {
+  padding: 0.9rem 1rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+}
+
+.hire-showcase-title {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hire-showcase-desc {
+  font-family: var(--font-ui);
+  font-size: 0.76rem;
+  color: var(--color-text-dim);
+  line-height: 1.4;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+}
+
+.hire-showcase-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #e1306c;
+  margin-top: 0.45rem;
+  opacity: 0.9;
 }
 
 /* Actions in cards */
@@ -4483,6 +4715,23 @@ body.skills-detail-open #skills-view .skills-display-area {
   .hire-sub-btn {
     width: 100%;
     justify-content: center;
+  }
+  .hire-compact-card {
+    padding: 1.1rem 0.95rem;
+    border-radius: 16px;
+  }
+  .hire-toggles-bar {
+    gap: 0.35rem;
+    padding: 0.25rem;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .hire-toggles-bar::-webkit-scrollbar {
+    display: none;
+  }
+  .hire-toggle-btn {
+    padding: 0.45rem 0.65rem;
+    font-size: 0.72rem;
   }
 }
 

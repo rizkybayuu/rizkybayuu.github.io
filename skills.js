@@ -1012,7 +1012,7 @@
           <div class="sd-stat-pill">
             <span class="sd-stat-num">92</span>
             <span class="sd-stat-unit">PEAK TOOL</span>
-            <span class="sd-stat-label">Blender 4.0</span>
+            <span class="sd-stat-label">Blender</span>
           </div>
         </div>
       </header>

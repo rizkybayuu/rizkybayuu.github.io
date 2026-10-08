@@ -249,11 +249,13 @@ window.RIZKYBY_CATALOG = {
         { t: 'Dither Study', p: 'drive', e: '1ubmjRmoxP0OYZP4oF78H055yWbgOUI0g', thumb: '1ubmjRmoxP0OYZP4oF78H055yWbgOUI0g', aspect: 1.778, tag: 'Procedural',
           u: 'https://drive.google.com/file/d/1ubmjRmoxP0OYZP4oF78H055yWbgOUI0g/view',
           d: 'Second pass on the procedural bitmap aesthetic, heavier dither masks.' },
-        { t: 'YEARBOOK 25 Publication', p: 'drive', e: '1-ittBfeoloB273J0gI9WA7rhITm3CoMx', aspect: 148 / 210, tag: 'Editorial',
+        { t: 'YEARBOOK 25 Publication', p: 'drive', thumb: '1r_SncCUh_e9Uub9jwdS2xvN7bh88BY7w', aspect: 1654 / 2339, tag: 'Editorial',
           u: 'https://drive.google.com/file/d/1-ittBfeoloB273J0gI9WA7rhITm3CoMx/view',
+          btn: 'PDF',
           d: 'Full-format commemorative yearbook: editorial design, typography lockups, layout engineering.' },
-        { t: 'Magazine Perfecta & Motion Sequence', p: 'drive', e: '1HuAMsS2i2uSsdHEqV5ilpdFKe1gh-Jsw', aspect: 148 / 210, tag: 'Editorial + Motion',
+        { t: 'Magazine Perfecta & Motion Sequence', p: 'drive', thumb: '1CdeWr4jQ5UsZfLzjBOjukozElIgmGNQ6', aspect: 2480 / 3509, tag: 'Editorial + Motion',
           u: 'https://drive.google.com/file/d/1HuAMsS2i2uSsdHEqV5ilpdFKe1gh-Jsw/view',
+          btn: 'PDF',
           alt: { label: 'Instagram post', u: 'https://www.instagram.com/p/DK50YJIgD99/', p: 'instagram' },
           d: 'Stylised magazine artwork synchronised with a fluid 3D commercial motion sequence.' }
       ]
