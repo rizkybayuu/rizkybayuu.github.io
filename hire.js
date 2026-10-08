@@ -478,13 +478,17 @@
     if (!wrapper || !track) return;
 
     let pos = 0;
-    const baseSpeed = -0.7; // default auto-scroll speed (px/frame)
+    const baseSpeed = -1.6; // Increased speed for lively autoscroll
     let isHovered = false;
     let isDown = false;
+    let isDragging = false;
+    let wasDragged = false;
     let startX = 0;
+    let startY = 0;
     let lastX = 0;
     let dragDist = 0;
     let velocity = 0;
+    let dragTimeout = null;
 
     // Measurement: single repeat unit width (total 3 repeated sets)
     let singleWidth = 0;
@@ -499,7 +503,7 @@
     window.addEventListener('resize', measureTrack);
 
     function loop() {
-      if (isDown) {
+      if (isDown && isDragging) {
         // Direct pointer follow while dragging
       } else {
         if (Math.abs(velocity) > 0.08) {
@@ -507,7 +511,7 @@
           velocity *= 0.94; // friction inertia
         } else {
           velocity = 0;
-          if (!isHovered) {
+          if (!isHovered && !isDown) {
             pos += baseSpeed;
           }
         }
@@ -529,42 +533,73 @@
 
     marqueeRafId = requestAnimationFrame(loop);
 
-    // Pointer Dragging (Mouse & Touch)
+    // Pointer Dragging (Mouse & Touch) - Strictly differentiated from Click
     wrapper.addEventListener('pointerdown', (e) => {
+      // Only respond to primary button (left click) or touch
+      if (e.button !== 0 && e.pointerType === 'mouse') return;
+
       isDown = true;
+      isDragging = false;
+      wasDragged = false;
       startX = e.clientX;
+      startY = e.clientY;
       lastX = e.clientX;
       dragDist = 0;
       velocity = 0;
-      wrapper.classList.add('is-dragging');
-      try { wrapper.setPointerCapture(e.pointerId); } catch (_) {}
+      if (dragTimeout) clearTimeout(dragTimeout);
     });
 
     wrapper.addEventListener('pointermove', (e) => {
       if (!isDown) return;
-      const delta = e.clientX - lastX;
+      const deltaX = e.clientX - lastX;
       lastX = e.clientX;
-      dragDist += Math.abs(delta);
-      pos += delta;
-      velocity = delta; // keep last movement momentum
+      const totalDx = Math.abs(e.clientX - startX);
+      const totalDy = Math.abs(e.clientY - startY);
+      dragDist = totalDx;
+
+      // Only enter drag mode if horizontal displacement exceeds 6px
+      if (!isDragging && totalDx > 6 && totalDx > totalDy) {
+        isDragging = true;
+        wrapper.classList.add('is-dragging');
+        try { wrapper.setPointerCapture(e.pointerId); } catch (_) {}
+      }
+
+      if (isDragging) {
+        pos += deltaX;
+        velocity = deltaX; // keep momentum
+      }
     });
 
     const finishDrag = (e) => {
       if (!isDown) return;
       isDown = false;
-      wrapper.classList.remove('is-dragging');
-      try { wrapper.releasePointerCapture(e.pointerId); } catch (_) {}
+
+      if (isDragging) {
+        wasDragged = true;
+        try { wrapper.releasePointerCapture(e.pointerId); } catch (_) {}
+        wrapper.classList.remove('is-dragging');
+        // Keep wasDragged true briefly so any subsequent click event is safely prevented
+        dragTimeout = setTimeout(() => {
+          isDragging = false;
+          wasDragged = false;
+        }, 100);
+      } else {
+        isDragging = false;
+        wasDragged = false;
+      }
     };
 
     wrapper.addEventListener('pointerup', finishDrag);
     wrapper.addEventListener('pointercancel', finishDrag);
 
-    // Prevent navigation if user dragged more than 6px
+    // Click handler on capture phase: suppress ONLY if actual drag took place
     wrapper.addEventListener('click', (e) => {
-      if (dragDist > 6) {
+      if (isDragging || wasDragged || dragDist > 6) {
         e.preventDefault();
         e.stopPropagation();
       }
+      // If it was a clean click without dragging, do NOT preventDefault!
+      // Native <a href="..." target="_blank"> opens normally!
     }, true);
 
     // Hover pause
@@ -574,8 +609,8 @@
     // Wheel & Trackpad Horizontal Scrolling
     wrapper.addEventListener('wheel', (e) => {
       const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-      pos -= delta * 0.85;
-      velocity = -delta * 0.15;
+      pos -= delta * 0.95;
+      velocity = -delta * 0.2;
       e.preventDefault();
     }, { passive: false });
   }
