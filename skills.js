@@ -456,7 +456,7 @@
     const pct = Math.min(100, Math.max(0, Math.round((wpm / 120) * 100)));
 
     return `
-      <div class="skills-typing-compact">
+      <div class="skills-typing-compact" role="button" tabindex="0" aria-label="Touch Typing 60 WPM, click to inspect live cadence and verified test proof">
         <div class="typing-top-row">
           <div class="typing-left-col">
             <div class="typing-kicker">
@@ -502,8 +502,253 @@
             <span>10-Finger Flow</span>
           </div>
         </div>
+
+        <div class="typing-click-hint">
+          <span>Inspect cadence & certified proof ↗</span>
+        </div>
       </div>
     `;
+  }
+
+  /* Live 60 WPM Human Typing Simulator */
+  const SIM_QUOTES = [
+    "Writing code is sculpting thought; every keystroke brings structure to ideas.",
+    "Speed without accuracy is noise. True flow is typing without looking.",
+    "Ten fingers moving in sync, turning thoughts into clean interactive interfaces.",
+    "Muscle memory bridges mind and screen, letting creativity take flight."
+  ];
+
+  const ADJACENT_KEYS = {
+    'a': ['s', 'q', 'z'],
+    'b': ['v', 'g', 'h', 'n'],
+    'c': ['x', 'd', 'v'],
+    'd': ['s', 'e', 'f', 'c'],
+    'e': ['w', 'r', 'd'],
+    'f': ['d', 'r', 'g', 'v'],
+    'g': ['f', 't', 'h', 'b'],
+    'h': ['g', 'y', 'j', 'n'],
+    'i': ['u', 'o', 'k'],
+    'j': ['h', 'u', 'k', 'm'],
+    'k': ['j', 'i', 'l'],
+    'l': ['k', 'o', 'p'],
+    'm': ['n', 'j', 'k'],
+    'n': ['b', 'h', 'j', 'm'],
+    'o': ['i', 'p', 'l'],
+    'p': ['o', 'l'],
+    'q': ['w', 'a'],
+    'r': ['e', 't', 'f'],
+    's': ['a', 'w', 'd', 'x'],
+    't': ['r', 'y', 'g'],
+    'u': ['y', 'i', 'j'],
+    'v': ['c', 'f', 'b'],
+    'w': ['q', 'e', 's'],
+    'x': ['z', 's', 'c'],
+    'y': ['t', 'u', 'h'],
+    'z': ['a', 's', 'x'],
+    ' ': ['c', 'v', 'b', 'n']
+  };
+
+  let simTimer = null;
+  let simActive = false;
+  let currentQuoteIdx = 0;
+  let typedCount = 0;
+  let errorCount = 0;
+  let totalKeypresses = 0;
+
+  function startSimulator() {
+    stopSimulator();
+    simActive = true;
+    currentQuoteIdx = 0;
+    typedCount = 0;
+    errorCount = 0;
+    totalKeypresses = 0;
+    runQuote(SIM_QUOTES[currentQuoteIdx]);
+  }
+
+  function stopSimulator() {
+    simActive = false;
+    if (simTimer) {
+      clearTimeout(simTimer);
+      simTimer = null;
+    }
+  }
+
+  function updateTelemetry(instantWpm) {
+    const wpmEl = document.getElementById('sim-live-wpm');
+    const cpmEl = document.getElementById('sim-live-cpm');
+    const accEl = document.getElementById('sim-live-acc');
+    if (!wpmEl || !cpmEl || !accEl) return;
+
+    wpmEl.textContent = `${Math.round(instantWpm)}`;
+    cpmEl.textContent = `${Math.round(instantWpm * 5)}`;
+    const acc = totalKeypresses > 0
+      ? Math.max(93, Math.min(100, Math.round(((totalKeypresses - errorCount) / totalKeypresses) * 1000) / 10))
+      : 98.4;
+    accEl.textContent = `${acc.toFixed(1)}%`;
+  }
+
+  function runQuote(text) {
+    if (!simActive) return;
+    const stage = document.getElementById('sd-typing-text-flow');
+    if (!stage) return;
+
+    let charIndex = 0;
+    let hasPendingTypo = false;
+    let typoChar = '';
+
+    function renderStage() {
+      let html = '';
+      for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        const displayChar = char;
+        if (i < charIndex) {
+          html += `<span class="char-done">${displayChar}</span>`;
+        } else if (i === charIndex) {
+          if (hasPendingTypo) {
+            html += `<span class="char-typo">${typoChar}</span><span class="char-caret"></span><span class="char-pending">${displayChar}</span>`;
+          } else {
+            html += `<span class="char-current"><span class="char-caret"></span>${displayChar}</span>`;
+          }
+        } else {
+          html += `<span class="char-pending">${displayChar}</span>`;
+        }
+      }
+      stage.innerHTML = html;
+    }
+
+    function step() {
+      if (!simActive) return;
+
+      // 60 WPM cadence math: average ~200ms per keystroke (300 CPM = 5 chars/sec)
+      let delay = Math.floor(165 + Math.random() * 70); // 165 - 235ms baseline
+      let instantaneousWpm = 58 + (Math.random() * 5); // 58 - 63 WPM
+
+      if (hasPendingTypo) {
+        // Backspacing typo: erase wrong character
+        hasPendingTypo = false;
+        typoChar = '';
+        renderStage();
+        totalKeypresses++;
+        updateTelemetry(instantaneousWpm);
+        // Delay before re-typing correct character
+        simTimer = setTimeout(step, Math.floor(110 + Math.random() * 50));
+        return;
+      }
+
+      if (charIndex >= text.length) {
+        // Quote finished: wait 2.6s, then start next quote
+        updateTelemetry(60);
+        simTimer = setTimeout(() => {
+          if (!simActive) return;
+          currentQuoteIdx = (currentQuoteIdx + 1) % SIM_QUOTES.length;
+          runQuote(SIM_QUOTES[currentQuoteIdx]);
+        }, 2600);
+        return;
+      }
+
+      const targetChar = text[charIndex];
+
+      // Realistic Typo injection (1% - 8% probability, ~4.5% avg, only on letters)
+      const canTypo = /[a-zA-Z]/.test(targetChar) && charIndex > 3 && (charIndex < text.length - 2);
+      const shouldTypo = canTypo && Math.random() < 0.045;
+
+      if (shouldTypo) {
+        const lower = targetChar.toLowerCase();
+        const adjacent = ADJACENT_KEYS[lower] || ['x'];
+        typoChar = adjacent[Math.floor(Math.random() * adjacent.length)];
+        hasPendingTypo = true;
+        errorCount++;
+        totalKeypresses++;
+        renderStage();
+        updateTelemetry(instantaneousWpm - 4);
+        // Human reaction pause before realizing typo and pressing backspace (~180 - 270ms)
+        simTimer = setTimeout(step, Math.floor(190 + Math.random() * 80));
+        return;
+      }
+
+      // Normal typing
+      charIndex++;
+      typedCount++;
+      totalKeypresses++;
+      renderStage();
+
+      // Human rhythm variations:
+      if (targetChar === ' ') {
+        delay = Math.floor(220 + Math.random() * 70); // inter-word pause
+      } else if (/[.,;]/.test(targetChar)) {
+        delay = Math.floor(320 + Math.random() * 110); // punctuation pause
+      } else if (charIndex > 1 && text[charIndex - 1] === text[charIndex - 2]) {
+        delay = Math.floor(100 + Math.random() * 40); // double-letter burst
+      }
+
+      updateTelemetry(instantaneousWpm);
+      simTimer = setTimeout(step, delay);
+    }
+
+    renderStage();
+    simTimer = setTimeout(step, 400);
+  }
+
+  let skillsDetailOpen = false;
+
+  function openSkillsDetail() {
+    const detailEl = document.getElementById('skills-detail');
+    if (!detailEl) return;
+    skillsDetailOpen = true;
+    document.body.classList.add('skills-detail-open');
+    detailEl.setAttribute('aria-hidden', 'false');
+
+    // Swap top nav to back mode
+    const nav = document.getElementById('site-nav');
+    if (nav) nav.classList.add('nav-back-mode');
+
+    // Start live 60 WPM simulator
+    startSimulator();
+  }
+
+  function closeSkillsDetail() {
+    if (!skillsDetailOpen) return;
+    const detailEl = document.getElementById('skills-detail');
+    skillsDetailOpen = false;
+    document.body.classList.remove('skills-detail-open');
+    if (detailEl) detailEl.setAttribute('aria-hidden', 'true');
+
+    // Restore top nav to normal mode if work detail is also not open
+    if (!document.body.classList.contains('detail-open')) {
+      const nav = document.getElementById('site-nav');
+      if (nav) nav.classList.remove('nav-back-mode');
+    }
+
+    // Stop live simulator
+    stopSimulator();
+  }
+
+  function renderSkills() {
+    const grid = document.getElementById('skills-grid');
+    if (!grid) return;
+    grid.innerHTML = renderCompactTyping();
+
+    // Attach click to compact typing widget
+    const typingWidget = grid.querySelector('.skills-typing-compact');
+    if (typingWidget) {
+      typingWidget.addEventListener('click', () => {
+        openSkillsDetail();
+      });
+      typingWidget.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openSkillsDetail();
+        }
+      });
+    }
+
+    // Attach click to internal back button
+    const backBtn = document.getElementById('sd-back');
+    if (backBtn) {
+      backBtn.addEventListener('click', () => {
+        closeSkillsDetail();
+      });
+    }
   }
 
   window.RIZKYBY_SKILLS = {
@@ -515,7 +760,10 @@
     renderBar,
     renderDonutCard,
     renderCompactTyping,
-    render: renderSkills
+    render: renderSkills,
+    openDetail: openSkillsDetail,
+    closeDetail: closeSkillsDetail,
+    isDetailOpen: () => skillsDetailOpen
   };
 
   if (document.readyState === 'loading') {
@@ -524,3 +772,4 @@
     renderSkills();
   }
 })();
+

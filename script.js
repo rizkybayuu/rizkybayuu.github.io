@@ -1274,13 +1274,28 @@
 
     if (detailBack) detailBack.addEventListener('click', closeDetail);
     const navBackBtn = document.getElementById('nav-back');
-    if (navBackBtn) navBackBtn.addEventListener('click', closeDetail);
+    if (navBackBtn) navBackBtn.addEventListener('click', () => {
+      closeDetail();
+      if (window.RIZKYBY_SKILLS && window.RIZKYBY_SKILLS.closeDetail) {
+        window.RIZKYBY_SKILLS.closeDetail();
+      }
+    });
     document.querySelectorAll('.nav-link').forEach(link => {
       // "Work" returns to the constellation, any other view takes it along.
-      link.addEventListener('click', () => closeDetail());
+      link.addEventListener('click', () => {
+        closeDetail();
+        if (window.RIZKYBY_SKILLS && window.RIZKYBY_SKILLS.closeDetail) {
+          window.RIZKYBY_SKILLS.closeDetail();
+        }
+      });
     });
     window.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && detailOpen) closeDetail();
+      if (e.key === 'Escape') {
+        if (detailOpen) closeDetail();
+        if (window.RIZKYBY_SKILLS && window.RIZKYBY_SKILLS.closeDetail) {
+          window.RIZKYBY_SKILLS.closeDetail();
+        }
+      }
     });
     buildChips();
 
