@@ -2352,7 +2352,7 @@ body.detail-open #work-view .constellation-map {
 }
 
 .skills-overview-content {
-  margin: 0 auto;
+  margin: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
