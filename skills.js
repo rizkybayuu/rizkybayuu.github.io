@@ -790,14 +790,13 @@
           // Single-key slip: in-place letter substitution without layout shift
           activeSpan.textContent = typoChar;
           activeSpan.className = 'type-char typo';
-          hasPendingTypo = true;
           errorCount++;
           totalKeypresses++;
           typoState = 1;
 
-          // Typist reaction pause before hitting backspace (~190 - 270ms)
-          const reactionDelay = Math.floor(205 + Math.random() * 75);
-          updateTelemetry(55 + Math.random() * 4);
+          // Typist reaction pause before hitting backspace (~160 - 230ms)
+          const reactionDelay = Math.floor(170 + Math.random() * 60);
+          updateTelemetry(56 + Math.random() * 4);
           simTimer = setTimeout(step, reactionDelay);
           return;
         }
@@ -816,73 +815,72 @@
       }
 
       // =========================================================================
-      // Advanced Humanized Keystroke Timing Model with Tricky-Word Dynamics
+      // True 60 WPM (300 CPM / 5 chars per sec) Humanized Keystroke Timing Model
       // =========================================================================
-      let baseDelay = 180;
+      let baseDelay = 110;
       const prevChar = text[charIndex - 1] || '';
       const bigram = (prevChar + targetChar).toLowerCase();
 
       if (postTypoCaution > 0) {
-        // Cautious recovery immediately following a typo (~220-290ms)
-        baseDelay = 230 + Math.random() * 70;
+        // Cautious recovery immediately following a typo (~160-220ms)
+        baseDelay = 175 + Math.random() * 45;
         postTypoCaution--;
       } else if (targetChar === ' ') {
-        // Word boundary pause: typist completes a word
-        baseDelay = 220 + Math.random() * 75;
+        // Word boundary pause: typist completes a word (~150-210ms)
+        baseDelay = 165 + Math.random() * 50;
 
-        // Cognitive Lookahead: if the upcoming next word is tricky, typist pauses to plan finger position!
+        // Cognitive Lookahead: if upcoming word is tricky, slight planning pause
         if (charIndex < text.length) {
           const nextWordInfo = getWordDetails(text, charIndex);
           if (nextWordInfo.difficulty >= 2) {
-            // Planning hesitation before complex words (e.g. "architectures", "synchronization")
-            baseDelay += Math.floor(130 + Math.random() * 160); // +130-290ms pause
+            baseDelay += Math.floor(70 + Math.random() * 90); // +70-160ms planning pause
           }
         }
       } else if (/[.,;!?:—-]/.test(targetChar)) {
-        // Punctuation and em-dash deliberate pause (~330-480ms)
-        baseDelay = 350 + Math.random() * 130;
-      } else if (/[A-Z]/.test(targetChar)) {
-        // Shift key hand reach delay (~210-280ms)
+        // Punctuation and em-dash deliberate pause (~200-280ms)
         baseDelay = 220 + Math.random() * 65;
+      } else if (/[A-Z]/.test(targetChar)) {
+        // Shift key reach delay (~150-200ms)
+        baseDelay = 160 + Math.random() * 40;
       } else if (wordInfo.difficulty === 0 && COMMON_BIGRAMS.has(bigram)) {
-        // Easy word muscle-memory fast burst (~85-135ms, ~90-130 WPM speed)
-        baseDelay = 88 + Math.random() * 48;
+        // Easy word muscle-memory fast burst (~65-95ms)
+        baseDelay = 70 + Math.random() * 30;
       } else if (wordInfo.difficulty >= 2) {
-        // Inside a tricky technical word: fingers deliberate more carefully
-        baseDelay = 165 + Math.random() * 85;
+        // Inside tricky word: deliberate pacing (~120-170ms)
+        baseDelay = 130 + Math.random() * 45;
 
-        // Occasional mid-word syllable hesitation on monstrous words (pos 4 or 7)
+        // Occasional mid-syllable hesitation on very long words
         if ((wordInfo.posInWord === 4 || wordInfo.posInWord === 7) && Math.random() < 0.35) {
-          baseDelay += Math.floor(95 + Math.random() * 125); // +95-220ms mid-word check
+          baseDelay += Math.floor(50 + Math.random() * 70);
         }
       } else if (charIndex > 1 && text[charIndex - 1] === text[charIndex - 2]) {
-        // Double letter burst (e.g. 'ee', 'll', 'ss') (~90-130ms)
-        baseDelay = 95 + Math.random() * 35;
+        // Double letter burst (e.g. 'ee', 'll', 'ss') (~65-90ms)
+        baseDelay = 75 + Math.random() * 20;
       } else {
-        // Normal letter with random Gaussian-like variance (~135-215ms)
-        baseDelay = 145 + Math.random() * 70;
+        // Normal letter with random variance (~85-130ms)
+        baseDelay = 95 + Math.random() * 40;
       }
 
-      // Random hand realignment micro-stutter (~once every 22 words)
-      if (targetChar === ' ' && Math.random() < 0.045) {
-        baseDelay += Math.floor(180 + Math.random() * 190);
+      // Random hand posture re-alignment (~once every 25 words)
+      if (targetChar === ' ' && Math.random() < 0.04) {
+        baseDelay += Math.floor(100 + Math.random() * 120);
       }
 
-      // Closed-Loop Speed Governor:
-      // Preserves all high-variance human imperfections while anchoring net speed to ~60.0 WPM
+      // Proportional Speed Governor:
+      // Locks net average speed strictly to 60.0 WPM (200ms avg per character)
       const now = performance.now();
       const elapsedSec = Math.max(0.1, (now - simStartTime) / 1000);
-      const idealTimeSec = typedCount * 0.20; // 5 chars/sec = 200ms per char
-      const drift = elapsedSec - idealTimeSec;
-      const speedAdjustment = Math.sign(drift) * Math.min(32, Math.abs(drift) * 14);
-      const delay = Math.max(75, Math.min(620, Math.floor(baseDelay - speedAdjustment)));
+      const idealElapsedMs = typedCount * 200; // 5 chars/sec = 200ms per char
+      const driftMs = (now - simStartTime) - idealElapsedMs;
+      // Damps drift so speed converges to 60 WPM while preserving high human variance
+      const speedNudge = Math.round(driftMs * 0.35);
+      const delay = Math.max(48, Math.min(420, Math.floor(baseDelay - speedNudge)));
 
-      // Smooth rolling live WPM telemetry calculation
-      const rollingWpm = elapsedSec > 1.2
-        ? ((typedCount / 5) / (elapsedSec / 60))
+      // True live rolling WPM telemetry calculation
+      const rollingWpm = elapsedSec > 0.8
+        ? Math.round(((typedCount / 5) / (elapsedSec / 60)) * 10) / 10
         : 60.0;
-      const displayWpm = Math.max(54, Math.min(66, rollingWpm + (Math.random() * 1.8 - 0.9)));
-      updateTelemetry(displayWpm);
+      updateTelemetry(rollingWpm);
 
       simTimer = setTimeout(step, delay);
     }
