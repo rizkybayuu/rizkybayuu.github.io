@@ -133,22 +133,20 @@
       ]
     },
     {
-      title: 'Web Development',
+      title: 'Dev & AI Tools',
       accent: '#7fd1ff',
       tools: [
-        { name: 'HTML', score: 82 },
-        { name: 'CSS', score: 81 },
-        { name: 'JavaScript', score: 64 }
+        { name: 'AI Agent', score: 86 },
+        { name: 'VS Code', score: 78 },
+        { name: 'Github', score: 74 }
       ]
     },
     {
-      title: 'System & Ops',
+      title: 'Virtualization & System',
       accent: '#c07bff',
       tools: [
-        { name: 'C++', score: 60 },
-        { name: 'Linux', score: 70 },
-        { name: 'VM Hypervisors', score: 73 },
-        { name: 'Git & GitHub', score: 71 }
+        { name: 'Linux Console', score: 81 },
+        { name: 'Qemu', score: 74 }
       ]
     }
   ];
@@ -1025,6 +1023,12 @@
       `;
     }).join('');
 
+    const totalToolsCount = SOFTWARE_GROUPS.reduce((acc, g) => acc + g.tools.length, 0);
+    const allTools = SOFTWARE_GROUPS.flatMap(g => g.tools);
+    const peakTool = allTools.reduce((max, t) => t.score > max.score ? t : max, allTools[0] || { name: 'Blender', score: 92 });
+    const groupAverages = SOFTWARE_GROUPS.map(g => Math.round(g.tools.reduce((sum, t) => sum + t.score, 0) / g.tools.length));
+    const overallStackAvg = Math.round(groupAverages.reduce((sum, s) => sum + s, 0) / groupAverages.length);
+
     el.innerHTML = `
       <header class="sd-head">
         <div class="sd-titles">
@@ -1036,29 +1040,29 @@
             <span>SHOWCASE · DIGITAL TOOLCHAINS</span>
           </div>
           <h2 class="sd-title">WHAT I USE TO BUILD</h2>
-          <p class="sd-blurb">Toolchain inventory covering 3D DCC software, graphics and print suites, audio/video editors, web platforms, and UNIX environments.</p>
+          <p class="sd-blurb">Toolchain inventory covering 3D DCC software, graphics and print suites, audio/video editors, developer tools, AI workflows, and UNIX virtualization environments.</p>
         </div>
 
         <div class="sd-stats-cluster">
           <div class="sd-stat-pill">
-            <span class="sd-stat-num">75</span>
+            <span class="sd-stat-num">${overallStackAvg}</span>
             <span class="sd-stat-unit">SCORE</span>
             <span class="sd-stat-label">Toolchain Avg</span>
           </div>
           <div class="sd-stat-pill">
-            <span class="sd-stat-num">5</span>
+            <span class="sd-stat-num">${SOFTWARE_GROUPS.length}</span>
             <span class="sd-stat-unit">STACKS</span>
             <span class="sd-stat-label">Functional Toolchains</span>
           </div>
           <div class="sd-stat-pill">
-            <span class="sd-stat-num">14</span>
+            <span class="sd-stat-num">${totalToolsCount}</span>
             <span class="sd-stat-unit">TOOLS</span>
             <span class="sd-stat-label">Primary Applications</span>
           </div>
           <div class="sd-stat-pill">
-            <span class="sd-stat-num">92</span>
+            <span class="sd-stat-num">${peakTool.score}</span>
             <span class="sd-stat-unit">PEAK TOOL</span>
-            <span class="sd-stat-label">Blender</span>
+            <span class="sd-stat-label">${escapeHtml(peakTool.name)}</span>
           </div>
         </div>
       </header>
