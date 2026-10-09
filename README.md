@@ -82,5 +82,5 @@ Then open your browser at `http://127.0.0.1:8080/`.
 
 ## 📄 License & Attribution
 
-Designed and engineered by **Rizky Bayu**.  
+Designed and engineered by **Rizky Bayuu**.  
 All 3D artworks, simulations, and procedural node networks are copyrighted by the author.
